@@ -1,5 +1,10 @@
 NestJS :
 https://www.javatpoint.com/nestjs
+npm new my-nestjs-01
+commandes à utiliser:
+sudo apt-get update
+sudo apt install npm
+npm i -g@nestjs/cli  
 
 PostgreSQL:
 https://www.postgresql.org/
