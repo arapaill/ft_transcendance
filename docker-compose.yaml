@@ -1,7 +1,9 @@
 version: '3'
 
 networks:
-  transcendance:
+  backend:
+
+  frontend:
 
 services:
   api:
@@ -16,7 +18,8 @@ services:
     depends_on:
       - postgres
     networks:
-      - transcendance
+      - backend
+      - frontend
     ports:
       - 3000:3000
 
@@ -33,7 +36,7 @@ services:
       - api
       - postgres
     networks:
-      - transcendance
+      - frontend
     ports:
       - 4200:4200
 
@@ -44,7 +47,7 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data
     networks:
-      - transcendance
+      - backend
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -59,7 +62,7 @@ services:
     volumes:
       - pg-admin:/var/lib/pgadmin
     networks:
-      - transcendance
+      - backend
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
