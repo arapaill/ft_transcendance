@@ -10,6 +10,7 @@ services:
     build:
       dockerfile: ./Dockerfile
       context: ./srcs/nestjs-backend
+      target: development
     image: nestjs_image
     container_name: nestjs_container
     volumes:
@@ -20,6 +21,7 @@ services:
     networks:
       - backend
       - frontend
+    command: npm run start:dev
     ports:
       - 3000:3000
 
@@ -41,7 +43,10 @@ services:
       - 4200:4200
 
   postgres:
-    image: postgres
+    build:
+      dockerfile: ./Dockerfile
+      context: ./srcs/database
+    image: postgres_image
     container_name: postgres_container
     restart: always
     volumes:
