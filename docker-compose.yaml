@@ -14,7 +14,7 @@ services:
     image: nestjs_image
     container_name: nestjs_container
     volumes:
-      - api:/usr/src/app
+      - ./srcs/nestjs-backend:/usr/src/app
       - back-package:/usr/src/app/node_modules
     depends_on:
       - postgres
@@ -23,7 +23,7 @@ services:
       - frontend
     command: npm run start:dev
     ports:
-      - 3000:3000
+      - 9876:9876
 
   frontend:
     build:
