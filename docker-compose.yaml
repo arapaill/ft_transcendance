@@ -14,7 +14,7 @@ services:
     image: nestjs_image
     container_name: nestjs_container
     volumes:
-      - api:/usr/src/app
+      - ./srcs/nestjs-backend:/usr/src/app
       - back-package:/usr/src/app/node_modules
     depends_on:
       - postgres
@@ -32,7 +32,7 @@ services:
     image: frontend_image
     container_name: frontend_container
     volumes:
-      - frontend:/usr/src/app
+      - ./srcs/angular-frontend:/usr/src/app
       - front-package:/usr/src/app/node_modules
     depends_on:
       - api
@@ -80,13 +80,7 @@ volumes:
 
   db-data:
     driver: local
-  
-  api:
-    driver: local
-  
-  frontend:
-    driver: local
-  
+
   back-package:
     driver: local
   
