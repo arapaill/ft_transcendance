@@ -1,0 +1,30 @@
+/* 
+**
+** Navigation Bar
+**
+*/
+
+// The whole bar
+.NavBar{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	background-color: #333;
+}
+//Item block on the bar
+.NavItem{
+	float: left;
+}
+
+// Item text
+.Item{
+	display: block;
+	color: white;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+}
+.Item:hover{
+	background-color: #111;
+}
