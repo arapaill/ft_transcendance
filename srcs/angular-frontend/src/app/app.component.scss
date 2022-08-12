@@ -15,7 +15,19 @@
 //Item block on the bar
 .NavItem{
 	float: left;
+	border-right:1px solid #bbb;
 }
+
+//NavItem when hover and not active
+.NavItem:hover:not(.active){
+	
+	background-color: #111;
+}
+
+//NavItem when not hover and active
+.active {
+	background-color: #04AA6D;
+  }
 
 // Item text
 .Item{
@@ -24,7 +36,20 @@
 	text-align: center;
 	padding: 14px 16px;
 	text-decoration: none;
+	
 }
-.Item:hover{
-	background-color: #111;
+
+/* 
+**
+** Images (temporary)
+**
+*/
+
+.PongImg{
+	width: 70%;
+	height: 70%;
+}
+.ChatImg{
+	
+	float: right;
 }
