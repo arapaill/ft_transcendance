@@ -1,55 +1,18 @@
-/* 
-**
-** Navigation Bar
-**
-*/
-
-// The whole bar
-.NavBar{
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
-	overflow: hidden;
-	background-color: #333;
-}
-//Item block on the bar
-.NavItem{
-	float: left;
-	border-right:1px solid #bbb;
+.wrapper {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	grid-gap: 10px;
+	grid-auto-rows: 100%;
 }
 
-//NavItem when hover and not active
-.NavItem:hover:not(.active){
-	
-	background-color: #111;
+.game {
+	grid-column-start: 1;
+	grid-column-end: 3;
+	background-color: aqua;
 }
 
-//NavItem when not hover and active
-.active {
-	background-color: #04AA6D;
-  }
-
-// Item text
-.Item{
-	display: block;
-	color: white;
-	text-align: center;
-	padding: 14px 16px;
-	text-decoration: none;
-	
-}
-
-/* 
-**
-** Images (temporary)
-**
-*/
-
-.PongImg{
-	width: 70%;
-	height: 70%;
-}
-.ChatImg{
-	
-	float: right;
+.chat {
+	grid-column-start: 3;
+	grid-column-end: 4;
+	background-color: rgb(178, 50, 140);
 }
