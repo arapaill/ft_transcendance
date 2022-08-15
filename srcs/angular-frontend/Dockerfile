@@ -6,6 +6,6 @@ RUN npm install -g @angular/cli @angular-devkit/build-angular
 RUN npm ci
 COPY --chown=node:node . .
 
-USER node
+EXPOSE 4200
 
-CMD [ "npm", "start"]
+CMD ["ng","serve", "--host","0.0.0.0", "--poll", "2000"]
