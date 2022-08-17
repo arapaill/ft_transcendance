@@ -1,18 +1,27 @@
+html, body {
+	height: 100%;
+	margin: 0px auto;
+	padding: 0px auto;
+}
+
 .wrapper {
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	grid-gap: 10px;
-	grid-auto-rows: 100%;
+	max-width: 100%;
+	border: 1px solid red;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .game {
-	grid-column-start: 1;
-	grid-column-end: 3;
-	background-color: aqua;
+	height: 100%;
+	background-color: rgb(202, 255, 255);
+	width: 80%;
+	max-width: 80%;
 }
 
 .chat {
-	grid-column-start: 3;
-	grid-column-end: 4;
-	background-color: rgb(178, 50, 140);
+	height: 100%;
+	padding: 5px;
+	width: 20%;
+	border: 1px solid skyblue;
 }

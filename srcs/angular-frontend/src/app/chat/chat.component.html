@@ -1,1 +1,14 @@
-<p>chat works!</p>
+<div *ngFor="let message of chatMessages; let isOdd = odd;">
+	<div [ngClass]="isOdd ? 'container darker' : 'container'">
+		<img [src]="message.userAvatar" alt="Avatar" [ngClass]="{ 'right': isOdd }">
+		<p>{{ message.text }}</p>
+		<span [ngClass]="isOdd ? 'time-left' : 'time-right'">{{ message.date }}</span>
+	</div>
+</div>
+
+<div class="chatbox-area">
+	<form action="" id="chatform">
+		<input type="text" value="" placeholder="Envoyer un message" class="txtbox" />
+		<input type="submit" value=" Envoyer " class="btncls" />	
+	</form>
+</div>
