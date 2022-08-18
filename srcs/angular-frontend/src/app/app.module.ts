@@ -6,13 +6,19 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { ChatComponent } from './chat/chat.component';
 import { PongComponent } from './pong/pong.component';
+import { ProfileComponent } from './profile/profile.component';
+import { ClassementComponent } from './classement/classement.component';
+import { AcceuilComponent } from './acceuil/acceuil.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     ChatComponent,
-    PongComponent
+    PongComponent,
+    ProfileComponent,
+    ClassementComponent,
+    AcceuilComponent
   ],
   imports: [
     BrowserModule,

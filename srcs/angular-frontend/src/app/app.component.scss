@@ -3,25 +3,3 @@ html, body {
 	margin: 0px auto;
 	padding: 0px auto;
 }
-
-.wrapper {
-	max-width: 100%;
-	border: 1px solid red;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
-.game {
-	height: 100%;
-	background-color: rgb(202, 255, 255);
-	width: 80%;
-	max-width: 80%;
-}
-
-.chat {
-	height: 100%;
-	padding: 5px;
-	width: 20%;
-	border: 1px solid skyblue;
-}
