@@ -6,8 +6,8 @@ import { ProfileComponent } from './profile/profile.component';
 import { AcceuilComponent } from './acceuil/acceuil.component';
 
 const routes: Routes = [
-  {path:'acceuil', component : AcceuilComponent},
   {path:'', redirectTo: '/acceuil', pathMatch: 'full'},
+  {path:'acceuil', component : AcceuilComponent},
   {path:'profile', component: ProfileComponent},
   {path:'classement', component:ClassementComponent}
 ];
