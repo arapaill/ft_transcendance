@@ -9,6 +9,7 @@ import { PongComponent } from './pong/pong.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ClassementComponent } from './classement/classement.component';
 import { AcceuilComponent } from './acceuil/acceuil.component';
+import { ProfileAvatareComponent } from './profile-avatare/profile-avatare.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { AcceuilComponent } from './acceuil/acceuil.component';
     PongComponent,
     ProfileComponent,
     ClassementComponent,
-    AcceuilComponent
+    AcceuilComponent,
+    ProfileAvatareComponent
   ],
   imports: [
     BrowserModule,
