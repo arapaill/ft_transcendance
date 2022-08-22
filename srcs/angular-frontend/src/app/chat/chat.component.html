@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 
 <div class="channels">
-	<p>{{ currentChannel }}</p>
+	<p>> {{ currentChannel }}</p>
 	<ul class="channelDropdown">
 		<li class="dropdown-content" *ngFor="let channel of channels;">{{ channel }}</li>
 	</ul>
@@ -13,11 +13,13 @@
 	</div>
 </div>
 
-<div *ngFor="let message of chatMessages; let isOdd = odd;">
-	<div [ngClass]="isOdd ? 'container darker' : 'container'">
-		<img [src]="message.userAvatar" alt="Avatar"/>
-		<p><span class="userPseudo">{{ message.userPseudo }}</span><span class="time">{{ message.date.getHours() }}:{{ message.date.getMinutes() }}</span></p>
-		<p class="text" >{{ message.text }}</p>
+<div class="chat-area" #scrollMe [scrollTop]="scrollMe.scrollHeight">
+	<div *ngFor="let message of chatMessages; let isOdd = odd;">
+		<div [ngClass]="isOdd ? 'container darker' : 'container'">
+			<img [src]="message.userAvatar" alt="Avatar"/>
+			<p><span class="userPseudo">{{ message.userPseudo }}</span><span class="time">{{ message.date.getHours() }}:{{ message.date.getMinutes() }}</span></p>
+			<p class="text" >{{ message.text }}</p>
+		</div>
 	</div>
 </div>
 

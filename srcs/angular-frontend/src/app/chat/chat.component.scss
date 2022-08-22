@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
 
 $mainColor: #ffffff;
 $secondaryColor: #eaeaea;
@@ -8,19 +9,19 @@ $dateColor: #aaa;
 
 /* Channels */
 .channels {
+	font-family: 'Roboto', sans-serif;
 	background-color: #ef9999;
-	height: 30px;
+	height: 35px;
 	display: flex;
 	align-items: center;
 	padding: 0 1rem;
-	font-size: 1.5rem;
+	font-size: 1.4rem;
 }
 
 .channels p {
 	float: left;
 	display: inline;
 	flex: 2;
-	color: rgb(72, 72, 72);
 }
 
 .toggle, .createChannel {
@@ -50,18 +51,23 @@ $dateColor: #aaa;
 }
 
 /* Chat Messages */
+.chat-area {
+	overflow: scroll;
+	height: 100%;
+	max-height: 90%;
+}
+
 .container {
 	background-color: $mainColor;
-	padding: 10px;
+	padding: 1px 10px;
 }
 
   
 .darker {
-	border-color: #ccc;
 	background-color: $secondaryColor;
 }
   
-/* Clear floats */
+/* Clear floats (Pas nécessaire à priori) */
 .container::after {
 	content: "";
 	clear: both;
@@ -71,6 +77,10 @@ $dateColor: #aaa;
 .userPseudo {
 	color: $pseudoColor;
 	font-family: 'Roboto', sans-serif;
+}
+
+.text {
+	padding-left: 4.3rem;
 }
 
 .container img {
@@ -100,10 +110,11 @@ $dateColor: #aaa;
 	height: 32px;
 	width: 80%;
 	text-align: center;
+	margin-right: 5px;
 }
 
 .buttonSend{
 	height: 40px;
 	width: 15%;
-	margin: 0px 10px;
+	margin: 0px auto;
 }

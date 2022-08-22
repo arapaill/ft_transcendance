@@ -1,17 +1,26 @@
-
 .wrapper {
 	max-width: 100%;
 	display: flex;
 }
 
 .game {
-	height: 100%;
-	background-color: rgb(62, 62, 62);
-	width: 80%;
-	max-width: 80%;
+	width: 100%;
 }
 
 .chat {
-	width: 20%;
-	position: relative;
+	display: none;
+}
+
+@media screen and (min-width: 1400px){
+	.game {
+		background-color: rgb(62, 62, 62);
+		width: 80%;
+		max-width: 80%;
+	}
+
+	.chat {
+		display: block;
+		width: 20%;
+		position: relative;
+	}
 }
