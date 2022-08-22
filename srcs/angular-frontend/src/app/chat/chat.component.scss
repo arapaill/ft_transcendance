@@ -1,16 +1,64 @@
-/* Chat containers */
-.container {
-	border: 2px solid #dedede;
-	background-color: #d0f4ff;
-	border-radius: 5px;
-	padding: 10px;
-	margin: 10px 0;
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
+
+$mainColor: #ffffff;
+$secondaryColor: #eaeaea;
+$pseudoColor: #33abeb;
+$textColor: #000000;
+$dateColor: #aaa;
+
+/* Channels */
+.channels {
+	background-color: #ef9999;
+	height: 30px;
+	display: flex;
+	align-items: center;
+	padding: 0 1rem;
+	font-size: 1.5rem;
 }
+
+.channels p {
+	float: left;
+	display: inline;
+	flex: 2;
+	color: rgb(72, 72, 72);
+}
+
+.toggle, .createChannel {
+	margin: 0 5px;
+	padding-top: 5px;
+	cursor: pointer;
+}
+
+.channelDropdown {
+	position: relative;
+ 	display: inline-block;
+}
+
+.dropdown-content {
+	display: none;
+	position: absolute;
+ 	background-color: #f1f1f1;
+	min-width: 160px;
+	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+	z-index: 1;
+
+	& a:hover {background-color: #ddd}
+}
+
+.open .channelDropdown {
+	display: block;
+}
+
+/* Chat Messages */
+.container {
+	background-color: $mainColor;
+	padding: 10px;
+}
+
   
-/* Darker chat container */
 .darker {
 	border-color: #ccc;
-	background-color: #aae6f8;
+	background-color: $secondaryColor;
 }
   
 /* Clear floats */
@@ -19,35 +67,27 @@
 	clear: both;
 	display: table;
 }
-  
-/* Style images */
+
+.userPseudo {
+	color: $pseudoColor;
+	font-family: 'Roboto', sans-serif;
+}
+
 .container img {
 	float: left;
-	max-width: 60px;
+	max-width: 55px;
 	width: 100%;
-	margin-right: 20px;
+	margin-right: 15px;
+	margin-top: 12px;
 	border-radius: 50%;
 }
   
-/* Style the right image */
-.container img.right {
-	float: right;
-	margin-left: 20px;
-	margin-right:0;
-}
-  
-/* Style time text */
-.time-right {
-	float: right;
-	color: #aaa;
-}
-  
-/* Style time text */
-.time-left {
-	float: left;
-	color: #999;
+.time {
+	padding-left: 5px;
+	color: $dateColor;
 }
 
+/* Chatbox */
 .txtbox{
 	display: block;
 	float: left;
