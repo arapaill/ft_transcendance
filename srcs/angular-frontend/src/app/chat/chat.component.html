@@ -1,17 +1,13 @@
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
-
-<div class="channels">
-	<p>> {{ currentChannel }}</p>
-	<ul class="channelDropdown">
-		<li class="dropdown-content" *ngFor="let channel of channels;">{{ channel }}</li>
-	</ul>
-	<div class="toggle">
-		<i class="material-symbols-outlined menuButton">menu</i>
-	</div>
-	<div class="createChannel">
-		<i class="material-symbols-outlined">add</i>
-	</div>
-</div>
+<mat-toolbar color="accent">
+	<mat-form-field appearance="fill" class="topbar" color="accent">
+		<mat-label>Channel sélectionné</mat-label>
+		<mat-select [(value)]="currentChannel">
+			<mat-option *ngFor="let channel of channels;" value="{{ channel }}">{{ channel }}</mat-option>
+		</mat-select>
+	</mat-form-field>
+	<mat-icon>settings</mat-icon>
+	<mat-icon>add_circle</mat-icon>
+</mat-toolbar>
 
 <div class="chat-area" #scrollMe [scrollTop]="scrollMe.scrollHeight">
 	<div *ngFor="let message of chatMessages; let isOdd = odd;">
@@ -23,9 +19,12 @@
 	</div>
 </div>
 
-<div class="chatbox-area">
-	<form action="" id="chatform">
-		<input type="text" value="" placeholder="Qu'avez vous à dire ?" class="txtbox" />
-		<input type="submit" value=" Envoyer " class="buttonSend" />	
-	</form>
-</div>
+
+<form class="chatbox-area">
+	<mat-form-field appearance="fill" class="chatbox" color="accent">
+	  <mat-label>Message</mat-label>
+	  <input matInput #message maxlength="256" placeholder="Qu'avez-vous de beau à dire ?">
+	  <mat-hint align="start"><strong>Soyez poli pas méchant svp</strong></mat-hint>
+	  <mat-hint align="end">{{message.value.length}} / 256</mat-hint>
+	</mat-form-field>
+</form>

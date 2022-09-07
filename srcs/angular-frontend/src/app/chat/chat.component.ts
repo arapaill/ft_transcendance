@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ChatMessage } from "../models/chat-message.model"
+import { ChatMessage } from "../models/chat-message.model";
+import { WebSocketService } from '../web-socket.service'
 
 @Component({
   selector: 'app-chat',
@@ -12,12 +13,20 @@ export class ChatComponent implements OnInit {
     "Général",
     "Tournois"
   ];
-  currentChannel: string = this.channels[0];
+  currentChannel: string = 'Général';
+  socket!: any;
+  messageToSend: string = "";
 
-  constructor() { }
+  constructor(private webSocketService: WebSocketService) { }
 
   ngOnInit(): void {
-    this.chatMessages = [
+    this.socket = this.webSocketService.socket;
+
+    this.socket.on("getMessage", (data: any) => {
+      this.chatMessages = data;
+    });
+
+    /* this.chatMessages = [
       {
         userPseudo: "cgoncalv",
         userAvatar: "assets/avatar-placeholder-1.png",
@@ -42,7 +51,7 @@ export class ChatComponent implements OnInit {
         text: "This is the last test",
         date: new Date()
       },
-    ];
+    ]; */
   }
 
 }

@@ -10,6 +10,13 @@ import { ProfileComponent } from './profile/profile.component';
 import { ClassementComponent } from './classement/classement.component';
 import { AcceuilComponent } from './acceuil/acceuil.component';
 import { ProfileAvatareComponent } from './profile-avatare/profile-avatare.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSelectModule } from '@angular/material/select'; 
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatMenuModule } from '@angular/material/menu'; 
+import { MatButtonModule } from '@angular/material/button'; 
+import { MatInputModule } from '@angular/material/input'; 
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -24,7 +31,14 @@ import { ProfileAvatareComponent } from './profile-avatare/profile-avatare.compo
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatSelectModule,
+    MatToolbarModule,
+    MatMenuModule,
+    MatButtonModule,
+    MatInputModule,
+    MatIconModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

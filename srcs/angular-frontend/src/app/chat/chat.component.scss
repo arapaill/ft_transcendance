@@ -7,7 +7,39 @@ $pseudoColor: #33abeb;
 $textColor: #000000;
 $dateColor: #aaa;
 
+$primaryColor: #69f0ae;
+
 /* Channels */
+
+mat-toolbar {
+	height: 60px;
+	padding-left: 0px;
+	padding-right: 0px;
+}
+
+.topbar {
+	margin-top: 20px;
+	transform: scale(0.8);
+}
+
+mat-icon {
+	padding-left: 2px;
+	cursor: pointer;
+	transition: all 0.3s ease 0s;
+	
+	&:hover {
+		color: whitesmoke;
+	}
+}
+
+
+.mat-raised-button {
+	height: 75px;
+	width: 75px;
+	font-size: 24px;
+	margin-left: auto;
+}
+
 .channels {
 	font-family: 'Roboto', sans-serif;
 	background-color: #ef9999;
@@ -16,38 +48,6 @@ $dateColor: #aaa;
 	align-items: center;
 	padding: 0 1rem;
 	font-size: 1.4rem;
-}
-
-.channels p {
-	float: left;
-	display: inline;
-	flex: 2;
-}
-
-.toggle, .createChannel {
-	margin: 0 5px;
-	padding-top: 5px;
-	cursor: pointer;
-}
-
-.channelDropdown {
-	position: relative;
- 	display: inline-block;
-}
-
-.dropdown-content {
-	display: none;
-	position: absolute;
- 	background-color: #f1f1f1;
-	min-width: 160px;
-	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-	z-index: 1;
-
-	& a:hover {background-color: #ddd}
-}
-
-.open .channelDropdown {
-	display: block;
 }
 
 /* Chat Messages */
@@ -60,11 +60,13 @@ $dateColor: #aaa;
 .container {
 	background-color: $mainColor;
 	padding: 1px 10px;
+	padding-bottom: 10px;
 }
 
   
 .darker {
 	background-color: $secondaryColor;
+	padding-bottom: 10px;
 }
   
 /* Clear floats (Pas nécessaire à priori) */
@@ -102,19 +104,15 @@ $dateColor: #aaa;
 	position: absolute;
 	bottom: 0;
 	width: 100%;
-	justify-content: center;
-	padding: 0px 10px;
+	background-color: #333333;
+	height: 75px;
 }
 
-.txtbox{
-	height: 32px;
-	width: 80%;
-	text-align: center;
-	margin-right: 5px;
+.chatbox {
+	width: 100%;
+	margin-top: 0px;
 }
 
-.buttonSend{
-	height: 40px;
-	width: 15%;
-	margin: 0px auto;
+::ng-deep .chatbox-area {
+	color: white !important;
 }
