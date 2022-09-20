@@ -2,11 +2,11 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ProfileModel} from "../models/profile-model.model"
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+  selector: 'app-info-profil',
+  templateUrl: './info-profil.component.html',
+  styleUrls: ['./info-profil.component.scss']
 })
-export class ProfileComponent implements OnInit {
+export class InfoProfilComponent implements OnInit {
   @Input() Personne!: ProfileModel;
   imgSrc!: string;
   title!: string;
@@ -24,5 +24,4 @@ export class ProfileComponent implements OnInit {
       this.imgSrc = 'assets/avatar-placeholder-1.png';
       this.title = "avatar-placeholder-1"
   }
-
 }
