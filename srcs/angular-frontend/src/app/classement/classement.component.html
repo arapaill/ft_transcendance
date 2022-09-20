@@ -1,1 +1,5 @@
-<p>classement works!</p>
+<div *ngFor="let profil of profils">
+	<img [src]="profil.avatar" [alt]="profil.avatarName">
+	<p>Nom: {{profil.Name}} </p>
+	<p> Nombres de victoires: {{profil.victoires}} </p>
+</div>

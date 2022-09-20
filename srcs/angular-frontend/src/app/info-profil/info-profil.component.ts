@@ -8,20 +8,30 @@ import { ProfileModel} from "../models/profile-model.model"
 })
 export class InfoProfilComponent implements OnInit {
   @Input() Personne!: ProfileModel;
-  imgSrc!: string;
-  title!: string;
+  @Input() User! : ProfileModel;
   constructor() { }
 
   ngOnInit(): void {
     this.Personne = 
       {
+        avatar: 'assets/avatar-placeholder-1.png',
+        avatarName: 'avatar-placeholder-1',
         Name: "Tester",
         Description: "I am Tester and I test things like this website or some other stuffs.",
         date: new Date(),
-        victoires: 0
+        victoires: 0,
+        match: true
         
       }
-      this.imgSrc = 'assets/avatar-placeholder-1.png';
-      this.title = "avatar-placeholder-1"
+      this.User =
+      {
+        avatar: 'assets/avatar-placeholder-1.png',
+        avatarName: 'avatar-placeholder-1',
+        Name: "User",
+        Description: "I am the User and I am real",
+        date: new Date(),
+        victoires : 9999,
+        match: false
+      }
   }
 }
