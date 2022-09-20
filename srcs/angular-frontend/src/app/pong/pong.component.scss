@@ -6,3 +6,17 @@
 	max-width:100%;
 	max-height: 960px;
 }
+
+@font-face {
+    font-family: 'orbitronregular';
+    src: url('./orbitron-variablefont_wght-webfont.woff2') format('woff2'),
+         url('./orbitron-variablefont_wght-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+canvas {
+	display: block;
+	margin: 0px auto;
+	background: black;
+}
