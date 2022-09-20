@@ -23,7 +23,7 @@ services:
       - frontend
     command: npm run start:dev
     ports:
-      - 9876:9876
+      - 3000:3000
 
   frontend:
     build:
