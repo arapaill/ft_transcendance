@@ -11,7 +11,7 @@ export class WebSocketService {
   readonly uri: string = "ws://localhost:3000";
 
   constructor() {
-    this.socket = io(this.uri);
+    this.socket = io(this.uri)
   }
 
 

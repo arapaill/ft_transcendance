@@ -1,4 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { WebSocketService } from '../web-socket.service';
+
 
 function drawMenu(ctx : CanvasRenderingContext2D) {
   ctx.font = '30px orbitronregular';
@@ -6,11 +8,10 @@ function drawMenu(ctx : CanvasRenderingContext2D) {
   ctx.strokeRect(25, 25, 1150, 550);
   ctx.fillStyle = "red";
   ctx.textAlign = "center";
-  ctx.fillText("Hello World", 100, 100);
 }
 
 class PongMenu {
-
+  
   private canvas : ElementRef<HTMLCanvasElement>;
   private ctx : CanvasRenderingContext2D;
   constructor(Canvas : ElementRef<HTMLCanvasElement>) {
@@ -36,13 +37,15 @@ export class PongComponent implements OnInit {
   draw_rect(x: number, y: number, z: number) {
     this.ctx.fillRect(z * x, z * y, z, z);
   }
-
+  
   
   ngOnInit(): void {
     let menu = new PongMenu(this.canvas);
     document.addEventListener("keydown", function(e) {
+      let socket = new WebSocketService;
       switch(e.code) {
         case 'ArrowUp': {
+          socket.emit('message', {data : "ok"});
           alert("up");
           break ;
         }
