@@ -1,4 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { MatDialog } from  '@angular/material/dialog';
+import { PopupAddFriendComponent } from "../popup-add-friend/popup-add-friend.component"
 import { ProfileModel} from "../models/profile-model.model"
 
 @Component({
@@ -9,7 +11,7 @@ import { ProfileModel} from "../models/profile-model.model"
 export class InfoProfilComponent implements OnInit {
   @Input() Personne!: ProfileModel;
   @Input() User! : ProfileModel;
-  constructor() { }
+  constructor(private  dialogRef : MatDialog){}
 
   ngOnInit(): void {
     this.Personne = 
@@ -33,5 +35,12 @@ export class InfoProfilComponent implements OnInit {
         victoires : 9999,
         match: false
       }
+  }
+  openDialog(){
+    this.dialogRef.open(PopupAddFriendComponent,{
+      data : {
+        name : 'Tester'
+      }
+    });
   }
 }

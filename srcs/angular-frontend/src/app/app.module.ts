@@ -16,7 +16,10 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button'; 
 import { MatInputModule } from '@angular/material/input'; 
 import { MatIconModule } from '@angular/material/icon';
+import { MatDialogModule } from '@angular/material/dialog';
 import { InfoProfilComponent } from './info-profil/info-profil.component';
+import { PopupModifierProfilComponent } from './popup-modifier-profil/popup-modifier-profil.component';
+import { PopupAddFriendComponent } from './popup-add-friend/popup-add-friend.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +31,8 @@ import { InfoProfilComponent } from './info-profil/info-profil.component';
     ClassementComponent,
     AcceuilComponent,
     InfoProfilComponent,
+    PopupModifierProfilComponent,
+    PopupAddFriendComponent,
   ],
   imports: [
     BrowserModule,
@@ -39,6 +44,7 @@ import { InfoProfilComponent } from './info-profil/info-profil.component';
     MatButtonModule,
     MatInputModule,
     MatIconModule,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

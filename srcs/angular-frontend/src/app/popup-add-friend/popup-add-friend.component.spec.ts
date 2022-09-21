@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProfileAvatareComponent } from './profile-avatare.component';
+import { PopupAddFriendComponent } from './popup-add-friend.component';
 
-describe('ProfileAvatareComponent', () => {
-  let component: ProfileAvatareComponent;
-  let fixture: ComponentFixture<ProfileAvatareComponent>;
+describe('PopupAddFriendComponent', () => {
+  let component: PopupAddFriendComponent;
+  let fixture: ComponentFixture<PopupAddFriendComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ProfileAvatareComponent ]
+      declarations: [ PopupAddFriendComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ProfileAvatareComponent);
+    fixture = TestBed.createComponent(PopupAddFriendComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
