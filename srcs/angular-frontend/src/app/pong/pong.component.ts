@@ -46,19 +46,19 @@ export class PongComponent implements OnInit {
       switch(e.code) {
         case 'ArrowUp': {
           socket.emit('message', {data : "ok"});
-          alert("up");
+          console.log("up");
           break ;
         }
         case 'ArrowLeft': {
-          alert("left");
+          console.log("left");
           break ;
         }
         case 'ArrowRight': {
-          alert("right");
+          console.log("right");
           break ;
         }
         case 'ArrowDown': {
-          alert("down");
+          console.log("down");
           break ;
         }
         case 'Enter': {

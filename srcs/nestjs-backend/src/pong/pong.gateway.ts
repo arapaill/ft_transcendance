@@ -1,6 +1,6 @@
 import { SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
 
-@WebSocketGateway()
+@WebSocketGateway(3000)
 export class PongGateway {
   @SubscribeMessage('message')
   handleMessage(client: any, payload: any): string {

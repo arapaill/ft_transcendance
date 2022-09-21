@@ -1,6 +1,7 @@
 import { WebSocketServer } from '@nestjs/websockets';
 import { MessageBody } from '@nestjs/websockets';
 import { SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
+import { Socket } from 'dgram';
 import { Server } from 'http';
 
 @WebSocketGateway({
@@ -10,10 +11,11 @@ import { Server } from 'http';
   }
 })
 export class AppGateway {
-  @WebSocketServer()
+  @WebSocketServer(4200)
   server : Server;
+
   @SubscribeMessage('message')
-  handleMessage(@MessageBody() data: any): string {
+  handleMessage(client: Socket, data: any): string {
     console.log("DODODODO");
     alert("ok");
     return 'Hello worldqsqsq!';
