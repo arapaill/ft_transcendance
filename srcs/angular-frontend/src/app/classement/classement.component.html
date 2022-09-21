@@ -1,5 +1,5 @@
 <div *ngFor="let profil of profils">
 	<img [src]="profil.avatar" [alt]="profil.avatarName">
-	<p>Nom: {{profil.Name}} </p>
+	<button (click)="openDialog()">Nom: {{profil.Name}} </button>
 	<p> Nombres de victoires: {{profil.victoires}} </p>
 </div>

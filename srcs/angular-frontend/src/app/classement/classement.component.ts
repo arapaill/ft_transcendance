@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ProfileModel } from '../models/profile-model.model';
+import { MatDialog } from  '@angular/material/dialog';
+import { InfoProfilComponent } from '../info-profil/info-profil.component';
 
 @Component({
   selector: 'app-classement',
@@ -9,7 +11,7 @@ import { ProfileModel } from '../models/profile-model.model';
 export class ClassementComponent implements OnInit {
   @Input() profils!: ProfileModel[];
 
-  constructor() { }
+  constructor(private  dialogRef : MatDialog){}
 
   ngOnInit(): void {
     this.profils = [
@@ -52,6 +54,9 @@ export class ClassementComponent implements OnInit {
       }
     ]
 
+  }
+  openDialog(){
+    this.dialogRef.open(InfoProfilComponent);
   }
 
 }
