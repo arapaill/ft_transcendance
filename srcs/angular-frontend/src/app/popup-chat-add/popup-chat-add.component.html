@@ -1,0 +1,22 @@
+<h1>Créer un nouveau channel</h1>
+<form>
+	<mat-form-field color="accent">
+		<mat-label>Nom du channel</mat-label>
+		<input matInput #text maxlength="32" placeholder="Channel name">
+	</mat-form-field>
+</form>
+
+<form>
+	<mat-form-field color="accent">
+		<mat-label>Utilisateurs à inviter</mat-label>
+		<input matInput #text maxlength="32" placeholder="Users">
+	</mat-form-field>
+</form>
+
+<form>
+	<mat-slide-toggle (change)="onToggle($event)">Utiliser un mot de passe</mat-slide-toggle>
+	<mat-form-field color="accent" *ngIf="isPasswordChecked">
+		<mat-label>Mot de passe</mat-label>
+		<input matInput #text maxlength="32" placeholder="Password">
+	</mat-form-field>
+</form>

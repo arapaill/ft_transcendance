@@ -1,16 +1,16 @@
 <mat-toolbar color="accent">
 	<mat-form-field appearance="fill" class="topbar" color="accent">
 		<mat-label>Channel sélectionné</mat-label>
-		<mat-select [(value)]="currentChannel">
-			<mat-option *ngFor="let channel of channels;" value="{{ channel }}">{{ channel }}</mat-option>
+		<mat-select [(value)]="currentChannel.name">
+			<mat-option *ngFor="let channel of channels;" value="{{ channel.name }}">{{ channel.name }}</mat-option>
 		</mat-select>
 	</mat-form-field>
-	<mat-icon>settings</mat-icon>
-	<mat-icon>add_circle</mat-icon>
+	<mat-icon (click)="openSettingsDialog()">settings</mat-icon>
+	<mat-icon (click)="openAddDialog()">add_circle</mat-icon>
 </mat-toolbar>
 
 <div class="chat-area" #scrollMe [scrollTop]="scrollMe.scrollHeight">
-	<div *ngFor="let message of chatMessages; let isOdd = odd;">
+	<div *ngFor="let message of currentChannel.messages; let isOdd = odd;">
 		<div [ngClass]="isOdd ? 'container darker' : 'container'">
 			<img [src]="message.userAvatar" alt="Avatar"/>
 			<p><span class="userPseudo">{{ message.userPseudo }}</span><span class="time">{{ message.date.getHours() }}:{{ message.date.getMinutes() }}</span></p>
@@ -19,12 +19,11 @@
 	</div>
 </div>
 
-
-<form class="chatbox-area">
+<form class="chatbox-area" (submit)="submitMessage(message.value)">
 	<mat-form-field appearance="fill" class="chatbox" color="accent">
 	  <mat-label>Message</mat-label>
 	  <input matInput #message maxlength="256" placeholder="Qu'avez-vous de beau à dire ?">
-	  <mat-hint align="start"><strong>Soyez poli pas méchant svp</strong></mat-hint>
+	  <mat-hint align="start">Soyez poli pas méchant svp</mat-hint>
 	  <mat-hint align="end">{{message.value.length}} / 256</mat-hint>
 	</mat-form-field>
 </form>
