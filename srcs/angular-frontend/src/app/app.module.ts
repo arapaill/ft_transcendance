@@ -20,6 +20,10 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { InfoProfilComponent } from './info-profil/info-profil.component';
 import { PopupModifierProfilComponent } from './popup-modifier-profil/popup-modifier-profil.component';
 import { PopupAddFriendComponent } from './popup-add-friend/popup-add-friend.component';
+import { FormsModule } from '@angular/forms';
+import { PopupChatAddComponent } from './popup-chat-add/popup-chat-add.component';
+import { PopupChatSettingsComponent } from './popup-chat-settings/popup-chat-settings.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle'; 
 
 @NgModule({
   declarations: [
@@ -33,6 +37,8 @@ import { PopupAddFriendComponent } from './popup-add-friend/popup-add-friend.com
     InfoProfilComponent,
     PopupModifierProfilComponent,
     PopupAddFriendComponent,
+    PopupChatAddComponent,
+    PopupChatSettingsComponent,
   ],
   imports: [
     BrowserModule,
@@ -45,6 +51,8 @@ import { PopupAddFriendComponent } from './popup-add-friend/popup-add-friend.com
     MatInputModule,
     MatIconModule,
     MatDialogModule,
+    FormsModule,
+    MatSlideToggleModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
