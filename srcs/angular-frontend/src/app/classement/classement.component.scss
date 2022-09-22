@@ -1,0 +1,19 @@
+.container {
+	flex-direction: column;
+	justify-content: space-between;
+	width: 	215px;
+  	height: 275px;
+	margin: 50px;
+  	outline: solid 1px black;
+}
+
+.img{
+
+}
+.container .button {
+	justify-content: flex-start;
+	display: flex;	
+}
+.container .text{
+	justify-content: flex-start;
+}

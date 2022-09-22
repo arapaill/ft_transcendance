@@ -2,7 +2,7 @@
 
 <p>Name: {{ Personne.Name }}</p>
 <p>Description: {{ Personne.Description }}</p>
-<p>Date: {{ Personne.date }}</p>
+<p>Date: {{ Personne.date.getDay() }}/{{ Personne.date.getMonth() }}/{{ Personne.date.getFullYear() }}</p>
 <p>Victoires: {{ Personne.victoires }}</p>
 <button *ngIf="Personne.Name != User.Name" mat-button color="basic" (click)="openDialog()">  Ajouter en amis </button>
 <button *ngIf="Personne.match" mat-button color="basic">  Voir match </button>
