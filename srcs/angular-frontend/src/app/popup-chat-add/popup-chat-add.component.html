@@ -1,22 +1,28 @@
-<h1>Créer un nouveau channel</h1>
-<form>
-	<mat-form-field color="accent">
-		<mat-label>Nom du channel</mat-label>
-		<input matInput #text maxlength="32" placeholder="Channel name">
-	</mat-form-field>
-</form>
+<h2 mat-dialog-title>Créer un nouveau channel</h2>
+<mat-dialog-content>
+	<form #settingsForm="ngForm" (ngSubmit)="getValues(settingsForm.value)">
+		<mat-form-field color="accent">
+			<mat-label>Nom du channel</mat-label>
+			<input matInput ngModel maxlength="32" name="name" placeholder="Channel Name">
+		</mat-form-field>
 
-<form>
-	<mat-form-field color="accent">
-		<mat-label>Utilisateurs à inviter</mat-label>
-		<input matInput #text maxlength="32" placeholder="Users">
-	</mat-form-field>
-</form>
+		<mat-form-field color="accent">
+			<mat-label>Ajouter des utilisateurs</mat-label>
+			<input matInput ngModel maxlength="32" name="users" placeholder="Users">
+		</mat-form-field>
 
-<form>
-	<mat-slide-toggle (change)="onToggle($event)">Utiliser un mot de passe</mat-slide-toggle>
-	<mat-form-field color="accent" *ngIf="isPasswordChecked">
-		<mat-label>Mot de passe</mat-label>
-		<input matInput #text maxlength="32" placeholder="Password">
-	</mat-form-field>
-</form>
+		<mat-form-field color="accent">
+			<mat-label>Ajouter des modérateurs</mat-label>
+			<input matInput ngModel maxlength="32" name="admin" placeholder="Users">
+		</mat-form-field>
+
+		<mat-slide-toggle (change)="onToggle($event)">Utiliser un mot de passe</mat-slide-toggle>
+		<mat-form-field color="accent" *ngIf="isPasswordChecked">
+			<mat-label>Mot de passe</mat-label>
+			<input matInput ngModel maxlength="32" name="password" placeholder="Password">
+		</mat-form-field>
+
+		<button mat-button color="accent">Cancel</button>
+		<button mat-raised-button color="accent">Save</button>
+	</form>
+</mat-dialog-content>

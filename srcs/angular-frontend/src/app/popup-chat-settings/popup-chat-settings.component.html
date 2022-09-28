@@ -1,1 +1,28 @@
-<p>popup-chat-settings works!</p>
+<h2 mat-dialog-title>Changer les paramètres du channel</h2>
+<mat-dialog-content>
+	<form #settingsForm="ngForm" (ngSubmit)="getValues(settingsForm.value)">
+		<mat-form-field color="accent">
+			<mat-label>Changer le nom du channel</mat-label>
+			<input matInput ngModel maxlength="32" name="newName" placeholder="{{channelName}}">
+		</mat-form-field>
+
+		<mat-form-field color="accent">
+			<mat-label>Ajouter des utilisateurs</mat-label>
+			<input matInput ngModel maxlength="32" name="newUsers" placeholder="Users">
+		</mat-form-field>
+
+		<mat-form-field color="accent">
+			<mat-label>Ajouter des modérateurs</mat-label>
+			<input matInput ngModel maxlength="32" name="newAdmin" placeholder="Users">
+		</mat-form-field>
+
+		<mat-slide-toggle (change)="onToggle($event)">Utiliser un mot de passe</mat-slide-toggle>
+		<mat-form-field color="accent" *ngIf="isPasswordChecked">
+			<mat-label>Mot de passe</mat-label>
+			<input matInput ngModel maxlength="32" name="newPassword" placeholder="Password">
+		</mat-form-field>
+
+		<button mat-button color="accent">Cancel</button>
+		<button mat-raised-button color="accent">Save</button>
+	</form>
+</mat-dialog-content>

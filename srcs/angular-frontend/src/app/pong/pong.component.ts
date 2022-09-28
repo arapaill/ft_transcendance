@@ -61,14 +61,14 @@ export class PongComponent implements OnInit {
           console.log("down");
           break ;
         }
-        case 'Enter': {
+/*         case 'Enter': {
           alert("enter");
           break ;
         }
         case 'Space': {
           alert("enter");
           break ;
-        }
+        } */
       }
     });
   }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-popup-chat-add',
@@ -8,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 export class PopupChatAddComponent implements OnInit {
   isPasswordChecked = false;
 
-  constructor() { }
+  constructor(public dialogRef: MatDialogRef<PopupChatAddComponent>) { }
 
   ngOnInit(): void {
   }
@@ -18,6 +19,10 @@ export class PopupChatAddComponent implements OnInit {
       this.isPasswordChecked = true;
     else
       this.isPasswordChecked = false;
+  }
+
+  getValues(values: any) {
+    this.dialogRef.close(values);
   }
 
 }
