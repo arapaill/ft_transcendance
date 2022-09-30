@@ -1,9 +1,6 @@
-<form >
-	<mat-form-field>
-		<mat-label>Avatar</mat-label>
-		<input matInput #text  placeholder="Avatar: ">
 
-	</mat-form-field>
+<form >
+		<input type="file" (change)="processFile($event)"  placeholder="Avatar: ">
 </form>
 
 <form >
@@ -21,3 +18,4 @@
 
 	</mat-form-field>
 </form>
+

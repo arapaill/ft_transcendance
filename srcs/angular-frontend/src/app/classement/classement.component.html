@@ -1,7 +1,10 @@
+<h1>click the name of a user to see the profil</h1>
+
 <div class="container" *ngFor="let profil of profils">
 	<img [src]="profil.avatar" [alt]="profil.avatarName">
 	<div class="button">
-		<button mat-button color="basic"  (click)="openDialog()">Nom: {{profil.Name}} </button>
+		<button mat-button color="basic" (click)="openDialog()">Nom: {{profil.Name}} </button>
 	</div>
 	<p class="text"> Nombres de victoires: {{profil.victoires}} </p>
 </div>
+
