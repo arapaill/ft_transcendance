@@ -294,10 +294,15 @@ export class Game {
         }
     }
 
-    returnData() : any {
+    returnGameState() : any {
         return {
             MENUSTATE: this.menuState,
             GAMESTATE: this.gameState,
+        }
+    }
+
+    returnData() : any {
+        return {    
             PADDLEONEPOS: this.playerOne.getPaddleY(),
             PADDLETWOPOS: this.playerTwo.getPaddleY(),
             SCORE1: this.playerOne.getScore(),

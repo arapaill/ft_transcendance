@@ -1,4 +1,7 @@
 import { Controller } from '@nestjs/common';
 
 @Controller('pong')
-export class PongController {}
+export class PongController {
+    getGameData() {
+    }
+}
