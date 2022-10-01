@@ -11,13 +11,12 @@ import { Server } from 'http';
   }
 })
 export class AppGateway {
-  @WebSocketServer(4200)
+  @WebSocketServer()
   server : Server;
 
   @SubscribeMessage('message')
   handleMessage(client: Socket, data: any): string {
     console.log("DODODODO");
-    alert("ok");
     return 'Hello worldqsqsq!';
   }
 }

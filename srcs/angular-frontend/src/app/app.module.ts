@@ -23,7 +23,8 @@ import { PopupAddFriendComponent } from './popup-add-friend/popup-add-friend.com
 import { FormsModule } from '@angular/forms';
 import { PopupChatAddComponent } from './popup-chat-add/popup-chat-add.component';
 import { PopupChatSettingsComponent } from './popup-chat-settings/popup-chat-settings.component';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle'; 
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     MatDialogModule,
     FormsModule,
     MatSlideToggleModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

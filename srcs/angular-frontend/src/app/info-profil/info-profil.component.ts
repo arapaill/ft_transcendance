@@ -1,17 +1,28 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MatDialog } from  '@angular/material/dialog';
-import { PopupAddFriendComponent } from "../popup-add-friend/popup-add-friend.component"
-import { ProfileModel} from "../models/profile-model.model"
+import { PopupAddFriendComponent } from "../popup-add-friend/popup-add-friend.component";
+import { ProfileModel} from "../models/profile-model.model";
 
 @Component({
   selector: 'app-info-profil',
   templateUrl: './info-profil.component.html',
+  template: `
+    <input type="file" accept=".jpg,.png" class="button" (change)="upload($event.target.files)" />
+    <p>Upload Percent: {{percentDone}}% </p> <br />
+
+    <ng-container *ngIf="uploadSuccess" class="success">
+      <p class="sucess">Upload Successful</p>
+    </ng-container>
+  `,
   styleUrls: ['./info-profil.component.scss']
+  
 })
 export class InfoProfilComponent implements OnInit {
   @Input() Personne!: ProfileModel;
   @Input() User! : ProfileModel;
-  constructor(private  dialogRef : MatDialog){}
+  percentDone!: number;
+  uploadSuccess!: boolean;
+  constructor(private  dialogRef : MatDialog) {}
 
   ngOnInit(): void {
     this.Personne = 
@@ -36,6 +47,7 @@ export class InfoProfilComponent implements OnInit {
         match: false
       }
   }
+  
   openDialog(){
     this.dialogRef.open(PopupAddFriendComponent,{
       data : {
