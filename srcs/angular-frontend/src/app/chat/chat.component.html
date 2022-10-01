@@ -12,14 +12,14 @@
 <div class="chat-area" #scrollMe [scrollTop]="scrollMe.scrollHeight">
 	<div *ngFor="let message of currentChannel.messages; let isOdd = odd;">
 		<div [ngClass]="isOdd ? 'container darker' : 'container'">
-			<img [src]="message.userAvatar" alt="Avatar"/>
+			<img [src]="message.userAvatar" alt="Avatar" (click)="openUserProfile()"/>
 			<p><span class="userPseudo">{{ message.userPseudo }}</span><span class="time">{{ message.date.getHours() }}:{{ message.date.getMinutes() }}</span></p>
 			<p class="text" >{{ message.text }}</p>
 		</div>
 	</div>
 </div>
 
-<form class="chatbox-area" (ngSubmit)="sendNewMessage(message.value)">
+<form class="chatbox-area" (ngSubmit)="sendNewMessage(message)">
 	<mat-form-field appearance="fill" class="chatbox" color="accent">
 	  <mat-label>Message</mat-label>
 	  <input matInput #message maxlength="256" placeholder="Qu'avez-vous de beau à dire ?">
