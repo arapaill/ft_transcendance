@@ -4,9 +4,10 @@ import { MatDialog } from  '@angular/material/dialog';
 import { WebSocketService } from '../web-socket.service'
 import { PopupChatAddComponent } from '../popup-chat-add/popup-chat-add.component';
 import { PopupChatSettingsComponent } from '../popup-chat-settings/popup-chat-settings.component';
+import { InfoProfilComponent } from '../info-profil/info-profil.component';
 
-import { ChatMessage } from "../models/chat-message.model";
-import { ChatChannel } from '../models/chat-channel.model';
+import { ChatChannel, ChatMessage } from '../models/chat.model'
+
 
 @Component({
   selector: 'app-chat',
@@ -19,15 +20,15 @@ export class ChatComponent implements OnInit {
   selectedChannel!: string;
 
 
-  constructor(private webSocketService: WebSocketService, private dialogRef: MatDialog) {
-  }
+  constructor(private webSocketService: WebSocketService, private dialogRef: MatDialog) { }
 
   ngOnInit(): void {
     this.currentChannel = {
       name: 'Général',
-      admin: 'Corentin',
+      owner: 'Corentin',
+      admins: [],
       users: ['Corentin', 'Alexandre'],
-      passwordEnabled: false,
+      type: "Public",
       messages: [
         {
           userPseudo: "cgoncalv",
@@ -58,9 +59,10 @@ export class ChatComponent implements OnInit {
 
     let newChannel: ChatChannel = {
       name: 'Autre',
-      admin: 'Corentin',
+      owner: 'Corentin', // A changer
+      admins: [],
       users: ['Corentin', 'Alexandre'],
-      passwordEnabled: false,
+      type: "Public",
       messages: [
         {
           userPseudo: "cgoncalv",
@@ -80,13 +82,16 @@ export class ChatComponent implements OnInit {
     })
   }
 
-  sendNewMessage(msg: string): void {
+  sendNewMessage(msg: any): void {
+    if (msg.value == "")
+      return ;
     let newMessage: ChatMessage = {
       userPseudo: "cgoncalv",
       userAvatar: "assets/avatar-placeholder-1.png",
-      text: msg,
+      text: msg.value,
       date: new Date()
     }
+    msg.value = "";
     this.currentChannel.messages.push(newMessage);
     this.webSocketService.emit("sendNewMessage", newMessage);
   }
@@ -103,9 +108,10 @@ export class ChatComponent implements OnInit {
   createNewChannel(settings: any) {
     let newChannel: ChatChannel = {
       name: settings.name,
-      admin: settings.admin,
+      owner: "Corentin", // A changer
+      admins: settings.admin,
       users: settings.users,
-      passwordEnabled: settings.passwordEnabled,
+      type: settings.type,
       password: settings.password,
       messages: []
     }
@@ -114,18 +120,26 @@ export class ChatComponent implements OnInit {
   }
 
   changeCurrentChannel(newSettings: any) {
+    if (newSettings == "Delete") {
+      let index = this.channels.indexOf(this.currentChannel);
+      this.channels.splice(index, 1);
+      return ;
+    }
     this.currentChannel.name = newSettings.newName;
-    if (newSettings.newPassword) {
-      this.currentChannel.passwordEnabled = true;
+    this.currentChannel.type = newSettings.newType;
+    if (this.currentChannel.type == "Protégé") {
       this.currentChannel.password = newSettings.newPassword;
     }
+    // Ajouter users et admins
     this.webSocketService.emit('changeChannel', newSettings);
   }
 
   openSettingsDialog() {
     let settingsDialog = this.dialogRef.open(PopupChatSettingsComponent, {
       data: {
-        channelName: this.currentChannel.name
+        name: this.currentChannel.name,
+        owner: this.currentChannel.owner,
+        type: this.currentChannel.type
       }
     });
   
@@ -139,6 +153,13 @@ export class ChatComponent implements OnInit {
 
     settingsDialog.afterClosed().subscribe(result => {
       this.createNewChannel(result);
+    });
+  }
+
+  openUserProfile() {
+    let profileDialog = this.dialogRef.open(InfoProfilComponent);
+
+    profileDialog.afterClosed().subscribe(result => {
     });
   }
 

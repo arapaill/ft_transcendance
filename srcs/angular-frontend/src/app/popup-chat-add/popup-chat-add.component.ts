@@ -15,13 +15,18 @@ export class PopupChatAddComponent implements OnInit {
   }
 
   onToggle(event: any) {
-    if (event.checked == true)
+    if (event.value === "Protégé")
       this.isPasswordChecked = true;
     else
       this.isPasswordChecked = false;
   }
 
-  getValues(values: any) {
+  closeDialog() {
+    this.dialogRef.close();
+  }
+
+  submitValues(values: any) {
+    console.log(values);
     this.dialogRef.close(values);
   }
 

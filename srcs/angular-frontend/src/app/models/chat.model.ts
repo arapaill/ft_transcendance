@@ -7,9 +7,10 @@ export class ChatMessage {
 
 export class ChatChannel {
 	name!: string;
-	admin!: string;
+	owner!: string;
+	admins!: string[];
 	users!: string[];
-	passwordEnabled: boolean = false;
+	type!: string;
 	password?: string = "";
 	messages!: ChatMessage[];
 }

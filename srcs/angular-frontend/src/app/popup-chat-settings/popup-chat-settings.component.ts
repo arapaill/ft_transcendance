@@ -1,7 +1,8 @@
 import { Component, OnInit, Inject, Optional } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { FormControl } from '@angular/forms';
 
-import { ChatChannel } from '../models/chat-channel.model';
+import { ChatChannel } from '../models/chat.model';
 
 @Component({
   selector: 'app-popup-chat-settings',
@@ -10,27 +11,57 @@ import { ChatChannel } from '../models/chat-channel.model';
 })
 export class PopupChatSettingsComponent implements OnInit {
   isPasswordChecked: boolean = false;
-  channelName!: string;
-  newSettings!: ChatChannel;
+  currentSettings: ChatChannel = {
+    name: "",
+    owner: "",
+    admins: [],
+    users: [],
+    type: "",
+    password: "",
+    messages: []
+  };
+  disableSelect: boolean = true;
 
   constructor(
     public dialogRef: MatDialogRef<PopupChatSettingsComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
-      this.channelName = data.channelName;
+      this.currentSettings.name = data.name,
+      this.currentSettings.owner = data.owner,
+      this.currentSettings.type = data.type
   }
 
   ngOnInit(): void {
+    if (this.currentSettings.owner === "Corentin")
+      this.disableSelect = false;
+    else
+      this.disableSelect = true;
   }
 
   onToggle(event: any) {
-    if (event.checked == true)
+    if (event.value === "Protégé")
       this.isPasswordChecked = true;
     else
       this.isPasswordChecked = false;
   }
 
-  getValues(values: any) {
+  
+  isOwner() {
+    if (this.currentSettings.owner === "Corentin") // A changer
+    return new FormControl(true);
+    else
+    return new FormControl(false);
+  }
+  
+  closeDialog() {
+    this.dialogRef.close();
+  }
+
+  submitValues(values: any) {
     this.dialogRef.close(values);
+  }
+
+  deleteChannel() {
+    this.dialogRef.close("Delete");
   }
 
 }
