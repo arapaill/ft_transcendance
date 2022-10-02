@@ -1,59 +1,24 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { WebSocketService } from '../web-socket.service';
+import { Pong } from './Pong'
 
 
 let socket = new WebSocketService;
-
-function drawMenu(ctx : CanvasRenderingContext2D) {
-  console.log("menu draw");
-  ctx.font = '30px orbitronregular';
-  ctx.strokeStyle = 'white';
-  ctx.strokeRect(25, 25, 1150, 550);
-  ctx.fillStyle = "red";
-  ctx.textAlign = "center";
-}
-
-class Pong {
-  
-  private canvas : ElementRef<HTMLCanvasElement>;
-  private ctx : CanvasRenderingContext2D;
-  constructor(Canvas : ElementRef<HTMLCanvasElement>) {
-    this.canvas = Canvas;
-    this.ctx = <CanvasRenderingContext2D>this.canvas.nativeElement.getContext('2d');
-  }
-  loop() {
-    let state : any;
-    console.log("get in the looop");
-    this.ctx.font = '30px orbitronregular';
-    this.ctx.strokeStyle = 'white';
-    this.ctx.strokeRect(25, 25, 1150, 550);
-    this.ctx.fillStyle = "red";
-    this.ctx.textAlign = "center";
-    //drawMenu(this.ctx);
-    //socket.emit('update', {data : "ok"});
-    //socket.listen('update').subscribe((val : any) => {
-    //   state = val;
-    //});
-    //if (state.MENUSTATE == 0)
-    {
-    }
-  }
-}
 
 @Component({
   selector: 'app-pong',
   templateUrl: './pong.component.html',
   styleUrls: ['./pong.component.scss']
 })
-
-
 export class PongComponent implements OnInit {
   @ViewChild('canvas', { static: true })
-  canvas!: ElementRef<HTMLCanvasElement>;
+  private canvas: ElementRef = {} as ElementRef;
+  pong!: Pong;
+
+  constructor(private webSocketServive: WebSocketService) {}
 
   ngOnInit(): void {
-    let pong = new Pong(this.canvas);
-    let data : any;
+    this.pong = new Pong(this.canvas);
     document.addEventListener("keydown", function(e) {
       switch(e.code) {
         case 'ArrowUp': {
@@ -74,6 +39,23 @@ export class PongComponent implements OnInit {
         }
       }
     });
-    requestAnimationFrame(pong.loop);
+
+    this.loop();
+  }
+
+  loop() {
+    let state: any;
+    console.log("get in the looop");
+    console.log("menu draw");
+    this.pong.ctx.font = '30px orbitronregular';
+    this.pong.ctx.strokeStyle = 'white';
+    this.pong.ctx.strokeRect(25, 25, 1150, 550);
+    this.pong.ctx.fillStyle = "red";
+    this.pong.ctx.textAlign = "center";
+    requestAnimationFrame(this.loop.bind(this));
+    this.webSocketServive.emit('update', {data : "ok"});
+    socket.listen('update').subscribe((val : any) => {
+      state = val;
+    });
   }
 }
