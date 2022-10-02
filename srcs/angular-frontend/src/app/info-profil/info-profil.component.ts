@@ -1,19 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MatDialog } from  '@angular/material/dialog';
 import { PopupAddFriendComponent } from "../popup-add-friend/popup-add-friend.component";
+import { WebSocketService } from '../web-socket.service'
 import { ProfileModel} from "../models/profile-model.model";
 
 @Component({
   selector: 'app-info-profil',
   templateUrl: './info-profil.component.html',
-  template: `
-    <input type="file" accept=".jpg,.png" class="button" (change)="upload($event.target.files)" />
-    <p>Upload Percent: {{percentDone}}% </p> <br />
 
-    <ng-container *ngIf="uploadSuccess" class="success">
-      <p class="sucess">Upload Successful</p>
-    </ng-container>
-  `,
   styleUrls: ['./info-profil.component.scss']
   
 })
@@ -22,9 +16,21 @@ export class InfoProfilComponent implements OnInit {
   @Input() User! : ProfileModel;
   percentDone!: number;
   uploadSuccess!: boolean;
-  constructor(private  dialogRef : MatDialog) {}
+  matchs !: string[];
+  constructor(private webSocketService: WebSocketService, private  dialogRef : MatDialog) {}
 
   ngOnInit(): void {
+    this.webSocketService.listen("getMatchHistory").subscribe((data) => {
+      console.log(data);
+    });
+    this.webSocketService.emit("getUser", name);
+    this.webSocketService.listen("getProfil").subscribe((data) => {
+      console.log(data);
+    });
+    this.matchs = [
+      "arapaill vs Cgoncalv 1.0",
+      "arapaill vs pet 8.9",
+    ]
     this.Personne = 
       {
         avatar: 'assets/avatar-placeholder-1.png',
