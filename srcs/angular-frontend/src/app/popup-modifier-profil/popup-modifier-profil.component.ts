@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { WebSocketService } from '../web-socket.service'
 import { HttpClient} from '@angular/common/http';
 
 
@@ -9,7 +10,7 @@ import { HttpClient} from '@angular/common/http';
 })
 export class PopupModifierProfilComponent implements OnInit {
 
-  constructor(private http: HttpClient) { }
+  constructor(private webSocketService: WebSocketService, private http: HttpClient) { }
 
   selectedFile!: File;
 
@@ -19,9 +20,7 @@ export class PopupModifierProfilComponent implements OnInit {
     const fd = new FormData();
     fd.append('image', this.selectedFile, this.selectedFile.name);
     this.selectedFile = <File>event.target.files[0];
-  }
-  onUpload(){
-
+    this.webSocketService.emit("updateUserAvatar", fd);
   }
 
 }
