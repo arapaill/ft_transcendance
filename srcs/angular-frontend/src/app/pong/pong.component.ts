@@ -2,7 +2,10 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { WebSocketService } from '../web-socket.service';
 
 
+let socket = new WebSocketService;
+
 function drawMenu(ctx : CanvasRenderingContext2D) {
+  console.log("menu draw");
   ctx.font = '30px orbitronregular';
   ctx.strokeStyle = 'white';
   ctx.strokeRect(25, 25, 1150, 550);
@@ -10,14 +13,30 @@ function drawMenu(ctx : CanvasRenderingContext2D) {
   ctx.textAlign = "center";
 }
 
-class PongMenu {
+class Pong {
   
   private canvas : ElementRef<HTMLCanvasElement>;
   private ctx : CanvasRenderingContext2D;
   constructor(Canvas : ElementRef<HTMLCanvasElement>) {
     this.canvas = Canvas;
     this.ctx = <CanvasRenderingContext2D>this.canvas.nativeElement.getContext('2d');
-    drawMenu(this.ctx)
+  }
+  loop() {
+    let state : any;
+    console.log("get in the looop");
+    this.ctx.font = '30px orbitronregular';
+    this.ctx.strokeStyle = 'white';
+    this.ctx.strokeRect(25, 25, 1150, 550);
+    this.ctx.fillStyle = "red";
+    this.ctx.textAlign = "center";
+    //drawMenu(this.ctx);
+    //socket.emit('update', {data : "ok"});
+    //socket.listen('update').subscribe((val : any) => {
+    //   state = val;
+    //});
+    //if (state.MENUSTATE == 0)
+    {
+    }
   }
 }
 
@@ -31,21 +50,13 @@ class PongMenu {
 export class PongComponent implements OnInit {
   @ViewChild('canvas', { static: true })
   canvas!: ElementRef<HTMLCanvasElement>;
-  
-  private ctx!: CanvasRenderingContext2D;
-  
-  draw_rect(x: number, y: number, z: number) {
-    this.ctx.fillRect(z * x, z * y, z, z);
-  }
-  
-  
+
   ngOnInit(): void {
-    let menu = new PongMenu(this.canvas);
+    let pong = new Pong(this.canvas);
+    let data : any;
     document.addEventListener("keydown", function(e) {
-      let socket = new WebSocketService;
       switch(e.code) {
         case 'ArrowUp': {
-          socket.emit('message', {data : "ok"});
           console.log("up");
           break ;
         }
@@ -63,5 +74,6 @@ export class PongComponent implements OnInit {
         }
       }
     });
+    requestAnimationFrame(pong.loop);
   }
 }
