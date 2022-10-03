@@ -31,32 +31,44 @@ export class PongComponent implements OnInit, AfterViewInit {
     this.renderer.listen('document', 'keydown', (e : any) => {
       let state: any;
       switch(e.code) {
+        case 'Enter': {
+          socket.emit('action', {
+            ACTION : "GO",
+            WIDTH : this.canvas.nativeElement.width,
+            HEIGHT : this.canvas.nativeElement.height,
+          });
+          break ;
+        }
         case 'ArrowUp': {
           socket.emit('action', {
             ACTION : "UP",
+            WIDTH : this.canvas.nativeElement.width,
+            HEIGHT : this.canvas.nativeElement.height,
           });
-          this.update();
           break ;
         }
         case 'ArrowLeft': {
           socket.emit('action', {
             ACTION : "LEFT",
+            WIDTH : this.canvas.nativeElement.width,
+            HEIGHT : this.canvas.nativeElement.height,
           });
-          this.update();
           break ;
         }
         case 'ArrowRight': {
           socket.emit('action', {
             ACTION : "RIGHT",
+            WIDTH : this.canvas.nativeElement.width,
+            HEIGHT : this.canvas.nativeElement.height,
           });
-          this.update();
           break ;
         }
         case 'ArrowDown': {
           socket.emit('action', {
             ACTION : "DOWN",
+            WIDTH : this.canvas.nativeElement.width,
+            HEIGHT : this.canvas.nativeElement.height,
           });
-          this.update();
           break ;
         }
       }
@@ -88,17 +100,32 @@ export class PongComponent implements OnInit, AfterViewInit {
     this.pong.ctx.fillText("OPTION", width / 4 * 3, height / 4 * 3);
     this.drawCursor(width, height);
   }
+
+  drawGame() {
+    let width = this.canvas.nativeElement.width;
+    let height = this.canvas.nativeElement.height;
+    this.pong.ctx.clearRect(0, 0, width, height);
+    console.log(this.response);
+    this.pong.ctx.fillRect(width / 50, this.response.PADDLEONEPOS, width / 25, height / 10);
+    this.pong.ctx.fillRect(width / 50 * 48, this.response.PADDLETWOPOS, width / 25, height / 10);
+    this.pong.ctx.fillRect(this.response.BALLX, this.response.BALLY, width / 50, width / 50);
+    this.pong.ctx.strokeText(this.response.SCORE1, width / 4, height / 10);
+    this.pong.ctx.strokeText(this.response.SCORE2, width / 4 * 3, height / 10);
+  }
   
   async update() {
     socket.emit('update', {
-      TYPE : "UPDATE",
-      STATE : this.state,
+      HEIGHT : this.canvas.nativeElement.height,
+      WIDTH : this.canvas.nativeElement.width,
     });
     socket.listen('update').subscribe((val : any) => {
       this.response = val;
     });
+    console.log(this.response.GAMESTATE);
     if (this.response.GAMESTATE == 0)
       this.drawMenu();
+    if (this.response.GAMESTATE == 1)
+      this.drawGame();
   }
   
   

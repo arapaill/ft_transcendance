@@ -18,18 +18,22 @@ export class PongGateway {
 
   @SubscribeMessage('update')
   async handleupdate(client: any, payload: any) {
-   // if (payload.TYPE == "ACTION") {
-     // if (this.game.returnGameState() == "MENU")
-       // this.game.changeStateMenu(payload);
-   // }
-   // if (payload.TYPE == "UPDATE")
+    if (this.game.gameState == GameState.MENU)
       client.emit('update', this.game.returnGameState());
+    else {
+      this.game.update(payload[0]);
+      client.emit('update', this.game.returnData());
+    }
 
   }
 
   @SubscribeMessage('action')
   async handleAction(client: any, payload: any) {
+    console.log(payload);
     if (this.game.returnGameState().GAMESTATE == GameState.MENU)
       this.game.changeStateMenu(payload[0]);
+    else {
+      this.game.update(payload[0]);
+    }
   }
 }
