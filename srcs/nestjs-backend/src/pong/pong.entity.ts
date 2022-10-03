@@ -185,7 +185,6 @@ export class Game {
     menuState: MenuState;
     gameState: GameState;
     private numberOfPlayer: number;
-    socket: Socket;
 
     constructor() {
         this.menuState = MenuState.SOLO;

@@ -17,8 +17,11 @@ export class PongComponent implements OnInit, AfterViewInit {
   private canvas: ElementRef = {} as ElementRef;
   pong!: Pong;
   response : any;
+  state! : string;
   
-  constructor(private webSocketService: WebSocketService, private renderer : Renderer2) { }
+  constructor(private webSocketService: WebSocketService, private renderer : Renderer2) {
+    this.state = "MENU";
+  }
   
   ngOnInit(): void {
     this.pong = new Pong(this.canvas);
@@ -30,7 +33,6 @@ export class PongComponent implements OnInit, AfterViewInit {
       switch(e.code) {
         case 'Enter': {
           socket.emit('update', {
-            SOCKET : socket,
             ACTION : "GO",
             WIDTH : this.canvas.nativeElement.width,
             HEIGHT : this.canvas.nativeElement.height,
@@ -39,7 +41,6 @@ export class PongComponent implements OnInit, AfterViewInit {
         }
         case 'ArrowUp': {
           socket.emit('update', {
-            SOCKET : socket,
             ACTION : "UP",
             WIDTH : this.canvas.nativeElement.width,
             HEIGHT : this.canvas.nativeElement.height,
@@ -48,7 +49,6 @@ export class PongComponent implements OnInit, AfterViewInit {
         }
         case 'ArrowLeft': {
           socket.emit('update', {
-            SOCKET : socket,
             ACTION : "LEFT",
             WIDTH : this.canvas.nativeElement.width,
             HEIGHT : this.canvas.nativeElement.height,
@@ -57,7 +57,6 @@ export class PongComponent implements OnInit, AfterViewInit {
         }
         case 'ArrowRight': {
           socket.emit('update', {
-            SOCKET : socket,
             ACTION : "RIGHT",
             WIDTH : this.canvas.nativeElement.width,
             HEIGHT : this.canvas.nativeElement.height,
@@ -66,7 +65,6 @@ export class PongComponent implements OnInit, AfterViewInit {
         }
         case 'ArrowDown': {
           socket.emit('update', {
-            SOCKET : socket,
             ACTION : "DOWN",
             WIDTH : this.canvas.nativeElement.width,
             HEIGHT : this.canvas.nativeElement.height,
@@ -126,7 +124,6 @@ export class PongComponent implements OnInit, AfterViewInit {
   
   async update() {
     socket.emit('update', {
-      SOCKET : socket,
       ACTION : undefined,
       HEIGHT : this.canvas.nativeElement.height,
       WIDTH : this.canvas.nativeElement.width,
