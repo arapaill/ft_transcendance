@@ -10,21 +10,29 @@ import { Game, GameState } from './pong.entity';
 })
 export class PongGateway {
 
-  private game : Game;
+  private games;
 
   constructor() {
-    this.game = new Game;
+    this.games = new Map();
   }
 
   @SubscribeMessage('update')
   async handleAction(client: any, payload: any) {
-    if (this.game.returnGameState().GAMESTATE == GameState.MENU) {
-      this.game.changeStateMenu(payload[0]);
-      client.emit('update', this.game.returnGameState());
+    console.log(payload[0]);
+    console.log(this.games.get(payload[0].SOCKET).returnGameState());
+    if (this.games.has(payload[0].SOCKET)) {
+      if (this.games.get(payload[0].SOCKET).returnGameState().GAMESTATE == GameState.MENU) {
+        this.games.get(payload[0].SOCKET).changeStateMenu(payload[0]);
+        client.emit('update', this.games.get(payload[0].SOCKET).returnGameState());
+      }
+      else {
+        this.games.get(payload[0].SOCKET).update(payload[0]);
+        client.emit('update', this.games.get(payload[0].SOCKET).returnData());
+      }
     }
     else {
-      this.game.update(payload[0]);
-      client.emit('update', this.game.returnData());
+      this.games.set(payload[0].SOCKET, new Game(payload[0].SOCKET))
+      client.emit('update', this.games.get(payload[0].SOCKET).returnGameState());
     }
   }
 }
