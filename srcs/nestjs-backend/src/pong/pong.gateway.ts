@@ -1,5 +1,5 @@
 import { SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
-import { Game } from './pong.entity';
+import { Game, GameState } from './pong.entity';
 
 @WebSocketGateway({
   cors: {
@@ -17,8 +17,19 @@ export class PongGateway {
   }
 
   @SubscribeMessage('update')
-  handleMessage(client: any, payload: any): void {
-    console.log(this.game.returnGameState());
-    client.emit('update', this.game.returnGameState());
+  async handleupdate(client: any, payload: any) {
+   // if (payload.TYPE == "ACTION") {
+     // if (this.game.returnGameState() == "MENU")
+       // this.game.changeStateMenu(payload);
+   // }
+   // if (payload.TYPE == "UPDATE")
+      client.emit('update', this.game.returnGameState());
+
+  }
+
+  @SubscribeMessage('action')
+  async handleAction(client: any, payload: any) {
+    if (this.game.returnGameState().GAMESTATE == GameState.MENU)
+      this.game.changeStateMenu(payload[0]);
   }
 }

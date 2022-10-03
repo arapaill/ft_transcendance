@@ -228,6 +228,7 @@ export enum GameState {
 export enum MenuState {
     SOLO,
     MULTI,
+    OPTION,
 }
 
 export class Game {
@@ -251,15 +252,24 @@ export class Game {
     }
 
     changeStateMenu(data: any) : void {
-        switch (data.action) {
+        switch (data.ACTION) {
             case "LEFT": {
-                this.menuState--;
+                if (this.menuState != 0)
+                    this.menuState--;
+                console.log("LEFT : ")
+                console.log(this.menuState);
+                break ;
             }
             case "RIGHT": {
-                this.menuState++;
+                if (this.menuState != 2)
+                    this.menuState++;
+                console.log("RIGHT : ")
+                console.log(this.menuState);
+                break ;
             }
             case "GO": {
                 this.changeStateGame(data);
+                break ;
             }
         }
     }
@@ -280,7 +290,7 @@ export class Game {
 
     update(data: any) : void {
         if (this.gameState == GameState.MENU) {
-            this.changeStateMenu(data.action);
+            this.changeStateMenu(data[0]);
             return ;                                // Ajout d'un renvoi si on lance le jeu depuis le menu
         }
         if (this.gameState == GameState.SOLO) {
