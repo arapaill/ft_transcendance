@@ -31,7 +31,7 @@ export class PongComponent implements OnInit, AfterViewInit {
     this.renderer.listen('document', 'keydown', (e : any) => {
       let state: any;
       switch(e.code) {
-        case 'Enter': {
+        case 'ControlLeft': {
           socket.emit('update', {
             SOCKET : socket.socket.id,
             ACTION : "GO",
