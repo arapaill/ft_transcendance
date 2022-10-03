@@ -187,11 +187,10 @@ export class Game {
     private numberOfPlayer: number;
     socket: Socket;
 
-    constructor(socket: Socket) {
+    constructor() {
         this.menuState = MenuState.SOLO;
         this.gameState = GameState.MENU;
         this.computerScore = 0;
-        this.socket = socket;
     }
 
     getPlayerPosition(number: number) : number {

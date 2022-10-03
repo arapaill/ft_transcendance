@@ -17,11 +17,8 @@ export class PongComponent implements OnInit, AfterViewInit {
   private canvas: ElementRef = {} as ElementRef;
   pong!: Pong;
   response : any;
-  state! : string;
   
-  constructor(private webSocketService: WebSocketService, private renderer : Renderer2) {
-    this.state = "MENU";
-  }
+  constructor(private webSocketService: WebSocketService, private renderer : Renderer2) { }
   
   ngOnInit(): void {
     this.pong = new Pong(this.canvas);
