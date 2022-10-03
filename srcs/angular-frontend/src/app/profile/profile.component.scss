@@ -1,13 +1,19 @@
 
-.avatar {
-	height: 100%;
-	padding: 5px;
-	width: 20%;
-}
 .wrapper {
-	max-width: 40%;
-	border: 1px solid skyblue;
+	height: 75%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	flex-direction: column;
+	background-color: gray;
+}
+.profil{
+	outline: solid 1px black;
+	background-color: white;
+	padding: 15px;
+}
+.button {
+	margin: 10px;
+	justify-content: flex-start;
+	display: flex;	
 }

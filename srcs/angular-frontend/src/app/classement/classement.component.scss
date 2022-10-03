@@ -1,18 +1,24 @@
-.container {
+.wrapper{
+	display: flex;
 	flex-direction: column;
+	align-items: center;
+}
+
+.container {
 	justify-content: space-between;
 	width: 	215px;
   	height: 275px;
 	margin: 50px;
+	padding: 5px;
   	outline: solid 1px black;
+	background-color: white;
+	cursor: pointer;
 }
 
-.img{
-
-}
 .container .button {
 	justify-content: flex-start;
-	display: flex;	
+	display: flex;
+	
 }
 .container .text{
 	justify-content: flex-start;
