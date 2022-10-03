@@ -33,6 +33,7 @@ export class PongComponent implements OnInit, AfterViewInit {
       switch(e.code) {
         case 'Enter': {
           socket.emit('update', {
+            SOCKET : socket.socket.id,
             ACTION : "GO",
             WIDTH : this.canvas.nativeElement.width,
             HEIGHT : this.canvas.nativeElement.height,
@@ -41,6 +42,7 @@ export class PongComponent implements OnInit, AfterViewInit {
         }
         case 'ArrowUp': {
           socket.emit('update', {
+            SOCKET : socket.socket.id,
             ACTION : "UP",
             WIDTH : this.canvas.nativeElement.width,
             HEIGHT : this.canvas.nativeElement.height,
@@ -49,6 +51,7 @@ export class PongComponent implements OnInit, AfterViewInit {
         }
         case 'ArrowLeft': {
           socket.emit('update', {
+            SOCKET : socket.socket.id,
             ACTION : "LEFT",
             WIDTH : this.canvas.nativeElement.width,
             HEIGHT : this.canvas.nativeElement.height,
@@ -57,6 +60,7 @@ export class PongComponent implements OnInit, AfterViewInit {
         }
         case 'ArrowRight': {
           socket.emit('update', {
+            SOCKET : socket.socket.id,
             ACTION : "RIGHT",
             WIDTH : this.canvas.nativeElement.width,
             HEIGHT : this.canvas.nativeElement.height,
@@ -65,6 +69,7 @@ export class PongComponent implements OnInit, AfterViewInit {
         }
         case 'ArrowDown': {
           socket.emit('update', {
+            SOCKET : socket.socket.id,
             ACTION : "DOWN",
             WIDTH : this.canvas.nativeElement.width,
             HEIGHT : this.canvas.nativeElement.height,
@@ -78,11 +83,13 @@ export class PongComponent implements OnInit, AfterViewInit {
 
   drawCursor(width : number, height : number) {
     if (this.response.MENUSTATE == 0)
-      this.pong.ctx.fillRect(width / 4 - width / 15 / 2, height / 4 * 3 + width / 150 / 2, width / 15, width / 150);
+      this.pong.ctx.fillRect(width / 5 - width / 15 / 2, height / 4 * 3 + width / 150 / 2, width / 15, width / 150);
     if (this.response.MENUSTATE == 1)
-      this.pong.ctx.fillRect(width / 4 * 2 - width / 15 / 2, height / 4 * 3 + width / 150 / 2, width / 15, width / 150);
+      this.pong.ctx.fillRect(width / 5 * 2 - width / 15 / 2, height / 4 * 3 + width / 150 / 2, width / 15, width / 150);
     if (this.response.MENUSTATE == 2)
-      this.pong.ctx.fillRect(width / 4 * 3 - width / 15 / 2, height / 4 * 3 + width / 150 / 2, width / 15, width / 150);
+      this.pong.ctx.fillRect(width / 5 * 3 - width / 15 / 2, height / 4 * 3 + width / 150 / 2, width / 15, width / 150);
+      if (this.response.MENUSTATE == 3)
+      this.pong.ctx.fillRect(width / 5 * 4 - width / 15 / 2, height / 4 * 3 + width / 150 / 2, width / 15, width / 150);
   }
 
 
@@ -92,12 +99,13 @@ export class PongComponent implements OnInit, AfterViewInit {
     this.pong.ctx.clearRect(0, 0, width, height);
     this.pong.ctx.font = '30px orbitronregular';
     this.pong.ctx.strokeStyle = 'white';
-    this.pong.ctx.strokeRect(25, 25, 1150, 550);
+    this.pong.ctx.strokeRect(25, 25, width - 50, height - 50);
     this.pong.ctx.fillStyle = "white";
     this.pong.ctx.textAlign = "center";
-    this.pong.ctx.fillText("SOLO", width / 4, height / 4 * 3);
-    this.pong.ctx.fillText("MULTI", width / 4 * 2, height / 4 * 3);
-    this.pong.ctx.fillText("OPTION", width / 4 * 3, height / 4 * 3);
+    this.pong.ctx.fillText("SOLO", width / 5, height / 4 * 3);
+    this.pong.ctx.fillText("MULTI", width / 5 * 2, height / 4 * 3);
+    this.pong.ctx.fillText("SPECTATE", width / 5 * 3, height / 4 * 3);
+    this.pong.ctx.fillText("OPTION", width / 5 * 4, height / 4 * 3);
     this.pong.ctx.font = '60px orbitronregular';
     this.pong.ctx.fillText("PONG THE GAME", width / 2, height / 5);
     this.pong.ctx.font = '30px orbitronregular';
@@ -123,7 +131,9 @@ export class PongComponent implements OnInit, AfterViewInit {
   }
   
   async update() {
+    console.log(socket.socket.id);
     socket.emit('update', {
+      SOCKET : socket.socket.id,
       ACTION : undefined,
       HEIGHT : this.canvas.nativeElement.height,
       WIDTH : this.canvas.nativeElement.width,
