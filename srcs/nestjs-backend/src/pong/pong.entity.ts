@@ -60,14 +60,14 @@ class Ball extends Entity {
         
         //check player one collision
         if (this.x <= canvasWidth / 50) {
-            if (this.y >= playerOneY && this.y + this.height <= playerOneY + canvasHeight / 10) {
+            if (this.y >= playerOneY && this.y + this.height <= playerOneY + canvasHeight / 8) {
                 this.xVel = 1;
             }
         }
         
         //check player two collision
         if (this.x + this.width >= canvasWidth / 50 * 48) {
-            if (this.y >= playerTwoY && this.y + this.height <= playerTwoY + canvasHeight / 10) {
+            if (this.y >= playerTwoY && this.y + this.height <= playerTwoY + canvasHeight / 8) {
                 this.xVel = -1;
             }
         }
@@ -243,7 +243,8 @@ export class Game {
             let scoreModifier : number;
             this.playerOne.paddle.update(data.ACTION, data.HEIGHT);
             this.computerPaddle.update(this.ball, data.HEIGHT);
-            scoreModifier = this.ball.update(this.playerOne.paddle.y, this.computerPaddle.y, data.HEIGHT, data.WIDTH);
+            if (data.ACTION == undefined)
+                scoreModifier = this.ball.update(this.playerOne.paddle.y, this.computerPaddle.y, data.HEIGHT, data.WIDTH);
             if (scoreModifier === 1)
                 this.playerOne.score++;
             else if (scoreModifier === -1)

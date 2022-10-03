@@ -32,7 +32,7 @@ export class PongComponent implements OnInit, AfterViewInit {
       let state: any;
       switch(e.code) {
         case 'Enter': {
-          socket.emit('action', {
+          socket.emit('update', {
             ACTION : "GO",
             WIDTH : this.canvas.nativeElement.width,
             HEIGHT : this.canvas.nativeElement.height,
@@ -40,7 +40,7 @@ export class PongComponent implements OnInit, AfterViewInit {
           break ;
         }
         case 'ArrowUp': {
-          socket.emit('action', {
+          socket.emit('update', {
             ACTION : "UP",
             WIDTH : this.canvas.nativeElement.width,
             HEIGHT : this.canvas.nativeElement.height,
@@ -48,7 +48,7 @@ export class PongComponent implements OnInit, AfterViewInit {
           break ;
         }
         case 'ArrowLeft': {
-          socket.emit('action', {
+          socket.emit('update', {
             ACTION : "LEFT",
             WIDTH : this.canvas.nativeElement.width,
             HEIGHT : this.canvas.nativeElement.height,
@@ -56,7 +56,7 @@ export class PongComponent implements OnInit, AfterViewInit {
           break ;
         }
         case 'ArrowRight': {
-          socket.emit('action', {
+          socket.emit('update', {
             ACTION : "RIGHT",
             WIDTH : this.canvas.nativeElement.width,
             HEIGHT : this.canvas.nativeElement.height,
@@ -64,7 +64,7 @@ export class PongComponent implements OnInit, AfterViewInit {
           break ;
         }
         case 'ArrowDown': {
-          socket.emit('action', {
+          socket.emit('update', {
             ACTION : "DOWN",
             WIDTH : this.canvas.nativeElement.width,
             HEIGHT : this.canvas.nativeElement.height,
@@ -93,7 +93,7 @@ export class PongComponent implements OnInit, AfterViewInit {
     this.pong.ctx.font = '30px orbitronregular';
     this.pong.ctx.strokeStyle = 'white';
     this.pong.ctx.strokeRect(25, 25, 1150, 550);
-    this.pong.ctx.fillStyle = "red";
+    this.pong.ctx.fillStyle = "white";
     this.pong.ctx.textAlign = "center";
     this.pong.ctx.fillText("SOLO", width / 4, height / 4 * 3);
     this.pong.ctx.fillText("MULTI", width / 4 * 2, height / 4 * 3);
@@ -104,10 +104,14 @@ export class PongComponent implements OnInit, AfterViewInit {
   drawGame() {
     let width = this.canvas.nativeElement.width;
     let height = this.canvas.nativeElement.height;
+    this.pong.ctx.font = '30px orbitronregular';
+    this.pong.ctx.strokeStyle = 'white';
+    this.pong.ctx.strokeRect(25, 25, 1150, 550);
+    this.pong.ctx.fillStyle = "white";
+    this.pong.ctx.textAlign = "center";
     this.pong.ctx.clearRect(0, 0, width, height);
-    console.log(this.response);
-    this.pong.ctx.fillRect(width / 50, this.response.PADDLEONEPOS, width / 25, height / 10);
-    this.pong.ctx.fillRect(width / 50 * 48, this.response.PADDLETWOPOS, width / 25, height / 10);
+    this.pong.ctx.fillRect(width / 50, this.response.PADDLEONEPOS, width / 50, height / 8);
+    this.pong.ctx.fillRect(width / 50 * 48, this.response.PADDLETWOPOS, width / 50, height / 8);
     this.pong.ctx.fillRect(this.response.BALLX, this.response.BALLY, width / 50, width / 50);
     this.pong.ctx.strokeText(this.response.SCORE1, width / 4, height / 10);
     this.pong.ctx.strokeText(this.response.SCORE2, width / 4 * 3, height / 10);
@@ -115,6 +119,7 @@ export class PongComponent implements OnInit, AfterViewInit {
   
   async update() {
     socket.emit('update', {
+      ACTION : undefined,
       HEIGHT : this.canvas.nativeElement.height,
       WIDTH : this.canvas.nativeElement.width,
     });
