@@ -59,7 +59,7 @@ class Ball extends Entity {
     
         
         //check player one collision
-        if (this.x <= canvasWidth / 50) {
+        if (this.x <= canvasWidth / 50 * 2) {
             if (this.y >= playerOneY && this.y + this.height <= playerOneY + canvasHeight / 8) {
                 this.xVel = 1;
             }
