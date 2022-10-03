@@ -80,7 +80,7 @@ class Ball extends Entity {
 
 class PlayerPaddle extends Entity {
     
-    private speed:number = 10;
+    private speed:number = 20;
     
     constructor(w: number, h: number, x: number, y: number) {
         super(w, h, x, y);
@@ -107,7 +107,7 @@ class PlayerPaddle extends Entity {
 
 class ComputerPaddle extends Entity {
     
-    private speed:number = 10;
+    private speed:number = 5;
     
     constructor(w: number, h: number, x: number, y: number){
         super(w, h, x, y);        
@@ -148,9 +148,11 @@ export class Player {
     score: number;
     position: number;
     leftOrRight: LeftOrRight;
+    state: string;
 
     constructor(socket: Socket, leftOrRight : LeftOrRight) {
         this.score = 0;
+        this.state = "iddle";
         this.leftOrRight = leftOrRight;
         this.socket = socket;
         if (this.leftOrRight = LeftOrRight.LEFT)
@@ -226,6 +228,12 @@ export class Game {
                 break ;
             }
             case MenuState.MULTI: {
+                if (this.playerOne == undefined) {
+                    this.playerOne = new Player(data.SOCKET, LeftOrRight.LEFT);
+                this.computerPaddle = new ComputerPaddle(data.WIDTH / 50, data.HEIGHT / 10, data.WIDTH / 50 * 48, data.HEIGHT / 2);
+                this.gameState = GameState.SOLO;
+                this.ball = new Ball(data.WIDTH / 50, data.HEIGHT / 50, data.WIDTH / 2, data.HEIGHT / 2);
+                }
                 break ;
             }
             case MenuState.OPTION: {
@@ -287,4 +295,8 @@ export class Game {
             }
         }
     }
+}
+
+export class Room {
+
 }
