@@ -20,12 +20,12 @@ export class InfoProfilComponent implements OnInit {
   constructor(private webSocketService: WebSocketService, private  dialogRef : MatDialog) {}
 
   ngOnInit(): void {
-    this.webSocketService.listen("getMatchHistory").subscribe((data) => {
-      console.log(data);
+    this.webSocketService.listen("getMatchHistory").subscribe((matchs) => {
+      console.log(matchs);
     });
     this.webSocketService.emit("getUser", name);
-    this.webSocketService.listen("getProfil").subscribe((data) => {
-      console.log(data);
+    this.webSocketService.listen("getProfil").subscribe((profil) => {
+      console.log(profil);
     });
     this.matchs = [
       "arapaill vs Cgoncalv 1.0",
@@ -39,17 +39,17 @@ export class InfoProfilComponent implements OnInit {
         Description: "I am Tester and I test things like this website or some other stuffs.",
         date: new Date(),
         victoires: 0,
-        match: true
+        match: false
         
       }
       this.User =
       {
         avatar: 'assets/avatar-placeholder-1.png',
         avatarName: 'avatar-placeholder-1',
-        Name: "User",
-        Description: "I am the User and I am real",
+        Name: "Tester",
+        Description: "I am Tester and I test things like this website or some other stuffs.",
         date: new Date(),
-        victoires : 9999,
+        victoires: 0,
         match: false
       }
   }

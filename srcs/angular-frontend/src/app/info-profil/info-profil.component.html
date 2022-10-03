@@ -1,9 +1,9 @@
 <img [src]="Personne.avatar" [alt]="Personne.avatarName">
 
-<p>Name: {{ Personne.Name }}</p>
-<p>Description: {{ Personne.Description }}</p>
-<p>Date: {{ Personne.date.getDay() }}/{{ Personne.date.getMonth() }}/{{ Personne.date.getFullYear() }}</p>
-<p>Victoires: {{ Personne.victoires }}</p>
+<p>{{ Personne.Name }}</p>
+<p>{{ Personne.Description }}</p>
+<p>{{ Personne.date.getDay() }}/{{ Personne.date.getMonth() }}/{{ Personne.date.getFullYear() }}</p>
+<p>{{ Personne.victoires }}</p>
 <p> Matchs history: </p>
 <div *ngFor="let match of matchs">
 	<p>{{match}}</p>
