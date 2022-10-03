@@ -44,12 +44,11 @@ export class PopupChatSettingsComponent implements OnInit {
       this.isPasswordChecked = false;
   }
 
-  
   isOwner() {
     if (this.currentSettings.owner === "Corentin") // A changer
-    return new FormControl(true);
+      return new FormControl(true);
     else
-    return new FormControl(false);
+      return new FormControl(false);
   }
   
   closeDialog() {

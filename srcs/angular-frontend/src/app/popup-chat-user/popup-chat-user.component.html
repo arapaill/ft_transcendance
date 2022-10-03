@@ -1,0 +1,10 @@
+<img class="avatar" [src]="Personne.avatar" [alt]="Personne.avatarName">
+
+<p class="name">{{ Personne.Name }}</p>
+<p class="date">{{ Personne.date.getDay() }}/{{ Personne.date.getMonth() }}/{{ Personne.date.getFullYear() }}</p>
+<p class="description">{{ Personne.Description }}</p>
+<p class="victoires">Victoires : {{ Personne.victoires }}</p>
+
+<button mat-raised-button color="accent">Ajouter en amis</button>
+<button *ngIf="Personne.match" mat-raised-button color="accent">Voir match</button>
+<button mat-raised-button color="accent" (click)="sendPrivateMessage()">Message privé</button>
