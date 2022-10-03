@@ -98,6 +98,9 @@ export class PongComponent implements OnInit, AfterViewInit {
     this.pong.ctx.fillText("SOLO", width / 4, height / 4 * 3);
     this.pong.ctx.fillText("MULTI", width / 4 * 2, height / 4 * 3);
     this.pong.ctx.fillText("OPTION", width / 4 * 3, height / 4 * 3);
+    this.pong.ctx.font = '60px orbitronregular';
+    this.pong.ctx.fillText("PONG THE GAME", width / 2, height / 5);
+    this.pong.ctx.font = '30px orbitronregular';
     this.drawCursor(width, height);
   }
 
@@ -110,6 +113,8 @@ export class PongComponent implements OnInit, AfterViewInit {
     this.pong.ctx.fillStyle = "white";
     this.pong.ctx.textAlign = "center";
     this.pong.ctx.clearRect(0, 0, width, height);
+    for (let i = height / 50; i < height; i += height / 10)
+      this.pong.ctx.fillRect(width / 2, i, width / 50, height / 15);
     this.pong.ctx.fillRect(width / 50, this.response.PADDLEONEPOS, width / 50, height / 8);
     this.pong.ctx.fillRect(width / 50 * 48, this.response.PADDLETWOPOS, width / 50, height / 8);
     this.pong.ctx.fillRect(this.response.BALLX, this.response.BALLY, width / 50, width / 50);
