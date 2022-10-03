@@ -26,6 +26,7 @@ import { PopupChatSettingsComponent } from './popup-chat-settings/popup-chat-set
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import {HttpClientModule} from '@angular/common/http';
 import { PopupChatUserComponent } from './popup-chat-user/popup-chat-user.component';
+import { PopupClickHereComponent } from './popup-click-here/popup-click-here.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { PopupChatUserComponent } from './popup-chat-user/popup-chat-user.compon
     PopupChatAddComponent,
     PopupChatSettingsComponent,
     PopupChatUserComponent,
+    PopupClickHereComponent,
   ],
   imports: [
     BrowserModule,
