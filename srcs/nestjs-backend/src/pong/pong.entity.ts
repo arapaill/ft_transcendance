@@ -143,14 +143,14 @@ export enum LeftOrRight {
 }
 
 export class Player {
-    socket: Socket;
+    socket: any;
     paddle: PlayerPaddle;
     score: number;
     position: number;
     leftOrRight: LeftOrRight;
     state: string;
 
-    constructor(socket: Socket, leftOrRight : LeftOrRight) {
+    constructor(socket: any, leftOrRight : LeftOrRight) {
         this.score = 0;
         this.state = "iddle";
         this.leftOrRight = leftOrRight;
@@ -167,12 +167,16 @@ export enum GameState {
     MENU,
     SOLO,
     MULTI,
+    SEARCHING,
+    WAITING,
+    SPECTATING,
     OVER
 }
 
 export enum MenuState {
     SOLO,
     MULTI,
+    SPECTATE,
     OPTION,
 }
 
@@ -185,8 +189,10 @@ export class Game {
     menuState: MenuState;
     gameState: GameState;
     private numberOfPlayer: number;
+    socket: any;
 
-    constructor() {
+    constructor(socket_id : any) {
+        this.socket = socket_id;
         this.menuState = MenuState.SOLO;
         this.gameState = GameState.MENU;
         this.computerScore = 0;
@@ -207,7 +213,7 @@ export class Game {
                 break ;
             }
             case "RIGHT": {
-                if (this.menuState != 2)
+                if (this.menuState != 3)
                     this.menuState++;
                 break ;
             }
