@@ -23,7 +23,8 @@ mat-toolbar {
 }
 
 mat-icon {
-	padding-left: 2px;
+	transform: scale(1.1);
+	padding-right: 10px;
 	cursor: pointer;
 	transition: all 0.3s ease 0s;
 	
@@ -31,7 +32,6 @@ mat-icon {
 		color: whitesmoke;
 	}
 }
-
 
 .mat-raised-button {
 	height: 75px;
@@ -48,6 +48,12 @@ mat-icon {
 	align-items: center;
 	padding: 0 1rem;
 	font-size: 1.4rem;
+}
+
+.chatButtons {
+	position: fixed;
+	right: 0;
+	padding-right: 20px;
 }
 
 /* Chat Messages */

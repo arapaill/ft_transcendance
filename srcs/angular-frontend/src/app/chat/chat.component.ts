@@ -18,6 +18,7 @@ export class ChatComponent implements OnInit {
   @Input() channels: ChatChannel[] = [];
   currentChannel!: ChatChannel;
   selectedChannel!: string;
+  blockedUsers: string[] = [];
 
 
   constructor(private webSocketService: WebSocketService, private dialogRef: MatDialog) { }
@@ -148,6 +149,24 @@ export class ChatComponent implements OnInit {
     this.webSocketService.emit('createNewChannel', newChannel);
   }
 
+  blockUser(user: string) {
+    if (this.isUserBlocked(user)) {
+      let index = this.blockedUsers.indexOf(user);
+      this.blockedUsers.splice(index, 1);
+    }
+    else
+      this.blockedUsers.push(user);
+  }
+
+  isUserBlocked(userToCheck: string) {
+    for (const user of this.blockedUsers) {
+      if (user == userToCheck) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   openSettingsDialog() {
     let settingsDialog = this.dialogRef.open(PopupChatSettingsComponent, {
       data: {
@@ -170,12 +189,19 @@ export class ChatComponent implements OnInit {
     });
   }
 
-  openUserProfile() {
-    let profileDialog = this.dialogRef.open(PopupChatUserComponent);
+  openUserProfile(user: string) {
+    let profileDialog = this.dialogRef.open(PopupChatUserComponent, {
+      data: {
+        userName: user,
+        blockedUsers: this.blockedUsers
+      }
+    });
 
     profileDialog.afterClosed().subscribe(result => {
-      if (result)
-        this.createMPChannel(result);
+      if (result.action == 'PM')
+        this.createMPChannel(result.user);
+      else if (result.action == 'Block')
+        this.blockUser(result.user);
     });
   }
 

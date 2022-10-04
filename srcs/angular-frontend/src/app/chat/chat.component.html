@@ -5,16 +5,18 @@
 			<mat-option *ngFor="let channel of channels;" value="{{ channel.name }}">{{ channel.name }}</mat-option>
 		</mat-select>
 	</mat-form-field>
-	<mat-icon (click)="openSettingsDialog()">settings</mat-icon>
-	<mat-icon (click)="openAddDialog()">add_circle</mat-icon>
+	<div class="chatButtons">
+		<mat-icon (click)="openSettingsDialog()">settings</mat-icon>
+		<mat-icon (click)="openAddDialog()">add_circle</mat-icon>
+	</div>
 </mat-toolbar>
 
 <div class="chat-area" #scrollMe [scrollTop]="scrollMe.scrollHeight">
 	<div *ngFor="let message of currentChannel.messages; let isOdd = odd;">
 		<div [ngClass]="isOdd ? 'container darker' : 'container'">
-			<img [src]="message.userAvatar" alt="Avatar" (click)="openUserProfile()"/>
+			<img [src]="message.userAvatar" alt="Avatar" (click)="openUserProfile(message.userPseudo)"/>
 			<p><span class="userPseudo">{{ message.userPseudo }}</span><span class="time">{{ message.date.getHours() }}:{{ message.date.getMinutes() }}</span></p>
-			<p class="text" >{{ message.text }}</p>
+			<p class="text" >{{ !isUserBlocked(message.userPseudo) ? message.text : 'Cet utilisateur est bloqué.' }}</p>
 		</div>
 	</div>
 </div>

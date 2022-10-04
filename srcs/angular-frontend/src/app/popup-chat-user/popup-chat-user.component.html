@@ -6,5 +6,6 @@
 <p class="victoires">Victoires : {{ Personne.victoires }}</p>
 
 <button mat-raised-button color="accent">Ajouter en amis</button>
-<button *ngIf="Personne.match" mat-raised-button color="accent">Voir match</button>
+<button mat-raised-button color="accent">{{ isUserPlaying() ? 'Voir match' : 'Inviter à jouer'}}</button>
 <button mat-raised-button color="accent" (click)="sendPrivateMessage()">Message privé</button>
+<button mat-raised-button color="warn" (click)="blockUser()">{{ !isUserBlocked(Personne.Name) ? 'Bloquer' : 'Débloquer'}}</button>

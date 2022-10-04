@@ -17,7 +17,7 @@
 
 		<mat-form-field color="accent" *ngIf="isPasswordChecked">
 			<mat-label>Mot de passe</mat-label>
-			<input matInput ngModel maxlength="32" name="password" placeholder="Password">
+			<input [type]="'password'" matInput ngModel maxlength="32" name="password" placeholder="Password">
 		</mat-form-field>
 
 		<mat-form-field color="accent">
