@@ -5,6 +5,8 @@
 FROM node:18-alpine AS development
 WORKDIR /usr/src/app
 RUN chown node:node ../app
+RUN npm config set fetch-retry-mintimeout 20000
+RUN npm config set fetch-retry-maxtimeout 120000
 # D'abord les package pour installer les dépendances.
 COPY --chown=node:node package*.json .
 # On s'assure d'avoir les dependances installée, apparement ci est plus léger et recommandé pour les 
@@ -12,9 +14,10 @@ COPY --chown=node:node package*.json .
 RUN npm ci
 # Ensuite le reste de l'application
 COPY --chown=node:node . .
+USER node
+RUN npm run prisma:generate
 # Ca construit le projet, et crée un dossier dist avec l'application finale
 #User pour la sécurité, et apparement des librairies optimise le bail quand NODE_ENV est init a production
-USER node
 
 ############################
 ### BUILD FOR PRODUCTION ###
