@@ -117,7 +117,7 @@ export class PongComponent implements OnInit, AfterViewInit {
     let height = this.canvas.nativeElement.height;
     this.pong.ctx.font = '30px orbitronregular';
     this.pong.ctx.strokeStyle = 'white';
-    this.pong.ctx.strokeRect(25, 25, 1150, 550);
+    this.pong.ctx.strokeRect(25, 25, width - 50, height - 50);
     this.pong.ctx.fillStyle = "white";
     this.pong.ctx.textAlign = "center";
     this.pong.ctx.clearRect(0, 0, width, height);
@@ -128,6 +128,31 @@ export class PongComponent implements OnInit, AfterViewInit {
     this.pong.ctx.fillRect(this.response.BALLX, this.response.BALLY, width / 50, width / 50);
     this.pong.ctx.strokeText(this.response.SCORE2, width / 4, height / 10);
     this.pong.ctx.strokeText(this.response.SCORE1, width / 4 * 3, height / 10);
+  }
+
+  drawSearching() {
+    let width = this.canvas.nativeElement.width;
+    let height = this.canvas.nativeElement.height;
+    this.pong.ctx.font = '45px orbitronregular';
+    this.pong.ctx.strokeStyle = 'white';
+    this.pong.ctx.fillStyle = "white";
+    this.pong.ctx.textAlign = "center";
+    this.pong.ctx.clearRect(0, 0, width, height);
+    this.pong.ctx.strokeRect(25, 25, width - 50, height - 50);
+    this.pong.ctx.fillText("SEARCHING FOR ANOTHER PLAYER", width / 2, height / 2);
+  }
+
+  drawWaiting() {
+    let width = this.canvas.nativeElement.width;
+    let height = this.canvas.nativeElement.height;
+    this.pong.ctx.font = '45px orbitronregular';
+    this.pong.ctx.strokeStyle = 'white';
+    this.pong.ctx.fillStyle = "white";
+    this.pong.ctx.textAlign = "center";
+    this.pong.ctx.clearRect(0, 0, width, height);
+    this.pong.ctx.strokeRect(25, 25, width - 50, height - 50);
+    this.pong.ctx.fillText("NO PLAYER FOUND", width / 2, height / 2)
+    this.pong.ctx.fillText("WAITING FOR ANOTHER PLAYER\n.....", width / 2, height / 2 + 50);
   }
   
   async update() {
@@ -144,8 +169,12 @@ export class PongComponent implements OnInit, AfterViewInit {
     console.log(this.response.GAMESTATE);
     if (this.response.GAMESTATE == 0)
       this.drawMenu();
-    if (this.response.GAMESTATE == 1)
+    if (this.response.GAMESTATE == 1 || this.response.GAMESTATE == 2)
       this.drawGame();
+    if (this.response.GAMESTATE == 3)
+      this.drawSearching();
+    if (this.response.GAMESTATE == 4)
+      this.drawWaiting();
   }
   
   

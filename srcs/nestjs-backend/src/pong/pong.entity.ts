@@ -189,10 +189,10 @@ export class Game {
     menuState: MenuState;
     gameState: GameState;
     private numberOfPlayer: number;
-    socket: any;
+    data_multi: any
 
-    constructor(socket_id : any) {
-        this.socket = socket_id;
+    constructor(data : any) {
+        this.data_multi = data;
         this.menuState = MenuState.SOLO;
         this.gameState = GameState.MENU;
         this.computerScore = 0;
@@ -224,6 +224,13 @@ export class Game {
         }
     }
 
+    addPlayer(socket_id: any) : void {
+        if (this.playerOne == undefined)
+            this.playerOne = new Player(socket_id, LeftOrRight.LEFT);
+        else
+            this.playerTwo = new Player(socket_id, LeftOrRight.RIGHT);
+    }
+
     changeStateGame(data: any) : void {
         switch (this.menuState) {
             case MenuState.SOLO: {
@@ -234,12 +241,7 @@ export class Game {
                 break ;
             }
             case MenuState.MULTI: {
-                if (this.playerOne == undefined) {
-                    this.playerOne = new Player(data.SOCKET, LeftOrRight.LEFT);
-                this.computerPaddle = new ComputerPaddle(data.WIDTH / 50, data.HEIGHT / 10, data.WIDTH / 50 * 48, data.HEIGHT / 2);
-                this.gameState = GameState.SOLO;
-                this.ball = new Ball(data.WIDTH / 50, data.HEIGHT / 50, data.WIDTH / 2, data.HEIGHT / 2);
-                }
+                this.gameState = GameState.SEARCHING;
                 break ;
             }
             case MenuState.OPTION: {
@@ -249,14 +251,30 @@ export class Game {
     }
 
     update(data: any) : void {
+        let scoreModifier : number;
         if (this.gameState == GameState.MENU) {
             this.changeStateMenu(data);
             return ;                                // Ajout d'un renvoi si on lance le jeu depuis le menu
         }
         if (this.gameState == GameState.SOLO) {
-            let scoreModifier : number;
             this.playerOne.paddle.update(data.ACTION, data.HEIGHT);
             this.computerPaddle.update(this.ball, data.HEIGHT);
+            if (data.ACTION == undefined)
+                scoreModifier = this.ball.update(this.playerOne.paddle.y, this.computerPaddle.y, data.HEIGHT, data.WIDTH);
+            if (scoreModifier === 1)
+                this.playerOne.score++;
+            else if (scoreModifier === -1)
+                this.computerScore++;
+            if (this.playerOne.score === 11 || this.computerScore === 11)
+                this.gameState = GameState.OVER;
+            if (this.gameState === GameState.OVER)
+                this.gameState = GameState.MENU;
+        }
+        else if (this.gameState == GameState.MULTI) {
+            if (data.SOCKET == this.playerOne.socket)
+                this.playerOne.paddle.update(data.ACTION, data.HEIGHT);
+            else if (data.SOCKET == this.playerTwo.socket)
+                this.playerTwo.paddle.update(data.ACTION, data.HEIGHT);
             if (data.ACTION == undefined)
                 scoreModifier = this.ball.update(this.playerOne.paddle.y, this.computerPaddle.y, data.HEIGHT, data.WIDTH);
             if (scoreModifier === 1)
@@ -300,9 +318,10 @@ export class Game {
                 BALLY: this.ball.y,
             }
         }
+        else {
+            return {
+                GAMESTATE: this.gameState,
+            }
+        }
     }
-}
-
-export class Room {
-
 }
