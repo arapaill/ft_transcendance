@@ -1,4 +1,8 @@
 <div class="wrapper">
-	<app-info-profil class="profil"> </app-info-profil>
+	<div class="profil">
+	<img [src]="user.avatar">
+	<p> {{user.pseudo}}</p>
+	<p> {{user.description}}</p>
+	</div>
 	<button class="button"  mat-raised-button color="accent"  (click)="openDialog()">  Modifer le profil</button>
 </div>

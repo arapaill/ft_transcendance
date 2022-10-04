@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { WebSocketService } from '../web-socket.service'
 import { HttpClient} from '@angular/common/http';
+import { MatDialogRef } from '@angular/material/dialog';
+
 
 
 @Component({
@@ -10,7 +12,8 @@ import { HttpClient} from '@angular/common/http';
 })
 export class PopupModifierProfilComponent implements OnInit {
 
-  constructor(private webSocketService: WebSocketService, private http: HttpClient) { }
+  
+  constructor(private webSocketService: WebSocketService, private http: HttpClient, private dialogRef: MatDialogRef<PopupModifierProfilComponent>) { }
 
   selectedFile!: File;
 
@@ -21,6 +24,14 @@ export class PopupModifierProfilComponent implements OnInit {
     fd.append('image', this.selectedFile, this.selectedFile.name);
     this.selectedFile = <File>event.target.files[0];
     this.webSocketService.emit("updateUserAvatar", fd);
+  }
+
+  save(value : any){
+    this.dialogRef.close(value);
+    
+  }
+  close(){
+    this.dialogRef.close();
   }
 
 }

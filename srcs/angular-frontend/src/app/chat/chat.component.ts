@@ -7,7 +7,8 @@ import { PopupChatSettingsComponent } from '../popup-chat-settings/popup-chat-se
 import { PopupChatUserComponent } from '../popup-chat-user/popup-chat-user.component';
 import { PopupChatPasswordComponent } from '../popup-chat-password/popup-chat-password.component';
 
-import { ChatChannel, ChatMessage } from '../models/chat.model'
+import { ChatChannel, ChatMessage } from '../models/chat.model';
+import { myUser, User } from '../models/user.model';
 
 
 @Component({
@@ -20,7 +21,7 @@ export class ChatComponent implements OnInit {
   currentChannel!: ChatChannel;
   selectedChannel!: string;
   blockedUsers: string[] = [];
-
+  user: User = myUser;
 
   constructor(private webSocketService: WebSocketService, private dialogRef: MatDialog) { }
 
@@ -88,8 +89,8 @@ export class ChatComponent implements OnInit {
     if (msg.value == "")
       return ;
     let newMessage: ChatMessage = {
-      userPseudo: "cgoncalv",
-      userAvatar: "assets/avatar-placeholder-1.png",
+      userPseudo: this.user.pseudo,
+      userAvatar: this.user.avatar,
       text: msg.value,
       date: new Date()
     }
@@ -116,7 +117,7 @@ export class ChatComponent implements OnInit {
   createNewChannel(settings: any) {
     let newChannel: ChatChannel = {
       name: settings.name,
-      owner: "Corentin", // A changer
+      owner: this.user.pseudo,
       admins: settings.admin,
       users: settings.users,
       type: settings.type,
@@ -144,8 +145,8 @@ export class ChatComponent implements OnInit {
 
   createMPChannel(user: string) {
     let newChannel: ChatChannel = {
-      name: user + ' & ' + user, // A changer
-      owner: "Corentin", // A changer
+      name: this.user.pseudo + ' & ' + user,
+      owner: this.user.pseudo,
       admins: [user],
       users: [user],
       type: "Privé",
