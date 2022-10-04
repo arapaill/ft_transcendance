@@ -64,6 +64,7 @@ class Ball extends Entity {
         if (this.x <= canvasWidth / 50 * 2) {
             if (this.y >= playerOneY && this.y + this.height <= playerOneY + canvasHeight / 8) {
                 this.xVel = 1;
+            if (this.speed < 10)
                 this.speed++;
             }
         }
@@ -72,10 +73,10 @@ class Ball extends Entity {
         if (this.x + this.width >= canvasWidth / 50 * 48) {
             if (this.y >= playerTwoY && this.y + this.height <= playerTwoY + canvasHeight / 8) {
                 this.xVel = -1;
+            if (this.speed < 10)
                 this.speed++;
             }
         }
-        console.log(this.speed);
         this.x += this.xVel * this.speed;
         this.y += this.yVel * this.speed;
         return scoreModifier;
@@ -207,10 +208,12 @@ export class Game {
     data_multi: any
     winner: any;
     color: string;
+    equilibrium: number;
 
     constructor(data : any, color : string) {
         this.data_multi = data;
         this.color = color;
+        this.equilibrium = 0;
         this.optionState = OptionState.WHITE;
         this.menuState = MenuState.SOLO;
         this.gameState = GameState.MENU;
@@ -321,7 +324,7 @@ export class Game {
         let scoreModifier : number;
         if (this.gameState == GameState.MENU) {
             this.changeStateMenu(data);
-            return ;                                // Ajout d'un renvoi si on lance le jeu depuis le menu
+            return ;                               
         }
         if (this.gameState == GameState.SOLO) {
             if (data.ACTION == "QUIT") {
@@ -358,8 +361,9 @@ export class Game {
                 this.playerOne.paddle.update(data.ACTION, data.HEIGHT);
             else if (data.SOCKET == this.playerTwo.socket)
                 this.playerTwo.paddle.update(data.ACTION, data.HEIGHT);
-            if (data.ACTION == undefined)
+            if (data.ACTION == undefined && this.equilibrium % 2)
                 scoreModifier = this.ball.update(this.playerOne.paddle.y, this.playerTwo.paddle.y, data.HEIGHT, data.WIDTH);
+                this.equilibrium++;
             if (scoreModifier === 1)
                 this.playerOne.score++;
             else if (scoreModifier === -1)
