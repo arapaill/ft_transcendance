@@ -225,6 +225,7 @@ export class PongComponent implements OnInit, AfterViewInit {
     socket.listen('update').subscribe((val : any) => {
       this.response = val;
     });
+    console.log(this.response);
     if (this.response.GAMESTATE == 0)
       this.drawMenu();
     if (this.response.GAMESTATE == 1 || this.response.GAMESTATE == 2)

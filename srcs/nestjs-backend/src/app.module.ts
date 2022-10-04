@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ChatGateway } from './chat/chat.gateway';
-import { AppGateway } from './app.gateway';
+//import { AppGateway } from './app.gateway';
 import { PongModule } from './pong/pong.module';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
@@ -12,11 +12,12 @@ import { FortyTwoStrategy } from './auth/strategy/42.strategy';
 import { UserService } from './user/user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Chat } from './chat/chat.entity';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
 	//ChatModule, 
-	//PongModule,
+	PongModule,
 	TypeOrmModule.forRoot({
 		type: 'postgres',
 		host: 'postgres',
@@ -36,8 +37,8 @@ import { Chat } from './chat/chat.entity';
 	],
   providers: [
 	AppService,
-  	AppGateway,
-  	ChatGateway,
+  	//AppGateway,
+  	//ChatGateway,
   	FortyTwoStrategy
 	],
 })
