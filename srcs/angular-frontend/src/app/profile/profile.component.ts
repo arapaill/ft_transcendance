@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { ProfileModel} from "../models/profile-model.model"
+import { myUser, User} from '../models/user.model';
 import { MatDialog } from  '@angular/material/dialog';
 import { PopupModifierProfilComponent } from '../popup-modifier-profil/popup-modifier-profil.component';
 
@@ -9,13 +9,19 @@ import { PopupModifierProfilComponent } from '../popup-modifier-profil/popup-mod
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
+  user : User = myUser;
   constructor(private  dialogRef : MatDialog){}
 
   ngOnInit(): void {
 
   }
   openDialog(){
-    this.dialogRef.open(PopupModifierProfilComponent);
+    let ret = this.dialogRef.open(PopupModifierProfilComponent);
+    ret.afterClosed().subscribe(result=>{
+      myUser.pseudo = result.Nom;
+      myUser.description = result.Description;
+      this.user = myUser;
+    })
   }
 
 }

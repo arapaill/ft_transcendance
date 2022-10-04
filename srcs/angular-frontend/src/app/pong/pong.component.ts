@@ -76,6 +76,15 @@ export class PongComponent implements OnInit, AfterViewInit {
           });
           break ;
         }
+        case 'Escape': {
+          socket.emit('update', {
+            SOCKET : socket.socket.id,
+            ACTION : "QUIT",
+            WIDTH : this.canvas.nativeElement.width,
+            HEIGHT : this.canvas.nativeElement.height,
+          });
+          break ;
+        }
       }
     })
     this.loop();
@@ -108,6 +117,8 @@ export class PongComponent implements OnInit, AfterViewInit {
     this.pong.ctx.fillText("OPTION", width / 5 * 4, height / 4 * 3);
     this.pong.ctx.font = '60px orbitronregular';
     this.pong.ctx.fillText("PONG THE GAME", width / 2, height / 5);
+    this.pong.ctx.font = '15px orbitronregular';
+    this.pong.ctx.fillText("Use arrow to change option, and Ctrl to choose.", width / 2, height - 30);
     this.pong.ctx.font = '30px orbitronregular';
     this.drawCursor(width, height);
   }
@@ -154,6 +165,21 @@ export class PongComponent implements OnInit, AfterViewInit {
     this.pong.ctx.fillText("NO PLAYER FOUND", width / 2, height / 2)
     this.pong.ctx.fillText("WAITING FOR ANOTHER PLAYER\n.....", width / 2, height / 2 + 50);
   }
+
+  drawOver() {
+    let width = this.canvas.nativeElement.width;
+    let height = this.canvas.nativeElement.height;
+    this.pong.ctx.font = '45px orbitronregular';
+    this.pong.ctx.strokeStyle = 'white';
+    this.pong.ctx.fillStyle = "white";
+    this.pong.ctx.textAlign = "center";
+    this.pong.ctx.clearRect(0, 0, width, height);
+    this.pong.ctx.strokeRect(25, 25, width - 50, height - 50);
+    this.pong.ctx.fillText("WINNER IS", width / 2, height / 2)
+    this.pong.ctx.fillText(this.response.WINNER, width / 2, height / 2 + 50);
+    this.pong.ctx.font = '15px orbitronregular';
+    this.pong.ctx.fillText("Press Esc to quit", width / 2, height - 30);
+  }
   
   async update() {
     console.log(socket.socket.id);
@@ -166,7 +192,6 @@ export class PongComponent implements OnInit, AfterViewInit {
     socket.listen('update').subscribe((val : any) => {
       this.response = val;
     });
-    console.log(this.response.GAMESTATE);
     if (this.response.GAMESTATE == 0)
       this.drawMenu();
     if (this.response.GAMESTATE == 1 || this.response.GAMESTATE == 2)
@@ -175,6 +200,8 @@ export class PongComponent implements OnInit, AfterViewInit {
       this.drawSearching();
     if (this.response.GAMESTATE == 4)
       this.drawWaiting();
+    if (this.response.GAMESTATE == 6)
+      this.drawOver();
   }
   
   

@@ -190,6 +190,7 @@ export class Game {
     gameState: GameState;
     private numberOfPlayer: number;
     data_multi: any
+    winner: any;
 
     constructor(data : any) {
         this.data_multi = data;
@@ -242,6 +243,7 @@ export class Game {
             }
             case MenuState.MULTI: {
                 this.gameState = GameState.SEARCHING;
+                this.ball = new Ball(data.WIDTH / 50, data.HEIGHT / 50, data.WIDTH / 2, data.HEIGHT / 2);
                 break ;
             }
             case MenuState.OPTION: {
@@ -257,6 +259,11 @@ export class Game {
             return ;                                // Ajout d'un renvoi si on lance le jeu depuis le menu
         }
         if (this.gameState == GameState.SOLO) {
+            if (data.ACTION == "QUIT") {
+                this.winner = "Computer";
+                this.gameState = GameState.OVER;
+                return ;
+            }
             this.playerOne.paddle.update(data.ACTION, data.HEIGHT);
             this.computerPaddle.update(this.ball, data.HEIGHT);
             if (data.ACTION == undefined)
@@ -265,26 +272,40 @@ export class Game {
                 this.playerOne.score++;
             else if (scoreModifier === -1)
                 this.computerScore++;
-            if (this.playerOne.score === 11 || this.computerScore === 11)
-                this.gameState = GameState.OVER;
-            if (this.gameState === GameState.OVER)
-                this.gameState = GameState.MENU;
+                if (this.playerOne.score === 11 || this.computerScore === 11) {
+                    this.gameState = GameState.OVER;
+                    if (this.playerOne.score === 11)
+                        this.winner = "Player One";
+                    else
+                        this.winner = "Computer";
+                }
         }
         else if (this.gameState == GameState.MULTI) {
+            if (data.ACTION == "QUIT") {
+                if (data.SOCKET == this.playerOne.socket)
+                    this.winner = "Player Two";
+                else
+                    this.winner = "Player One";
+                this.gameState = GameState.OVER;
+                return ;
+            }
             if (data.SOCKET == this.playerOne.socket)
                 this.playerOne.paddle.update(data.ACTION, data.HEIGHT);
             else if (data.SOCKET == this.playerTwo.socket)
                 this.playerTwo.paddle.update(data.ACTION, data.HEIGHT);
             if (data.ACTION == undefined)
-                scoreModifier = this.ball.update(this.playerOne.paddle.y, this.computerPaddle.y, data.HEIGHT, data.WIDTH);
+                scoreModifier = this.ball.update(this.playerOne.paddle.y, this.playerTwo.paddle.y, data.HEIGHT, data.WIDTH);
             if (scoreModifier === 1)
                 this.playerOne.score++;
             else if (scoreModifier === -1)
-                this.computerScore++;
-            if (this.playerOne.score === 11 || this.computerScore === 11)
+                this.playerTwo.score++;
+            if (this.playerOne.score === 11 || this.playerTwo.score === 11) {
                 this.gameState = GameState.OVER;
-            if (this.gameState === GameState.OVER)
-                this.gameState = GameState.MENU;
+                if (this.playerOne.score === 11)
+                    this.winner = "Player One";
+                else
+                    this.winner = "Player Two";
+            }
         }
     }
 
@@ -316,6 +337,13 @@ export class Game {
                 SCORE2: this.computerScore,
                 BALLX: this.ball.x,
                 BALLY: this.ball.y,
+            }
+        }
+        else if (this.gameState == GameState.OVER)
+        {
+            return {
+                GAMESTATE: this.gameState,
+                WINNER: this.winner,
             }
         }
         else {

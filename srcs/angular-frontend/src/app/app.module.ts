@@ -28,7 +28,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { PopupChatPasswordComponent } from './popup-chat-password/popup-chat-password.component'; 
+import { PopupChatPasswordComponent } from './popup-chat-password/popup-chat-password.component';
 
 @NgModule({
   declarations: [
