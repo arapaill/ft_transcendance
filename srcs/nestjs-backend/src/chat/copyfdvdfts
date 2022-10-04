@@ -1,0 +1,81 @@
+import {
+  SubscribeMessage,
+  WebSocketGateway,
+  OnGatewayInit,
+  WebSocketServer,
+  OnGatewayConnection,
+  OnGatewayDisconnect,
+} from '@nestjs/websockets';
+import { Socket, Server } from 'socket.io';
+import { AppService } from '../app.service';
+import { Chat } from './chat.entity';
+var usernames = {};
+// var rooms = [
+//   { name: "global", creator: "Anonymous" },
+// ];
+@WebSocketGateway({
+  cors: {
+    origin: '*',
+  },
+})
+export class AppGateway
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
+{
+  constructor(private appService: AppService) {}
+
+  @WebSocketServer() server: Server;
+
+  @SubscribeMessage('sendMessage')
+  async handleSendMessage(client, payload: Chat): Promise<void> {
+    // await this.appService.createMessage(payload);
+    // console.log(payload);
+    this.server.to(client.currentRoom).emit('recMessage', payload);
+  }
+
+  afterInit(server: Server) {
+    // console.log(server);
+  }
+
+  handleDisconnect(client: Socket) {
+    console.log(`Disconnected: ${client.id}`);
+    //Do stuffs
+  }
+  
+  @SubscribeMessage('createRoom')
+  async handleCreateRoom(client, room : string, rooms :any): Promise<void> {
+    if (room != null) {
+      rooms.push({ name: room, creator: client.username });
+      this.server.emit("updateRooms", rooms, null);
+    }
+  }
+
+  @SubscribeMessage('updateRooms')
+  async handleupdateRooms(client, room : any): Promise<void> {
+    client.broadcast.to(client.currentRoom).emit("updateChat", "INFO", client.username + " left room", room, null);
+      client.leave(client.currentRoom);
+    client.currentRoom = room;
+    client.join(room);
+      client.emit("updateChat", "INFO", "You have joined " + room + " room", room, null);
+      client.broadcast.to(room).emit("updateChat","INFO",client.username + " has joined " + room + " room", room
+      , null);
+  }
+
+  @SubscribeMessage('createUser')
+  handlecreateUser(client,message: { sender: string, room: string, message: string , rooms: any}) {
+    console.log("dekhlt le user");
+    client.username = message.sender;
+    usernames[message.sender] = message.sender;
+    client.currentRoom = "global";
+    client.join("global");
+    console.log(`User ${message.sender} created on server successfully.`);
+    client.emit("updateChat", "INFO", "You have joined global room", client.currentRoom,message);
+    client.broadcast.to("global").emit("updateChat", "INFO", message.sender + " has joined global room","global", message);
+    this.server.emit("updateUsers", usernames);
+    client.emit("updateRooms", message.rooms, "global");
+  }
+
+  handleConnection(client: Socket, ...args: any[]) {
+    console.log(`Connected ${client.id}`);
+    //Do stuffs
+  }
+}

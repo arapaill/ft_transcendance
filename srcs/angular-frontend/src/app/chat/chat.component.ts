@@ -212,5 +212,4 @@ export class ChatComponent implements OnInit {
         this.blockUser(result.user);
     });
   }
-
 }

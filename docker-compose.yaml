@@ -6,7 +6,7 @@ networks:
   frontend:
 
 services:
-  api:
+  backend:
     build:
       dockerfile: ./Dockerfile
       context: ./srcs/nestjs-backend
@@ -35,7 +35,7 @@ services:
       - ./srcs/angular-frontend:/usr/src/app
       - front-package:/usr/src/app/node_modules
     depends_on:
-      - api
+      - backend
       - postgres
     networks:
       - frontend
@@ -59,20 +59,6 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - '5432:5432'
-  
-  pgadmin:
-    container_name: pgadmin4_container
-    image: dpage/pgadmin4
-    restart: always
-    volumes:
-      - pg-admin:/var/lib/pgadmin
-    networks:
-      - backend
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
-    ports:
-      - "5050:80"
 
 volumes:
   pg-admin:
