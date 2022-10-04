@@ -48,11 +48,13 @@ class Ball extends Entity {
         //check left canvas bounds
         if (this.x <= 0) {  
             this.x = canvasWidth / 2 - this.width / 2;
+            this.speed = 5;
             scoreModifier++;
         }
         
         //check right canvas bounds
         if (this.x + this.width >= canvasWidth) {
+            this.speed = 5;
             this.x = canvasWidth / 2 - this.width / 2;
             scoreModifier--;
         }
@@ -62,6 +64,7 @@ class Ball extends Entity {
         if (this.x <= canvasWidth / 50 * 2) {
             if (this.y >= playerOneY && this.y + this.height <= playerOneY + canvasHeight / 8) {
                 this.xVel = 1;
+                this.speed++;
             }
         }
         
@@ -69,9 +72,10 @@ class Ball extends Entity {
         if (this.x + this.width >= canvasWidth / 50 * 48) {
             if (this.y >= playerTwoY && this.y + this.height <= playerTwoY + canvasHeight / 8) {
                 this.xVel = -1;
+                this.speed++;
             }
         }
-       
+        console.log(this.speed);
         this.x += this.xVel * this.speed;
         this.y += this.yVel * this.speed;
         return scoreModifier;
@@ -107,7 +111,7 @@ class PlayerPaddle extends Entity {
 
 class ComputerPaddle extends Entity {
     
-    private speed:number = 5;
+    private speed:number = 6;
     
     constructor(w: number, h: number, x: number, y: number){
         super(w, h, x, y);        
