@@ -172,6 +172,7 @@ export enum GameState {
     SPECTATING,
     OVER,
     MENUSPEC,
+    OPTION,
 }
 
 export enum MenuState {
@@ -179,6 +180,14 @@ export enum MenuState {
     MULTI,
     SPECTATE,
     OPTION,
+}
+
+export enum OptionState {
+    WHITE,
+    BLUE,
+    GREEN,
+    YELLOW,
+    RED,
 }
 
 export class Game {
@@ -189,12 +198,16 @@ export class Game {
     private ball: Ball;
     menuState: MenuState;
     gameState: GameState;
+    optionState : OptionState;
     private numberOfPlayer: number;
     data_multi: any
     winner: any;
+    color: string;
 
-    constructor(data : any) {
+    constructor(data : any, color : string) {
         this.data_multi = data;
+        this.color = color;
+        this.optionState = OptionState.WHITE;
         this.menuState = MenuState.SOLO;
         this.gameState = GameState.MENU;
         this.computerScore = 0;
@@ -205,6 +218,49 @@ export class Game {
             return this.playerOne.position;
         else if (number === 2)
             return this.playerTwo.position;
+    }
+
+    changeOptionMenu(data: any) : void {
+        switch (data.ACTION) {
+            case "LEFT": {
+                if (this.optionState != 0)
+                    this.optionState--;
+                break ;
+            }
+            case "RIGHT": {
+                if (this.optionState != 4)
+                    this.optionState++;
+                break ;
+            }
+            case "GO": {
+                switch (this.optionState) {
+                    case OptionState.BLUE: {
+                        this.color = "blue";
+                        break ;
+                    }
+                    case OptionState.RED: {
+                        this.color = "red";
+                        break ;
+                    }
+                    case OptionState.YELLOW: {
+                        this.color = "yellow";
+                        break ;
+                    }
+                    case OptionState.WHITE: {
+                        this.color = "white";
+                        break ;
+                    }
+                    case OptionState.GREEN: {
+                        this.color = "green";
+                        break ;
+                    }
+                }
+                break ;
+            }
+            case "QUIT": {
+                this.gameState = GameState.MENU;
+            }
+        }
     }
 
     changeStateMenu(data: any) : void {
@@ -248,6 +304,7 @@ export class Game {
                 break ;
             }
             case MenuState.OPTION: {
+                this.gameState = GameState.OPTION;
                 break ;
             }
            /* case MenuState.SPECTATE: {
@@ -326,6 +383,7 @@ export class Game {
         return {
             MENUSTATE: this.menuState,
             GAMESTATE: this.gameState,
+            COLOR: this.color,
         }
     }
 
@@ -339,6 +397,7 @@ export class Game {
                 SCORE2: this.playerTwo.score,
                 BALLX: this.ball.x,
                 BALLY: this.ball.y,
+                COLOR: this.color,
             }
         }
         else if (this.gameState == GameState.SOLO) {
@@ -350,6 +409,7 @@ export class Game {
                 SCORE2: this.computerScore,
                 BALLX: this.ball.x,
                 BALLY: this.ball.y,
+                COLOR: this.color,
             }
         }
         else if (this.gameState == GameState.OVER)
@@ -357,11 +417,21 @@ export class Game {
             return {
                 GAMESTATE: this.gameState,
                 WINNER: this.winner,
+                COLOR: this.color,
+            }
+        }
+        else if (this.gameState == GameState.OPTION)
+        {
+            return {
+                GAMESTATE: this.gameState,
+                OPTIONSTATE: this.optionState,
+                COLOR: this.color,
             }
         }
         else {
             return {
                 GAMESTATE: this.gameState,
+                COLOR: this.color,
             }
         }
     }

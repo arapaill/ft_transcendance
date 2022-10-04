@@ -100,15 +100,50 @@ export class PongComponent implements OnInit, AfterViewInit {
       this.pong.ctx.fillRect(width / 5 * 4 - width / 15 / 2, height / 4 * 3 + width / 150 / 2, width / 15, width / 150);
   }
 
+  drawOptionCursor(width : number, height : number) {
+    console.log(this.response);
+    if (this.response.OPTIONSTATE == 0)
+      this.pong.ctx.fillRect(width / 6 - width / 15 / 2, height / 3 * 2 + width / 150 / 2, width / 15, width / 150);
+    if (this.response.OPTIONSTATE == 1)
+      this.pong.ctx.fillRect(width / 6 * 2 - width / 15 / 2, height / 3 * 2 + width / 150 / 2, width / 15, width / 150);
+    if (this.response.OPTIONSTATE == 2)
+      this.pong.ctx.fillRect(width / 6 * 3 - width / 15 / 2, height / 3 * 2 + width / 150 / 2, width / 15, width / 150);
+    if (this.response.OPTIONSTATE == 3)
+      this.pong.ctx.fillRect(width / 6 * 4 - width / 15 / 2, height / 3 * 2 + width / 150 / 2, width / 15, width / 150);
+    if (this.response.OPTIONSTATE == 4)
+      this.pong.ctx.fillRect(width / 6 * 5 - width / 15 / 2, height / 3 * 2 + width / 150 / 2, width / 15, width / 150);
+}
+  
+
+  drawOption() {
+    let width = this.canvas.nativeElement.width;
+    let height = this.canvas.nativeElement.height;
+    this.pong.ctx.clearRect(0, 0, width, height);
+    this.pong.ctx.font = '45px orbitronregular';
+    this.pong.ctx.strokeStyle = this.response.COLOR;
+    this.pong.ctx.fillStyle = this.response.COLOR;
+    this.pong.ctx.strokeRect(25, 25, width - 50, height - 50);
+    this.pong.ctx.textAlign = "center";
+    this.pong.ctx.fillText("Choose Color", width / 2, height / 3);
+    this.pong.ctx.font = '30px orbitronregular';
+    this.pong.ctx.fillText("WHITE", width / 6, height / 3 * 2);
+    this.pong.ctx.fillText("BLUE", width / 6 * 2 , height / 3 * 2);
+    this.pong.ctx.fillText("GREEN", width / 6 * 3, height / 3 * 2);
+    this.pong.ctx.fillText("YELLOW", width / 6 * 4, height / 3 * 2);
+    this.pong.ctx.fillText("RED", width / 6 * 5, height / 3 * 2);
+    this.pong.ctx.font = '15px orbitronregular';
+    this.pong.ctx.fillText("Use arrow to change option, and Ctrl to choose. Esc to return to Menu", width / 2, height - 30);
+    this.drawOptionCursor(width, height);
+  }
 
   drawMenu() {
     let width = this.canvas.nativeElement.width;
     let height = this.canvas.nativeElement.height;
     this.pong.ctx.clearRect(0, 0, width, height);
     this.pong.ctx.font = '30px orbitronregular';
-    this.pong.ctx.strokeStyle = 'white';
+    this.pong.ctx.strokeStyle = this.response.COLOR;
+    this.pong.ctx.fillStyle = this.response.COLOR;
     this.pong.ctx.strokeRect(25, 25, width - 50, height - 50);
-    this.pong.ctx.fillStyle = "white";
     this.pong.ctx.textAlign = "center";
     this.pong.ctx.fillText("SOLO", width / 5, height / 4 * 3);
     this.pong.ctx.fillText("MULTI", width / 5 * 2, height / 4 * 3);
@@ -126,9 +161,8 @@ export class PongComponent implements OnInit, AfterViewInit {
     let width = this.canvas.nativeElement.width;
     let height = this.canvas.nativeElement.height;
     this.pong.ctx.font = '30px orbitronregular';
-    this.pong.ctx.strokeStyle = 'white';
-    this.pong.ctx.strokeRect(25, 25, width - 50, height - 50);
-    this.pong.ctx.fillStyle = "white";
+    this.pong.ctx.strokeStyle = this.response.COLOR;
+    this.pong.ctx.fillStyle = this.response.COLOR;
     this.pong.ctx.textAlign = "center";
     this.pong.ctx.clearRect(0, 0, width, height);
     for (let i = height / 50; i < height; i += height / 10)
@@ -144,8 +178,8 @@ export class PongComponent implements OnInit, AfterViewInit {
     let width = this.canvas.nativeElement.width;
     let height = this.canvas.nativeElement.height;
     this.pong.ctx.font = '45px orbitronregular';
-    this.pong.ctx.strokeStyle = 'white';
-    this.pong.ctx.fillStyle = "white";
+    this.pong.ctx.strokeStyle = this.response.COLOR;
+    this.pong.ctx.fillStyle = this.response.COLOR;
     this.pong.ctx.textAlign = "center";
     this.pong.ctx.clearRect(0, 0, width, height);
     this.pong.ctx.strokeRect(25, 25, width - 50, height - 50);
@@ -156,8 +190,8 @@ export class PongComponent implements OnInit, AfterViewInit {
     let width = this.canvas.nativeElement.width;
     let height = this.canvas.nativeElement.height;
     this.pong.ctx.font = '45px orbitronregular';
-    this.pong.ctx.strokeStyle = 'white';
-    this.pong.ctx.fillStyle = "white";
+    this.pong.ctx.strokeStyle = this.response.COLOR;
+    this.pong.ctx.fillStyle = this.response.COLOR;
     this.pong.ctx.textAlign = "center";
     this.pong.ctx.clearRect(0, 0, width, height);
     this.pong.ctx.strokeRect(25, 25, width - 50, height - 50);
@@ -169,8 +203,8 @@ export class PongComponent implements OnInit, AfterViewInit {
     let width = this.canvas.nativeElement.width;
     let height = this.canvas.nativeElement.height;
     this.pong.ctx.font = '45px orbitronregular';
-    this.pong.ctx.strokeStyle = 'white';
-    this.pong.ctx.fillStyle = "white";
+    this.pong.ctx.strokeStyle = this.response.COLOR;
+    this.pong.ctx.fillStyle = this.response.COLOR;
     this.pong.ctx.textAlign = "center";
     this.pong.ctx.clearRect(0, 0, width, height);
     this.pong.ctx.strokeRect(25, 25, width - 50, height - 50);
@@ -201,6 +235,8 @@ export class PongComponent implements OnInit, AfterViewInit {
       this.drawWaiting();
     if (this.response.GAMESTATE == 6)
       this.drawOver();
+    if (this.response.GAMESTATE == 8)
+      this.drawOption();
   }
   
   

@@ -24,6 +24,21 @@ export class PongGateway {
         this.games.get(socket_id).changeStateMenu(payload[0]);
         client.emit('update', this.games.get(socket_id).returnGameState());
       }
+      else if (this.games.get(socket_id).gameState == GameState.OPTION) {
+        this.games.get(socket_id).changeOptionMenu(payload[0]);
+        client.emit('update', this.games.get(socket_id).returnData());
+      }
+      else if (this.games.get(socket_id).gameState == GameState.WAITING) {
+        if (payload[0].ACTION == "QUIT") {
+          let color = "white";
+          if (this.games.has(socket_id)) {
+            color = this.games.get(socket_id).color;
+            this.games.delete(socket_id);
+          }
+          this.games.set(socket_id, new Game(socket_id, color));
+          this.games.get(socket_id).gameState = GameState.MENU;
+        }
+      }
       else if (this.games.get(socket_id).gameState == GameState.SEARCHING) {
         for (let [key, value] of this.games) {
           if (key != socket_id && value.gameState == GameState.WAITING) {
@@ -41,7 +56,7 @@ export class PongGateway {
       }
       else if (this.games.get(socket_id).gameState == GameState.SPECTATING) {
         if (payload[0].ACTION == "QUIT") {
-          this.games.set(socket_id, new Game(socket_id));
+          this.games.set(socket_id, new Game(socket_id, this.games.get(socket_id).color));
           this.games.get(socket_id).gameState = GameState.MENU;
           this.games.get(socket_id).update(payload[0]);
           client.emit('update', this.games.get(socket_id).returnData());
@@ -49,9 +64,12 @@ export class PongGateway {
       }
       else if (this.games.get(socket_id).gameState == GameState.OVER) {
         if (payload[0].ACTION == "QUIT") {
-          if (this.games.has(socket_id))
+          let color = "white";
+          if (this.games.has(socket_id)) {
+            color = this.games.get(socket_id).color;
             this.games.delete(socket_id);
-          this.games.set(socket_id, new Game(socket_id));
+          }
+          this.games.set(socket_id, new Game(socket_id, color));
           this.games.get(socket_id).gameState = GameState.MENU;
         }
         this.games.get(socket_id).update(payload[0]);
@@ -66,7 +84,7 @@ export class PongGateway {
       }
     }
     else {
-      this.games.set(socket_id, new Game(socket_id));
+      this.games.set(socket_id, new Game(socket_id, "white"));
     }
   }
 }
