@@ -39,7 +39,14 @@ export class PongGateway {
         this.games.get(socket_id).update(payload[0]);
         client.emit('update', this.games.get(socket_id).returnData());
       }
-      else if (this.games.get(socket_id).gameState == GameState.SPECTATING) { }
+      else if (this.games.get(socket_id).gameState == GameState.SPECTATING) {
+        if (payload[0].ACTION == "QUIT") {
+          this.games.set(socket_id, new Game(socket_id));
+          this.games.get(socket_id).gameState = GameState.MENU;
+          this.games.get(socket_id).update(payload[0]);
+          client.emit('update', this.games.get(socket_id).returnData());
+        }
+      }
       else if (this.games.get(socket_id).gameState == GameState.OVER) {
         if (payload[0].ACTION == "QUIT") {
           if (this.games.has(socket_id))

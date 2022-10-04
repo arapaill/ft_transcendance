@@ -170,7 +170,8 @@ export enum GameState {
     SEARCHING,
     WAITING,
     SPECTATING,
-    OVER
+    OVER,
+    MENUSPEC,
 }
 
 export enum MenuState {
@@ -249,6 +250,9 @@ export class Game {
             case MenuState.OPTION: {
                 break ;
             }
+           /* case MenuState.SPECTATE: {
+                this.gameState = GameState.MENUSPEC;
+            }*/
         }
     }
 
@@ -307,6 +311,15 @@ export class Game {
                     this.winner = "Player Two";
             }
         }
+        else if (this.gameState == GameState.SPECTATING) {
+            if (this.playerOne.score === 11 || this.playerTwo.score === 11) {
+                this.gameState = GameState.OVER;
+                if (this.playerOne.score === 11)
+                    this.winner = "Player One";
+                else
+                    this.winner = "Player Two";
+            }
+        }
     }
 
     returnGameState() : any {
@@ -317,7 +330,7 @@ export class Game {
     }
 
     returnData() : any {
-        if (this.gameState == GameState.MULTI) {
+        if (this.gameState == GameState.MULTI || this.gameState == GameState.SPECTATING) {
             return {
                 GAMESTATE: this.gameState,
                 PADDLEONEPOS: this.playerOne.paddle.y,

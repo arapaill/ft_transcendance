@@ -6,7 +6,6 @@ import { Pong } from './Pong'
 let socket : WebSocketService;
 socket = new WebSocketService;
 
-
 @Component({
   selector: 'app-pong',
   templateUrl: './pong.component.html',
