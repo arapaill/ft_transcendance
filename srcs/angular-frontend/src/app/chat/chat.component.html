@@ -14,7 +14,7 @@
 <div class="chat-area" #scrollMe [scrollTop]="scrollMe.scrollHeight">
 	<div *ngFor="let message of currentChannel.messages; let isOdd = odd;">
 		<div [ngClass]="isOdd ? 'container darker' : 'container'">
-			<img [src]="message.userAvatar" alt="Avatar" (click)="openUserProfile(message.userPseudo)"/>
+			<img [src]="message.userAvatar" alt="Avatar" (click)="openUserProfileDialog(message)"/>
 			<p><span class="userPseudo">{{ message.userPseudo }}</span><span class="time">{{ message.date.getHours() }}:{{ message.date.getMinutes() }}</span></p>
 			<p class="text" >{{ !isUserBlocked(message.userPseudo) ? message.text : 'Cet utilisateur est bloqué.' }}</p>
 		</div>
