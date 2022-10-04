@@ -5,6 +5,7 @@ import { WebSocketService } from '../web-socket.service'
 import { PopupChatAddComponent } from '../popup-chat-add/popup-chat-add.component';
 import { PopupChatSettingsComponent } from '../popup-chat-settings/popup-chat-settings.component';
 import { PopupChatUserComponent } from '../popup-chat-user/popup-chat-user.component';
+import { PopupChatPasswordComponent } from '../popup-chat-password/popup-chat-password.component';
 
 import { ChatChannel, ChatMessage } from '../models/chat.model'
 
@@ -98,11 +99,17 @@ export class ChatComponent implements OnInit {
   }
 
   selectChannel(fchannel: string) {
-    console.log(fchannel);
     let tmpChannel = this.channels.find(x => x.name === fchannel);
-    console.log(tmpChannel);
     if (tmpChannel) {
-      this.currentChannel = tmpChannel;
+      if (tmpChannel.type == "Protégé") {
+        let settingsDialog = this.dialogRef.open(PopupChatPasswordComponent);
+        settingsDialog.afterClosed().subscribe(password => {
+          if (tmpChannel?.password !== undefined && password == tmpChannel?.password)
+            this.currentChannel = tmpChannel;
+        });
+      }
+      else
+        this.currentChannel = tmpChannel;
     }
   }
 
@@ -142,7 +149,6 @@ export class ChatComponent implements OnInit {
       admins: [user],
       users: [user],
       type: "Privé",
-      password: "",
       messages: []
     }
     this.channels.push(newChannel);
@@ -189,10 +195,11 @@ export class ChatComponent implements OnInit {
     });
   }
 
-  openUserProfile(user: string) {
+  openUserProfileDialog(user: ChatMessage) {
     let profileDialog = this.dialogRef.open(PopupChatUserComponent, {
       data: {
-        userName: user,
+        userName: user.userPseudo,
+        userAvatar: user.userAvatar,
         blockedUsers: this.blockedUsers
       }
     });

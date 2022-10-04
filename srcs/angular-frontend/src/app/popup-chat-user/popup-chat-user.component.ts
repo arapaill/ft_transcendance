@@ -15,17 +15,19 @@ export class PopupChatUserComponent implements OnInit {
   @Input() Personne!: ProfileModel;
   blockedUsers: string[] = [];
   tmpUserName: string = '';
+  tmpUserAvatar: string = '';
 
   constructor(private webSocketService: WebSocketService,
     public dialogRef: MatDialogRef<PopupChatUserComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
       this.blockedUsers = data.blockedUsers,
-      this.tmpUserName = data.userName
+      this.tmpUserName = data.userName,
+      this.tmpUserAvatar = data.userAvatar
   }
 
   ngOnInit(): void {
     this.Personne = {
-      avatar: 'assets/avatar-placeholder-1.png',
+      avatar: this.tmpUserAvatar,
       avatarName: 'avatar-placeholder-1',
       Name: this.tmpUserName,
       Description: "I am Tester and I test things like this website or some other stuffs.",
