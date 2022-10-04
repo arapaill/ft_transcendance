@@ -9,12 +9,9 @@ import { WebSocketService } from './web-socket.service'
 
 export class AppComponent implements OnInit {
   title = 'angular-frontend';
-
   constructor(private webSocketService: WebSocketService) {}
 
   ngOnInit(): void {
-    this.webSocketService.listen('test event').subscribe((data) => {
-      console.log(data);
-    })
+    }
   }
-}
+

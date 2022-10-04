@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { MatDialog } from  '@angular/material/dialog';
 import { PopupAddFriendComponent } from "../popup-add-friend/popup-add-friend.component";
 import { WebSocketService } from '../web-socket.service'
+import { myUser } from '../models/user.model';
 import { ProfileModel} from "../models/profile-model.model";
 
 @Component({
@@ -41,16 +42,6 @@ export class InfoProfilComponent implements OnInit {
         victoires: 0,
         match: false
         
-      }
-      this.User =
-      {
-        avatar: 'assets/avatar-placeholder-1.png',
-        avatarName: 'avatar-placeholder-1',
-        Name: "Tester",
-        Description: "I am Tester and I test things like this website or some other stuffs.",
-        date: new Date(),
-        victoires: 0,
-        match: false
       }
   }
   
