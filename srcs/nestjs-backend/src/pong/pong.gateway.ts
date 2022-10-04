@@ -36,7 +36,11 @@ export class PongGateway {
             this.games.get(socket_id).gameState = GameState.WAITING;
         }
         this.games.get(socket_id).update(payload[0]); // PB se trouve ici malheureusement ;....:///
-        console.log("EFEFEFE");
+        client.emit('update', this.games.get(socket_id).returnData());
+      }
+      else if (this.games.get(socket_id).gameState == GameState.SPECTATING) { }
+      else {
+        this.games.get(socket_id).update(payload[0]);
         client.emit('update', this.games.get(socket_id).returnData());
       }
     }
