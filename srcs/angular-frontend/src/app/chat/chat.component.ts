@@ -4,7 +4,7 @@ import { MatDialog } from  '@angular/material/dialog';
 import { WebSocketService } from '../web-socket.service'
 import { PopupChatAddComponent } from '../popup-chat-add/popup-chat-add.component';
 import { PopupChatSettingsComponent } from '../popup-chat-settings/popup-chat-settings.component';
-import { InfoProfilComponent } from '../info-profil/info-profil.component';
+import { PopupChatUserComponent } from '../popup-chat-user/popup-chat-user.component';
 
 import { ChatChannel, ChatMessage } from '../models/chat.model'
 
@@ -116,7 +116,7 @@ export class ChatComponent implements OnInit {
       messages: []
     }
     this.channels.push(newChannel);
-    this.webSocketService.emit('createNewChannel', newChannel);
+    this.webSocketService.socket.emit('createNewChannel', newChannel);
   }
 
   changeCurrentChannel(newSettings: any) {
@@ -132,6 +132,20 @@ export class ChatComponent implements OnInit {
     }
     // Ajouter users et admins
     this.webSocketService.emit('changeChannel', newSettings);
+  }
+
+  createMPChannel(user: string) {
+    let newChannel: ChatChannel = {
+      name: user + ' & ' + user, // A changer
+      owner: "Corentin", // A changer
+      admins: [user],
+      users: [user],
+      type: "Privé",
+      password: "",
+      messages: []
+    }
+    this.channels.push(newChannel);
+    this.webSocketService.emit('createNewChannel', newChannel);
   }
 
   openSettingsDialog() {
@@ -157,9 +171,11 @@ export class ChatComponent implements OnInit {
   }
 
   openUserProfile() {
-    let profileDialog = this.dialogRef.open(InfoProfilComponent);
+    let profileDialog = this.dialogRef.open(PopupChatUserComponent);
 
     profileDialog.afterClosed().subscribe(result => {
+      if (result)
+        this.createMPChannel(result);
     });
   }
 
