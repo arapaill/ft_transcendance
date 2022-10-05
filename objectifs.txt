@@ -139,3 +139,28 @@ ChatChannel:
 	messages: ChatMessage[]; (Peut-être ignoré ici)
 
 status : À faire
+
+------------------------------
+
+Objectif 9: Update la friendlist de l'user
+
+Demande: socket.emit("updateFriendlist", newFriendID);
+Réponse: N/A
+
+Ce que j'envoie: L'id (number) de l'user que je veux ajouter à la liste d'ami de l'utilisateur.
+
+status : À faire
+
+------------------------------
+
+Objectif 10: Savoir si le user est en cours de partie ou non
+
+Demande: socket.emit("requestIsUserPlaying", userID);
+Réponse: socket.on("getIsUserPlaying");
+
+Ce que j'envoie: L'id (number) de l'user.
+Ce que je voudrais recevoir: true or false;
+
+status : À faire
+
+------------------------------
