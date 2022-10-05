@@ -1,0 +1,202 @@
+Objectif 1: Faire une demande d'info sur un user.
+
+Demande : socket.emit("requestUserInfos", userName: string);
+Réponse : socket.on(getUserInfos");
+
+Ce que je voudrais récupérer :
+User:
+	id: number;
+	Name: string;
+	avatar: string;
+	Description: string;
+	date: Date;
+	victoires: number;
+	match: boolean;
+
+status : À faire
+
+------------------------------
+
+Objectif 2: faire une demande de match history sous forme de tableau de string
+
+Demande: socket.emit("requestUserMatchsHistory", userName: string);
+Réponse : socket.on(getUserMatchsHistory");
+
+Ce que je voudrais récupérer :
+
+matchs : string[];
+
+status : À faire
+
+------------------------------
+
+Objectif 3: ffaire une demande des 5 meilleurs joueurs en fonction du nombres de victoirs sous forme de tableau d'objet User (voir objectif 1)
+
+
+Demande: socket.emit("requestTopFiveUsers");
+Réponse : socket.on(getTopFiveUsers");
+
+Ce que je voudrais récupérer :
+
+top : User[] (voir Objectif: 1)
+
+status : À faire
+
+------------------------------
+
+Objectif 4: Obtenir tous les channels auquel l'user actuel à le droit d'accèder. C'est à dire tous les channels de type "Public" et "Protégé",
+			ainsi que tous les channels de type "Privé" que dans lequel l'user est présent soit en tant qu'user soit en tant qu'admin. 
+
+Demande: socket.emit("requestChannels", myUserPseudo: string);
+Réponse: socket.on("getChannels");
+
+Ce que je voudrais récupérer:
+Un tableau d'objet contenant les données suivantes :
+ChatChannel:
+	name: string;
+	owner: string;
+	admins: string[];
+	users: string[];
+	type: string; (Public, Privé, Protégé)
+	password: string = "";
+	messages: ChatMessage[]; (Tableau de messages)
+
+ChatMessage:
+	userPseudo: string;
+	userAvatar: string;
+	text: string;
+	date: Date;
+	channelName: string;
+
+status : À faire
+
+------------------------------
+
+Objectif 5: Envoyer un nouveau message sur le chat et le stocker dans la db
+
+Demande: socket.emit("sendNewMessage", newMessage: ChatMessage);
+Réponse: N/A
+
+Ce que j'envoie:
+Un objet contenant les données suivantes :
+ChatMessage:
+	userPseudo: string;
+	userAvatar: string;
+	text: string;
+	date: Date;
+	channelName: string;
+
+status : À faire
+
+------------------------------
+
+Objectif 6: Envoyer un nouveau channel et le stocker dans la db
+
+Demande: socket.emit("createNewChannel", newChannel: ChatChannel);
+Réponse: N/A
+
+Ce que j'envoie:
+Un objet contenant les données suivantes :
+ChatChannel:
+	name: string;
+	owner: string;
+	admins: string[];
+	users: string[];
+	type: string; (Public, Privé, Protégé)
+	password: string = "";
+	messages: ChatMessage[]; (Tableau de messages)
+
+status : À faire
+
+------------------------------
+
+Objectif 7: Delete un channel et tous les messages qu'il contient de la db
+
+Demande: socket.emit("deleteChannel", channelName: string);
+Réponse: N/A
+
+Ce que j'envoie: Simplement le nom du channel à supprimer.
+
+status : À faire
+
+------------------------------
+
+Objectif 8: Mettre à jour certains paramètres d'un channel.
+			Ca sera utilisé à chaque fois que des users sont ajoutés ou que le type, le nom ou le mdp change
+
+Demande: socket.emit('updateChannel', newSettings: ChatChannel);
+Réponse: N/A
+
+Ce que j'envoie:
+Un objet contenant les données suivantes :
+ChatChannel:
+	name: string;
+	owner: string;
+	admins: string[];
+	users: string[];
+	type: string; (Public, Privé, Protégé)
+	password: string = "";
+	messages: ChatMessage[]; (Peut-être ignoré ici)
+
+status : À faire
+
+------------------------------
+
+Objectif 9: Update la friendlist de l'user
+
+Demande: socket.emit("updateFriendlist", newFriendID);
+Réponse: N/A
+
+Ce que j'envoie: L'id (number) de l'user que je veux ajouter à la liste d'ami de l'utilisateur.
+
+status : À faire
+
+------------------------------
+
+Objectif 10: Savoir si le user est en cours de partie ou non
+
+Demande: socket.emit("requestIsUserPlaying", userID);
+Réponse: socket.on("getIsUserPlaying");
+
+Ce que j'envoie: L'id (number) de l'user.
+Ce que je voudrais recevoir: true or false;
+
+status : À faire
+
+------------------------------
+
+Objectif 11: Faire une demande de login.
+
+Réponse : socket.on("getLogin");
+
+Ce que je voudrais récupérer :
+	recevoir une confirmation de login + un objet du User
+
+status : À faire
+
+-----------------------------
+
+Objectif 12: Check si un pseudo existe deja.
+
+Demande : socket.emit("requestCheckUserName", value.Nom);
+Réponse : ocket.on("getCheckUserName");
+
+status : À faire
+
+-----------------------------
+
+Objectif 13: Inviter un joueur à jouer au pong
+
+Demande: socket.emit("inviteUserToPlay", userID);
+Réponse: socket.on("getUserToPlay");
+
+Ce que j'envoie: L'id (number) de l'user.
+Ce que je voudrais recevoir: 
+Alors ici c'est un peu plus complexe. Il faudrait envoyer
+sur le socket de l'userID envoyé un simple boolean true.
+Il faut donc trouver le socket de l'user dont l'id est userID.
+Ca risque d'être un peu compliqué donc on pourra en discuter. 
+
+status : À faire
+
+------------------------------

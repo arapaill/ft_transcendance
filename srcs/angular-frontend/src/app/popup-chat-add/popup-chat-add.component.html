@@ -1,0 +1,42 @@
+<h2 mat-dialog-title>Créer un nouveau channel</h2>
+<mat-dialog-content>
+	<form #settingsForm="ngForm">
+		<mat-form-field color="accent">
+			<mat-label>Nom du channel</mat-label>
+			<input matInput ngModel maxlength="32" name="name" placeholder="Channel Name">
+		</mat-form-field>
+
+		<mat-form-field color="accent">
+			<mat-label>Type du channel</mat-label>
+			<mat-select ngModel name="type" value="Public" (selectionChange)="onToggle($event)">
+				<mat-option value="Public">Public</mat-option>
+				<mat-option value="Privé">Privé</mat-option>
+				<mat-option value="Protégé">Protégé</mat-option>
+			</mat-select>
+		</mat-form-field>
+
+		<mat-form-field color="accent" *ngIf="isPasswordChecked">
+			<mat-label>Mot de passe</mat-label>
+			<input [type]="'password'" matInput ngModel maxlength="32" name="password" placeholder="Password">
+		</mat-form-field>
+
+		<mat-form-field color="accent">
+			<mat-label>Ajouter des utilisateurs</mat-label>
+			<mat-select ngModel name="newUsers" multiple>
+				<mat-option *ngFor="let friend of friendsList" [value]="friend">{{friend}}</mat-option>
+			</mat-select>
+		</mat-form-field>
+
+		<mat-form-field color="accent">
+			<mat-label>Ajouter des administrateurs</mat-label>
+			<mat-select ngModel name="newAdmin" multiple>
+				<mat-option *ngFor="let friend of friendsList" [value]="friend">{{friend}}</mat-option>
+			</mat-select>
+		</mat-form-field>
+	</form>
+</mat-dialog-content>
+<mat-dialog-actions>
+	<br>
+	<button mat-raised-button color="accent" (click)="submitValues(settingsForm.value)">Save</button>
+	<button mat-button color="accent" (click)="closeDialog()">Cancel</button>
+</mat-dialog-actions>

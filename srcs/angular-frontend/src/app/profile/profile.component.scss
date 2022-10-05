@@ -1,0 +1,24 @@
+
+.wrapper {
+	height: 75%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	background-color: gray;
+}
+.profil{
+	outline: solid 1px black;
+	background-color: white;
+	padding: 15px;
+}
+.button {
+	margin: 10px;
+	justify-content: flex-start;
+	display: flex;	
+}
+
+.img{
+	width: 	250px;
+	height: 250px;
+}

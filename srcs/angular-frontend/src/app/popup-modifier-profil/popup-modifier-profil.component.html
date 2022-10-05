@@ -1,0 +1,22 @@
+<mat-dialog-content>
+<form #modifUser = "ngForm">
+	<div [innerHtml]='msg' *ngIf="msg"> </div>
+		<input type="file" (change)="processFile($event)"  placeholder="Avatar: ">
+	<div><img class="previewImg" [src]="url" *ngIf="url"></div>
+	<mat-form-field color = "accent">
+		<mat-label>Nom</mat-label>
+		<input matInput #text ngModel name="Nom" maxlength="20" placeholder="Nom: ">
+	</mat-form-field>
+
+	<mat-form-field color = "accent">
+		<mat-label>Description</mat-label>
+		<input matInput #text ngModel name="Description" maxlength="256" placeholder="Description: ">
+
+	</mat-form-field>
+</form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+	<button mat-raised-button color="accent" (click)="save(modifUser.value)"> save </button>
+	<button mat-raised-button color="warn" (click)="close()"> close </button>
+ </mat-dialog-actions>

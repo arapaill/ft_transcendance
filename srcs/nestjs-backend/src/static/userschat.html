@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Chat App</title>
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="styleforusers.css" />
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js"
+      integrity="sha512-PU5S6BA03fRv1Q5fpwXjg5nlRrgdoguZ74urFInkbABMCENyx5oP3hrDzYMMPh3qdLdknIvrGj3yqZ4JuU7Nag=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+  </head>
+
+  <body>
+    <div class="app">
+      <div class="chat_app">
+        <div id="sidebar" class="left_sidebar">
+          <div class="logo_text">
+            <span>Chat <span class="colored">App</span></span>
+          </div>
+
+          <span class="user_label">Users</span>
+          <div id="active_users_list" class="active_users_list"></div>
+        </div>
+
+        <div class="chat_area">
+          <div class="chat_bg">
+            <div id="data-container" class="chat"></div>
+
+            <!-- <button id="bgnBtn" onclick="promptMe()"> -->
+              <div class="chat_input">
+                <input
+                  type="text"
+                  id="exampleFormControlTextarea1"
+                  placeholder="Enter message"
+                />
+                <!-- <input type="checkbox" name="is_user" id="is_user" onclick="enableCreateUser()" checked> -->
+              <!-- </button>               -->
+              <!-- <button id="email" class="send_message_btn" onclick="promptMe()">">
+                SEND
+              </button> -->
+                
+              </button>              
+              <button id="send_message_btn" class="send_message_btn" id="send">
+                SEND
+              </button>
+            </div>
+          </div>
+        </div>
+
+      <!-- <button id="myButton" class="float-left submit-button" >Home</button>
+  
+  <script type="text/javascript">
+      document.getElementById("myButton").onclick = function () {
+          location.href = "aa.html";
+      };
+  </script> -->
+        <div class="right_sidebar">
+          <span class="room_label">Users</span>
+          <div id="active_rooms_list" class="active_rooms_list"></div>
+          <div id="kick">
+            <input type="text" id="kickusername"  placeholder="     Ban a User" class="room_input">
+          </div> 
+          <!-- <label for="myCheck">Check to make a room with password</label>  -->
+        <!-- <input type="checkbox" id="myCheck" onclick="myFunction()"> -->
+        <input class="tgl tgl-skewed" id="myCheck" onclick="myFunction()" type="checkbox" /><label for="myCheck" class="tgl-btn" data-tg-off="WITHOUT PASSWORD" data-tg-on="WITH PASSWORD" for="cb3"></label>
+        <p id="text" style="display:none"> <input type="password" id="roomio" placeholder="Write Password" class="room_input"/>
+        </p>
+          <div class="room_input">
+            <input type="text" id="roomInput" placeholder="Create room" />
+            <button id="room_add_icon_holder" class="room_add_icon_holder">
+              +
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="mainforusers.js"></script>
+    <!-- <script src="../server.js"></script> -->
+  </body>
+</html>

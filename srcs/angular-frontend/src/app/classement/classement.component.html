@@ -1,0 +1,10 @@
+
+<div class="wrapper">
+	<div (click)="openDialog(profil.Name)" class="container" *ngFor="let profil of profils">
+		<img class="img" [src]="profil.avatar">
+		<div class="button">
+			<p> Nom: {{profil.Name}} </p>
+		</div>
+		<p class="text"> Nombres de victoires: {{profil.victoires}} </p>
+	</div>
+</div>

@@ -1,0 +1,13 @@
+<img class="avatar" [src]="Personne.avatar" [alt]="Personne.avatarName">
+
+<p class="name">{{ Personne.Name }}</p>
+<p class="date">{{ Personne.date.getDay() }}/{{ Personne.date.getMonth() }}/{{ Personne.date.getFullYear() }}</p>
+<p class="description">{{ Personne.Description }}</p>
+<p class="victoires">Victoires : {{ Personne.victoires }}</p>
+
+<div *ngIf="Personne.Name !== myUserCpy.pseudo">
+	<button mat-raised-button color="accent" (click)="addToFriends()">{{ myUserCpy.friends.has(this.Personne.Name) ? 'Retirer des amis' : 'Ajouter en amis'	 }}</button>
+	<button mat-raised-button color="accent" (click)="inviteToPlayOrWatch()">{{ isUserPlaying() ? 'Voir match' : 'Inviter à jouer'}}</button>
+	<button mat-raised-button color="accent" (click)="sendPrivateMessage()">Message privé</button>
+	<button mat-raised-button color="warn" (click)="blockUser()">{{ !myUserCpy.blacklist.has(this.Personne.Name) ? 'Bloquer' : 'Débloquer'}}</button>
+</div>

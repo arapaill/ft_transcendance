@@ -1,0 +1,24 @@
+NestJS :
+https://www.javatpoint.com/nestjs
+npm new my-nestjs-01
+commandes à utiliser:
+sudo apt-get update
+sudo apt install npm
+npm i -g@nestjs/cli  
+
+PostgreSQL:
+https://www.postgresql.org/
+https://www.postgresqltutorial.com/
+https://www.postgresql.org/docs/8.0/tutorial.html
+https://stackoverflow.com/questions/2647158/how-can-i-hash-passwords-in-postgresql
+
+OAuth system of 42 intranet:
+https://api.intra.42.fr/apidoc/guides/web_application_flow
+
+Frontend frameworks:
+https://awesomeopensource.com/projects/frontend-framework/typescript
+https://www.quora.com/What-are-good-frameworks-for-front-end-development-written-in-Typescript
+https://www.libhunt.com/l/typescript/topic/frontend-framework
+
+docker:
+https://www.tomray.dev/nestjs-docker-compose-postgres
