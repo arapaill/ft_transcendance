@@ -2,7 +2,6 @@ import { Component, OnInit, Input, Inject } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from  '@angular/material/dialog';
 import { PopupAddFriendComponent } from "../popup-add-friend/popup-add-friend.component";
 import { WebSocketService } from '../web-socket.service'
-import { myUser } from '../models/user.model';
 import { ProfileModel} from "../models/profile-model.model";
 
 @Component({
@@ -19,16 +18,19 @@ export class InfoProfilComponent implements OnInit {
   uploadSuccess!: boolean;
   matchs !: string[];
   name !: string;
+  i : number = 0;
   constructor(private webSocketService: WebSocketService, private  dialogRef : MatDialog, @Inject(MAT_DIALOG_DATA) public data : any) {
     this.name = data.name;
   }
 
   ngOnInit(): void {
-    this.webSocketService.listen("getMatchHistory").subscribe((matchs) => {
-      console.log(matchs);
+    this.webSocketService.emit("getUserMatchHistory", this.name);
+    this.webSocketService.listen("getMatchHistory").subscribe((userMatchs) => {
+      console.log(userMatchs);
+      //this.matchs = userMatchs,
     });
-    this.webSocketService.emit("getUserInfos", name);
-    this.webSocketService.listen("getProfil").subscribe((profil) => {
+    this.webSocketService.emit("getUserInfos", this.name);
+    this.webSocketService.listen("getInfos").subscribe((profil) => {
       console.log(profil);
     });
     this.matchs = [
@@ -44,7 +46,6 @@ export class InfoProfilComponent implements OnInit {
         date: new Date(),
         victoires: 0,
         match: false
-        
       }
   }
   
