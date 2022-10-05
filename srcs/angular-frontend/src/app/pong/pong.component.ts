@@ -93,7 +93,6 @@ export class PongComponent implements OnInit, AfterViewInit {
         }
       }
     })
-    socket.emit('clear', {});
     this.loop();
   }
 
@@ -109,7 +108,6 @@ export class PongComponent implements OnInit, AfterViewInit {
   }
 
   drawOptionCursor(width : number, height : number) {
-    console.log(this.response);
     if (this.response.OPTIONSTATE == 0)
       this.pong.ctx.fillRect(width / 6 - width / 15 / 2, height / 3 * 2 + width / 150 / 2, width / 15, width / 150);
     if (this.response.OPTIONSTATE == 1)
@@ -237,14 +235,15 @@ export class PongComponent implements OnInit, AfterViewInit {
     this.pong.ctx.fillText("MATCH LIST", width / 7, 80);
     this.pong.ctx.font = '20px orbitronregular';
     let matchHeight : number = 120;
-    console.log(this.response);
+    this.pong.ctx.textAlign = "left";
     for (const key in this.response)
     {
       if (key != "GAMESTATE" && key != "COLOR" && key != "MATCHNUMBER" && key != "STATE") {
-        this.pong.ctx.fillText(this.response[key], width / 7, matchHeight);
+        this.pong.ctx.fillText(this.response[key], 75, matchHeight);
         matchHeight += 25;
       }
     }
+    this.pong.ctx.textAlign = "center";
     this.pong.ctx.fillText("Use UP and DOWN arrow to choose, and Ctrl to watch a game", width / 2, height - 30);
     this.drawSpecMenuCursor();
   }
@@ -262,7 +261,6 @@ export class PongComponent implements OnInit, AfterViewInit {
   }
   
   async update() {
-    console.log(socket.socket.id);
     socket.emit('update', {
       SOCKET : socket.socket.id,
       NAME : myUser.pseudo,
@@ -273,7 +271,6 @@ export class PongComponent implements OnInit, AfterViewInit {
     socket.listen('update').subscribe((val : any) => {
       this.response = val;
     });
-    console.log(this.response);
     if (this.response.GAMESTATE == 0)
       this.drawMenu();
     if (this.response.GAMESTATE == 1 || this.response.GAMESTATE == 2)
