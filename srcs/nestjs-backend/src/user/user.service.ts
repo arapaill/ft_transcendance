@@ -80,8 +80,7 @@ async requestUserMatchsHistory( nameg: string) {
 			name: nameg,
 		  },
     });
-    let MatchsHistory ;
-    // = (await u).MatchsHistory;
+    let MatchsHistory  = (await u).MatchsHistory;
 
     return MatchsHistory;
  }

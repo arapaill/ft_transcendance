@@ -38,19 +38,27 @@ export class AuthController {
 	
 	
 	// @UseGuards(AuthenticatedGuard)
-	@Get('1111')
-	async hhh(@Req() req,){
-	let h = this.UserService.requestUserInfos( "fejjed");
-	return h
-	
-	}
-	
-	
 	@Get('111')
-	async hhvvh(@Req() req,){
-	return this.UserService.requestUserInfos(req.user.username);
+	async hhh(@Req() req,){
+	let h = await this.UserService.requestCheckUserName("sejjed");
+	// if(h == null){return "null";}
+	console.log(h);
+	return h;
+
+	// async handleupdateFriendlist(client, userName: string, newFriendID: number ): Promise<void> {
+
 	
+	
+
+	// async handlerequestIsUserPlaying(client, userName: string): Promise<void> {
+
+	
+	
+
+	// async handlerequestCheckUserName(client, userName: string): Promise<void> {
+
 	}
+	
 	
 	// @Public()
 	@Get('code')
@@ -131,7 +139,7 @@ export class AuthController {
 				// req.session.originalMaxAge == 110000;
 				// req.params = "0";
 				// console.log("YYYYY? " , req.session.originalMaxAge )
-				req.socket._sockname = "987";
+				req.socket._sockname = "9876";
 				response.redirect("http://localhost:9876/auth2/verify",302); 
 				// response.sendFile( "/Users/saad/FINAL_RARE/srcs/nestjs-backend/src/auth/123.html");
 				// console.log(req.session.cookie.httpOnly);
@@ -339,5 +347,4 @@ export class AuthController {
 	}
 
 }
-
 
