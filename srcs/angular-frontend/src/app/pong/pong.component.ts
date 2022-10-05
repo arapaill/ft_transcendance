@@ -93,6 +93,7 @@ export class PongComponent implements OnInit, AfterViewInit {
         }
       }
     })
+    socket.emit('clear', {});
     this.loop();
   }
 
@@ -232,14 +233,32 @@ export class PongComponent implements OnInit, AfterViewInit {
     this.pong.ctx.textAlign = "center";
     this.pong.ctx.clearRect(0, 0, width, height);
     this.pong.ctx.strokeRect(25, 25, width - 50, height - 50);
+    this.pong.ctx.font = '30px orbitronregular';
+    this.pong.ctx.fillText("MATCH LIST", width / 7, 80);
     this.pong.ctx.font = '20px orbitronregular';
-    let 
-    for (let [key, value] of this.response)
+    let matchHeight : number = 120;
+    console.log(this.response);
+    for (const key in this.response)
     {
-      if (key != "GAMESTATE" && key != "COLOR") {
-        this.pong.ctx.fillText(, width / 2, height / 2)
+      if (key != "GAMESTATE" && key != "COLOR" && key != "MATCHNUMBER" && key != "STATE") {
+        this.pong.ctx.fillText(this.response[key], width / 7, matchHeight);
+        matchHeight += 25;
       }
     }
+    this.pong.ctx.fillText("Use UP and DOWN arrow to choose, and Ctrl to watch a game", width / 2, height - 30);
+    this.drawSpecMenuCursor();
+  }
+
+  drawSpecMenuCursor() {
+    let width = this.canvas.nativeElement.width;
+    let height = this.canvas.nativeElement.height;
+    if (this.response.STATE != 0)
+      this.pong.ctx.fillRect(45, this.response.STATE * 25 + 80, 15, 15);
+  }
+
+  drawSpecCursor(matchNumber : number) {
+    let state : number = 0;
+
   }
   
   async update() {
@@ -263,13 +282,14 @@ export class PongComponent implements OnInit, AfterViewInit {
       this.drawSearching();
     if (this.response.GAMESTATE == 4)
       this.drawWaiting();
+    if (this.response.GAMESTATE == 5)
+      this.drawGame();
     if (this.response.GAMESTATE == 6)
       this.drawOver();
     if (this.response.GAMESTATE == 8)
       this.drawOption();
     if (this.response.GAMESTATE == 7) {
-      console.log(this.response);
-      this.drawOption();
+      this.drawSpecMenu();
     }
   }
   

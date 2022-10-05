@@ -16,6 +16,11 @@ export class PongGateway {
     this.games = new Map();
   }
 
+  @SubscribeMessage('clear')
+  async clearGames(client: any, payload: any) {
+    this.games.clear();
+  }
+
   @SubscribeMessage('update')
   async handleAction(client: any, payload: any) {
     let socket_id = payload[0].SOCKET;
@@ -58,20 +63,50 @@ export class PongGateway {
       }
       else if (this.games.get(socket_id).gameState == GameState.MENUSPEC) {
         if (payload[0].ACTION == "QUIT") {
+          this.games.get(socket_id).specMenuState = 0;
           this.games.set(socket_id, new Game(socket_id, this.games.get(socket_id).color));
           this.games.get(socket_id).gameState = GameState.MENU;
           this.games.get(socket_id).update(payload[0]);
         }
-        let numberOfMatches: number = 1;
-        let MatchList : any = { GAMESTATE : GameState.MENUSPEC, COLOR: this.games.get(socket_id).color, };
+        let numberOfMatches: number = 0;
+        let MatchList : any = { GAMESTATE : GameState.MENUSPEC, COLOR: this.games.get(socket_id).color, STATE: this.games.get(socket_id).specMenuState};
+        let tmp : number = 0;
         for (let [key, value] of this.games) {
           if (value.gameState == GameState.MULTI) {
-            let matchFound = {[numberOfMatches] : value.playerOneName + " vs " + value.playerTwoName };
-            MatchList = Object.assign(MatchList, matchFound);
-            numberOfMatches++;
+            if (tmp % 2 == 0) {
+              let matchFound = {[numberOfMatches] : value.playerOneName + " vs " + value.playerTwoName };
+              MatchList = Object.assign(MatchList, matchFound);
+              numberOfMatches++;
+            }
+            tmp++;
           }
-          MatchList = Object.assign(MatchList, { MATCHNUMBER : numberOfMatches - 1, });
+          if (this.games.get(socket_id).specMenuState == 0 && tmp != 0)
+            this.games.get(socket_id).specMenuState++;
+          MatchList = Object.assign(MatchList, { MATCHNUMBER : numberOfMatches, });
         }
+        if (payload[0].ACTION == "UP") {
+          if (this.games.get(socket_id).specMenuState != 0 && this.games.get(socket_id).specMenuState != 1) {
+            this.games.get(socket_id).specMenuState--;
+          }
+        }
+        if (payload[0].ACTION == "DOWN") {
+          if (this.games.get(socket_id).specMenuState != numberOfMatches) {
+            this.games.get(socket_id).specMenuState++;
+          }
+        }
+        if (payload[0].ACTION == "GO") {
+          tmp = 0;
+          for (let [key, value] of this.games) {
+            console.log(value.galeState);
+            tmp++;
+            if (this.games.get(socket_id).specMenuState != 0) {
+              this.games.get(socket_id).gameState == GameState.SPECTATING;
+              if ((this.games.get(socket_id).specMenuState == tmp || this.games.get(socket_id).specMenuState == tmp + 1))
+                this.games.set(socket_id, value);
+            }
+          }
+        }
+        MatchList.STATE = this.games.get(socket_id).specMenuState;
         client.emit('update', MatchList);
       }
       else if (this.games.get(socket_id).gameState == GameState.SPECTATING) {
@@ -81,6 +116,7 @@ export class PongGateway {
           this.games.get(socket_id).update(payload[0]);
           client.emit('update', this.games.get(socket_id).returnData());
         }
+        client.emit('update', this.games.get(socket_id).returnData());
       }
       else if (this.games.get(socket_id).gameState == GameState.OVER) {
         if (payload[0].ACTION == "QUIT") {

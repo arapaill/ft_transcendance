@@ -211,9 +211,11 @@ export class Game {
     winner: any;
     color: string;
     equilibrium: number;
+    specMenuState: number;
 
     constructor(data : any, color : string) {
         this.data_multi = data;
+        this.specMenuState = 0;
         this.color = color;
         this.equilibrium = 0;
         this.optionState = OptionState.WHITE;
