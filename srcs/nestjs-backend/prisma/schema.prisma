@@ -39,15 +39,13 @@ model User {
 }
 
 
-model ongoingGames {
+model ongoingGame {
   id           Int      @id @default(autoincrement())
   JOUEUR_1_SOCKET    String?
   JOUEUR_1_PSEUDO    String?
   JOUEUR_2_SOCKET    String?
   JOUEUR_2_PSEUDO    String?
 }
-
-
 
 
 model gameHistory {

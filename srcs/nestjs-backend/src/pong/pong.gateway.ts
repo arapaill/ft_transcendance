@@ -1,5 +1,7 @@
 import { SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
 import { Game, GameState, LeftOrRight } from './pong.entity';
+import { GameHistoryService } from 'src/gameHistory/gameHistory.service';
+import { OngoingGameService } from 'src/ongoingGames/ongoingGames.service';
 
 @WebSocketGateway({
   cors: {

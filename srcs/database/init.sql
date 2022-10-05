@@ -33,23 +33,20 @@ CREATE TABLE IF NOT EXISTS "chat"
     text text COLLATE pg_catalog."default",
     roomsb text COLLATE pg_catalog."default"
 );
-<<<<<<< HEAD
-=======
 
 
-CREATE TABLE IF NOT EXISTS "PARTIE_EN_COURS"(
+CREATE TABLE IF NOT EXISTS "ongoingGame"(
 	id SERIAL,
    JOUEUR_1_SOCKET text COLLATE pg_catalog."default",
    JOUEUR_1_PSEUDO text COLLATE pg_catalog."default",
    JOUEUR_2_SOCKET text COLLATE pg_catalog."default",
    JOUEUR_2_PSEUDO text COLLATE pg_catalog."default"
 );
-CREATE TABLE IF NOT EXISTS "HISTORIQUE_DES_PARTIES"(
+CREATE TABLE IF NOT EXISTS "gameHistory"(
    id SERIAL,
    JOUEUR_1 text COLLATE pg_catalog."default",
    JOUEUR_2 text COLLATE pg_catalog."default",
    VAINQUEUR text COLLATE pg_catalog."default",
    SCORE text COLLATE pg_catalog."default"
 );
->>>>>>> 897604e0ffffb5b180bef276cff5e77cef531eaf
 -- GRANT ALL PRIVILEGES ON DATABASE users TO $(POSTGRES_USER);
