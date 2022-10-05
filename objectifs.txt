@@ -164,3 +164,12 @@ Ce que je voudrais recevoir: true or false;
 status : À faire
 
 ------------------------------
+
+Objectif 11: Faire une demande de login.
+
+Réponse : socket.on("get4login");
+
+Ce que je voudrais récupérer :
+	recevoir une confirmation de login + un objet du User
+
+status : À faire
