@@ -44,6 +44,7 @@ export class PongGateway {
         for (let [key, value] of this.games) {
           if (key != socket_id && value.gameState == GameState.WAITING) {
             this.games.get(key).addPlayer(payload[0], user_id);
+            this.games.delete(socket_id, Game);
             this.games.set(socket_id, this.games.get(key));
             this.games.get(key).gameState = GameState.MULTI;
           }
@@ -54,6 +55,24 @@ export class PongGateway {
         }
         this.games.get(socket_id).update(payload[0]);
         client.emit('update', this.games.get(socket_id).returnData());
+      }
+      else if (this.games.get(socket_id).gameState == GameState.MENUSPEC) {
+        if (payload[0].ACTION == "QUIT") {
+          this.games.set(socket_id, new Game(socket_id, this.games.get(socket_id).color));
+          this.games.get(socket_id).gameState = GameState.MENU;
+          this.games.get(socket_id).update(payload[0]);
+        }
+        let numberOfMatches: number = 1;
+        let MatchList : any = { GAMESTATE : GameState.MENUSPEC, COLOR: this.games.get(socket_id).color, };
+        for (let [key, value] of this.games) {
+          if (value.gameState == GameState.MULTI) {
+            let matchFound = {[numberOfMatches] : value.playerOneName + " vs " + value.playerTwoName };
+            MatchList = Object.assign(MatchList, matchFound);
+            numberOfMatches++;
+          }
+          MatchList = Object.assign(MatchList, { MATCHNUMBER : numberOfMatches - 1, });
+        }
+        client.emit('update', MatchList);
       }
       else if (this.games.get(socket_id).gameState == GameState.SPECTATING) {
         if (payload[0].ACTION == "QUIT") {

@@ -322,9 +322,9 @@ export class Game {
                 this.gameState = GameState.OPTION;
                 break ;
             }
-           /* case MenuState.SPECTATE: {
+            case MenuState.SPECTATE: {
                 this.gameState = GameState.MENUSPEC;
-            }*/
+            }
         }
     }
 
