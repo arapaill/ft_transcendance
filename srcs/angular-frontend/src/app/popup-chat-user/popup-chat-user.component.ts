@@ -54,11 +54,27 @@ export class PopupChatUserComponent implements OnInit {
 
   inviteToPlayOrWatch() {
     if (this.isUserPlaying()) {
-      //this.webSocketService.emit("")
+      this.webSocketService.emit("spectate", {
+        MYUSER: myUser.pseudo,
+        USER: this.Personne.Name,
+        USERID: this.userID,
+      })
     }
     else {
       this.webSocketService.emit("inviteUserToPlay", this.userID);
-      this.webSocketService.emit("pongGame", undefined); // A voir avec Jandre
+      this.webSocketService.emit("invitation", {
+        TYPE: "Demande",
+        MYUSER: myUser.pseudo,
+        USER: this.Personne.Name,
+        USERID: this.userID,
+      });
+
+      /* this.webSocketService.emit("invitation", {
+        TYPETYPE: "Accepte/Refuse",
+        MYUSER: myUser,
+        USER: this.Personne.Name,
+        USERID: this.userID
+      }) */
     }
     this.dialogRef.close();
   }
