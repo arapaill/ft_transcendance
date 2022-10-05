@@ -3,6 +3,7 @@ export class ChatMessage {
 	userAvatar!: string;
 	text!: string;
 	date!: Date;
+	channelName!: string;
 }
 
 export class ChatChannel {
