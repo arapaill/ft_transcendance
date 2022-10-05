@@ -3,16 +3,16 @@ export class User {
 	pseudo!: string;
 	avatar!: string;
 	description !: string;
-	friends!: string[];
-	blacklist!: string[];
+	friends!: Map<string, number>;
+	blacklist!: Map<string, number>;
 }
 
 export let myUser : User = {
 	id : 0,
-	pseudo : "Tester",
+	pseudo : "cgoncalv",
 	avatar : "assets/avatar-placeholder-1.png",
 	description : "TEST",
-	friends : [],
-	blacklist : [],
+	friends : new Map(),
+	blacklist : new Map(),
 }
 
