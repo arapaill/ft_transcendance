@@ -198,6 +198,8 @@ export enum OptionState {
 export class Game {
     private playerOne: Player;
     private playerTwo: Player;
+    playerOneName : string;
+    playerTwoName : string;
     private computerPaddle : ComputerPaddle;
     private computerScore : number;
     private ball: Ball;
@@ -289,18 +291,24 @@ export class Game {
         }
     }
 
-    addPlayer(socket_id: any) : void {
-        if (this.playerOne == undefined)
+    addPlayer(socket_id: any, user_id: string) : void {
+        if (this.playerOne == undefined) {
+            this.playerOneName = user_id;
             this.playerOne = new Player(socket_id, LeftOrRight.LEFT);
-        else
+        }
+        else {
+            this.playerTwoName = user_id;
             this.playerTwo = new Player(socket_id, LeftOrRight.RIGHT);
+        }
     }
 
     changeStateGame(data: any) : void {
         switch (this.menuState) {
             case MenuState.SOLO: {
                 this.playerOne = new Player(data.SOCKET, LeftOrRight.LEFT);
+                this.playerOneName = data.NAME;
                 this.computerPaddle = new ComputerPaddle(data.WIDTH / 50, data.HEIGHT / 10, data.WIDTH / 50 * 48, data.HEIGHT / 2);
+                this.playerTwoName = "Computer";
                 this.gameState = GameState.SOLO;
                 this.ball = new Ball(data.WIDTH / 50, data.HEIGHT / 50, data.WIDTH / 2, data.HEIGHT / 2);
                 break ;
@@ -399,6 +407,8 @@ export class Game {
         if (this.gameState == GameState.MULTI || this.gameState == GameState.SPECTATING) {
             return {
                 GAMESTATE: this.gameState,
+                NAME1: this.playerOneName,
+                NAME2: this.playerTwoName,
                 PADDLEONEPOS: this.playerOne.paddle.y,
                 PADDLETWOPOS: this.playerTwo.paddle.y,
                 SCORE1: this.playerOne.score,
@@ -411,6 +421,8 @@ export class Game {
         else if (this.gameState == GameState.SOLO) {
             return {
                 GAMESTATE: this.gameState,
+                NAME1: this.playerOneName,
+                NAME2: this.playerTwoName,
                 PADDLEONEPOS: this.playerOne.paddle.y,
                 PADDLETWOPOS: this.computerPaddle.y,
                 SCORE1: this.playerOne.score,

@@ -177,8 +177,10 @@ export class PongComponent implements OnInit, AfterViewInit {
     this.pong.ctx.fillRect(width / 50, this.response.PADDLEONEPOS, width / 50, height / 8);
     this.pong.ctx.fillRect(width / 50 * 48, this.response.PADDLETWOPOS, width / 50, height / 8);
     this.pong.ctx.fillRect(this.response.BALLX, this.response.BALLY, width / 50, width / 50);
-    this.pong.ctx.strokeText(this.response.SCORE1, width / 4, height / 10);
-    this.pong.ctx.strokeText(this.response.SCORE2, width / 4 * 3, height / 10);
+    this.pong.ctx.strokeText(this.response.NAME1, width / 4, height / 10);
+    this.pong.ctx.strokeText(this.response.NAME2, width / 4 * 3, height / 10);
+    this.pong.ctx.strokeText(this.response.SCORE1, width / 4, height / 10 + 35);
+    this.pong.ctx.strokeText(this.response.SCORE2, width / 4 * 3, height / 10 + 35);
   }
 
   drawSearching() {
