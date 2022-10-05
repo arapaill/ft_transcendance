@@ -59,6 +59,13 @@ export class PopupChatSettingsComponent implements OnInit {
     else
       return new FormControl(false);
   }
+
+  shouldBlock() {
+    if (this.currentSettings.type != 'Public')
+      return (this.disableSelect);
+    else
+      return (true);
+  }
   
   closeDialog() {
     this.dialogRef.close();
