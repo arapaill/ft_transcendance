@@ -7,7 +7,7 @@ Ce que je voudrais récupérer :
 User:
 	id: number;
 	Name: string;
-	avatar: string;
+	avatar: string
 	Description: string;
 	date: Date;
 	victoires: number;
