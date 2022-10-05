@@ -222,6 +222,25 @@ export class PongComponent implements OnInit, AfterViewInit {
     this.pong.ctx.font = '15px orbitronregular';
     this.pong.ctx.fillText("Press Esc to quit", width / 2, height - 30);
   }
+
+  drawSpecMenu() {
+    let width = this.canvas.nativeElement.width;
+    let height = this.canvas.nativeElement.height;
+    this.pong.ctx.font = '45px orbitronregular';
+    this.pong.ctx.strokeStyle = this.response.COLOR;
+    this.pong.ctx.fillStyle = this.response.COLOR;
+    this.pong.ctx.textAlign = "center";
+    this.pong.ctx.clearRect(0, 0, width, height);
+    this.pong.ctx.strokeRect(25, 25, width - 50, height - 50);
+    this.pong.ctx.font = '20px orbitronregular';
+    let 
+    for (let [key, value] of this.response)
+    {
+      if (key != "GAMESTATE" && key != "COLOR") {
+        this.pong.ctx.fillText(, width / 2, height / 2)
+      }
+    }
+  }
   
   async update() {
     console.log(socket.socket.id);
@@ -248,6 +267,10 @@ export class PongComponent implements OnInit, AfterViewInit {
       this.drawOver();
     if (this.response.GAMESTATE == 8)
       this.drawOption();
+    if (this.response.GAMESTATE == 7) {
+      console.log(this.response);
+      this.drawOption();
+    }
   }
   
   
