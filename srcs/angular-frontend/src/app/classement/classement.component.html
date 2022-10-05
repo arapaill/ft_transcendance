@@ -1,7 +1,7 @@
 
 <div class="wrapper">
-	<div (click)="openDialog()" class="container" *ngFor="let profil of profils">
-		<img class="img" [src]="profil.avatar" [alt]="profil.avatarName">
+	<div (click)="openDialog(profil.Name)" class="container" *ngFor="let profil of profils">
+		<img class="img" [src]="profil.avatar">
 		<div class="button">
 			<p> Nom: {{profil.Name}} </p>
 		</div>

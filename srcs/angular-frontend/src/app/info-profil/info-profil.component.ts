@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { MatDialog } from  '@angular/material/dialog';
+import { Component, OnInit, Input, Inject } from '@angular/core';
+import { MatDialog, MAT_DIALOG_DATA } from  '@angular/material/dialog';
 import { PopupAddFriendComponent } from "../popup-add-friend/popup-add-friend.component";
 import { WebSocketService } from '../web-socket.service'
 import { myUser } from '../models/user.model';
@@ -18,13 +18,16 @@ export class InfoProfilComponent implements OnInit {
   percentDone!: number;
   uploadSuccess!: boolean;
   matchs !: string[];
-  constructor(private webSocketService: WebSocketService, private  dialogRef : MatDialog) {}
+  name !: string;
+  constructor(private webSocketService: WebSocketService, private  dialogRef : MatDialog, @Inject(MAT_DIALOG_DATA) public data : any) {
+    this.name = data.name;
+  }
 
   ngOnInit(): void {
     this.webSocketService.listen("getMatchHistory").subscribe((matchs) => {
       console.log(matchs);
     });
-    this.webSocketService.emit("getUser", name);
+    this.webSocketService.emit("getUserInfos", name);
     this.webSocketService.listen("getProfil").subscribe((profil) => {
       console.log(profil);
     });
