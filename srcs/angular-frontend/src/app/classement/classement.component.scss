@@ -6,9 +6,9 @@
 
 .container {
 	justify-content: space-between;
-	width: 	215px;
-  	height: 275px;
-	margin: 50px;
+	width: 	250px;
+	height: 300px;
+	margin: 30px;
 	padding: 5px;
   	outline: solid 1px black;
 	background-color: white;
@@ -22,4 +22,8 @@
 }
 .container .text{
 	justify-content: flex-start;
+}
+.img{
+	width: 	250px;
+	height: 250px;
 }
