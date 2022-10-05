@@ -31,13 +31,8 @@ export class ChatComponent implements OnInit {
       admins: [],
       users: ['Corentin', 'Alexandre'],
       type: "Public",
-      messages: [{
-        userPseudo: "Alexandre",
-        userAvatar: "assets/avatar-placeholder-1.png",
-        text: "Hey",
-        date: new Date(),
-        channelName: 'Général'
-      }]
+      messages: [
+      ]
     }
 
     let newChannel: ChatChannel = {
