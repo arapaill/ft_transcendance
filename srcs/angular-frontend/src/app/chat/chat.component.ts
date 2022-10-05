@@ -20,44 +20,24 @@ export class ChatComponent implements OnInit {
   @Input() channels: ChatChannel[] = [];
   currentChannel!: ChatChannel;
   selectedChannel!: string;
-  blockedUsers: string[] = [];
-  user: User = myUser;
+  myUserCpy: User = myUser;
 
   constructor(private webSocketService: WebSocketService, private dialogRef: MatDialog) { }
 
   ngOnInit(): void {
     this.currentChannel = {
       name: 'Général',
-      owner: 'Corentin',
+      owner: myUser.pseudo,
       admins: [],
       users: ['Corentin', 'Alexandre'],
       type: "Public",
-      messages: [
-        {
-          userPseudo: "cgoncalv",
-          userAvatar: "assets/avatar-placeholder-1.png",
-          text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec posuere volutpat metus, non convallis felis bibendum ut. Sed aliquet, neque eget pretium pretium, lorem mauris condimentum mi, auctor placerat eros justo sed ante. Ut sed mi est. Cras dictum ornare augue a cursus. Vivamus pulvinar, ex sit amet feugiat vehicula, tellus lorem gravida urna, at blandit ex mi rhoncus tellus. Aenean nec pharetra ante. Phasellus lobortis mi at ipsum varius interdum. Maecenas aliquet lacus sagittis enim commodo maximus. Nulla tristique lacinia nisi eu condimentum. Ut eu turpis eleifend, porta risus eu, venenatis erat. Ut eu purus ac eros pretium placerat et sed dolor. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. ",
-          date: new Date()
-        },
-        {
-          userPseudo: "arapaill",
-          userAvatar: "assets/avatar-placeholder-2.png",
-          text: "This is another test",
-          date: new Date()
-        },
-        {
-          userPseudo: "arapaill",
-          userAvatar: "assets/avatar-placeholder-2.png",
-          text: "This is another test",
-          date: new Date()
-        },
-        {
-          userPseudo: "cgoncalv",
-          userAvatar: "assets/avatar-placeholder-1.png",
-          text: "This is the last test",
-          date: new Date()
-        },
-      ]
+      messages: [{
+        userPseudo: "Alexandre",
+        userAvatar: "assets/avatar-placeholder-1.png",
+        text: "Hey",
+        date: new Date(),
+        channelName: 'Général'
+      }]
     }
 
     let newChannel: ChatChannel = {
@@ -66,22 +46,16 @@ export class ChatComponent implements OnInit {
       admins: [],
       users: ['Corentin', 'Alexandre'],
       type: "Public",
-      messages: [
-        {
-          userPseudo: "cgoncalv",
-          userAvatar: "assets/avatar-placeholder-1.png",
-          text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec posuere volutpat metus, non convallis felis bibendum ut. Sed aliquet, neque eget pretium pretium, lorem mauris condimentum mi, auctor placerat eros justo sed ante. Ut sed mi est. Cras dictum ornare augue a cursus. Vivamus pulvinar, ex sit amet feugiat vehicula, tellus lorem gravida urna, at blandit ex mi rhoncus tellus. Aenean nec pharetra ante. Phasellus lobortis mi at ipsum varius interdum. Maecenas aliquet lacus sagittis enim commodo maximus. Nulla tristique lacinia nisi eu condimentum. Ut eu turpis eleifend, porta risus eu, venenatis erat. Ut eu purus ac eros pretium placerat et sed dolor. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. ",
-          date: new Date()
-        }
-      ]
+      messages: []
     }
 
     this.channels.push(this.currentChannel);
     this.channels.push(newChannel);
     this.selectedChannel = this.currentChannel.name;
 
-    this.webSocketService.listen("getChatMessages").subscribe((data) => {
-      console.log(data);
+    this.webSocketService.emit("requestChannels", myUser.pseudo);
+    this.webSocketService.listen("getChannels").subscribe((data: any) => {
+      this.channels = data;
     })
   }
 
@@ -89,10 +63,11 @@ export class ChatComponent implements OnInit {
     if (msg.value == "")
       return ;
     let newMessage: ChatMessage = {
-      userPseudo: this.user.pseudo,
-      userAvatar: this.user.avatar,
+      userPseudo: myUser.pseudo,
+      userAvatar: myUser.avatar,
       text: msg.value,
-      date: new Date()
+      date: new Date(),
+      channelName: this.currentChannel.name
     }
     msg.value = "";
     this.currentChannel.messages.push(newMessage);
@@ -117,7 +92,7 @@ export class ChatComponent implements OnInit {
   createNewChannel(settings: any) {
     let newChannel: ChatChannel = {
       name: settings.name,
-      owner: this.user.pseudo,
+      owner: myUser.pseudo,
       admins: settings.admin,
       users: settings.users,
       type: settings.type,
@@ -130,6 +105,7 @@ export class ChatComponent implements OnInit {
 
   changeCurrentChannel(newSettings: any) {
     if (newSettings == "Delete") {
+      this.webSocketService.emit("deleteChannel", newSettings.name);
       let index = this.channels.indexOf(this.currentChannel);
       this.channels.splice(index, 1);
       return ;
@@ -139,14 +115,15 @@ export class ChatComponent implements OnInit {
     if (this.currentChannel.type == "Protégé") {
       this.currentChannel.password = newSettings.newPassword;
     }
-    // Ajouter users et admins
-    this.webSocketService.emit('changeChannel', newSettings);
+    this.currentChannel.users = newSettings.newUsers;
+    this.currentChannel.admins = newSettings.newAdmins;
+    this.webSocketService.emit('updateChannel', newSettings);
   }
 
   createMPChannel(user: string) {
     let newChannel: ChatChannel = {
-      name: this.user.pseudo + ' & ' + user,
-      owner: this.user.pseudo,
+      name: myUser.pseudo + ' & ' + user,
+      owner: myUser.pseudo,
       admins: [user],
       users: [user],
       type: "Privé",
@@ -156,30 +133,14 @@ export class ChatComponent implements OnInit {
     this.webSocketService.emit('createNewChannel', newChannel);
   }
 
-  blockUser(user: string) {
-    if (this.isUserBlocked(user)) {
-      let index = this.blockedUsers.indexOf(user);
-      this.blockedUsers.splice(index, 1);
-    }
-    else
-      this.blockedUsers.push(user);
-  }
-
-  isUserBlocked(userToCheck: string) {
-    for (const user of this.blockedUsers) {
-      if (user == userToCheck) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   openSettingsDialog() {
     let settingsDialog = this.dialogRef.open(PopupChatSettingsComponent, {
       data: {
         name: this.currentChannel.name,
         owner: this.currentChannel.owner,
-        type: this.currentChannel.type
+        type: this.currentChannel.type,
+        users: this.currentChannel.users,
+        admins: this.currentChannel.admins
       }
     });
   
@@ -201,15 +162,13 @@ export class ChatComponent implements OnInit {
       data: {
         userName: user.userPseudo,
         userAvatar: user.userAvatar,
-        blockedUsers: this.blockedUsers
+        blockedUsers: myUser.blacklist
       }
     });
 
     profileDialog.afterClosed().subscribe(result => {
       if (result.action == 'PM')
         this.createMPChannel(result.user);
-      else if (result.action == 'Block')
-        this.blockUser(result.user);
     });
   }
 }
