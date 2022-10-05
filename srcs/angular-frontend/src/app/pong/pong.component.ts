@@ -233,13 +233,14 @@ export class PongComponent implements OnInit, AfterViewInit {
     this.pong.ctx.clearRect(0, 0, width, height);
     this.pong.ctx.strokeRect(25, 25, width - 50, height - 50);
     this.pong.ctx.font = '20px orbitronregular';
-    let 
+    /*let 
     for (let [key, value] of this.response)
     {
       if (key != "GAMESTATE" && key != "COLOR") {
         this.pong.ctx.fillText(, width / 2, height / 2)
       }
     }
+    */
   }
   
   async update() {

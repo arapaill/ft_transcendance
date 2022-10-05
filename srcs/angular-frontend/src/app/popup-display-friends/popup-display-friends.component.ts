@@ -9,10 +9,15 @@ import { myUser, User } from '../models/user.model';
 })
 export class PopupDisplayFriendsComponent implements OnInit {
   user : User = myUser;
-  friends !: string[];
+  friends : string[] = [];
   constructor() { }
-
+ 
   ngOnInit(): void {
+    myUser.friends.set("Arapaill", 0);
+    myUser.friends.set("Cgoncalv", 2);
+    myUser.friends.forEach((key,value) : any =>{
+      this.friends.push(value);
+    });
   }
 
 }
