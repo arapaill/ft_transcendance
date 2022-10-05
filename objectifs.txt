@@ -71,3 +71,71 @@ ChatMessage:
 status : À faire
 
 ------------------------------
+
+Objectif 5: Envoyer un nouveau message sur le chat et le stocker dans la db
+
+Demande: socket.emit("sendNewMessage", newMessage: ChatMessage);
+Réponse: N/A
+
+Ce que j'envoie:
+Un objet contenant les données suivantes :
+ChatMessage:
+	userPseudo: string;
+	userAvatar: string;
+	text: string;
+	date: Date;
+	channelName: string;
+
+status : À faire
+
+------------------------------
+
+Objectif 6: Envoyer un nouveau channel et le stocker dans la db
+
+Demande: socket.emit("createNewChannel", newChannel: ChatChannel);
+Réponse: N/A
+
+Ce que j'envoie:
+Un objet contenant les données suivantes :
+ChatChannel:
+	name: string;
+	owner: string;
+	admins: string[];
+	users: string[];
+	type: string; (Public, Privé, Protégé)
+	password: string = "";
+	messages: ChatMessage[]; (Tableau de messages)
+
+status : À faire
+
+------------------------------
+
+Objectif 7: Delete un channel et tous les messages qu'il contient de la db
+
+Demande: socket.emit("deleteChannel", channelName: string);
+Réponse: N/A
+
+Ce que j'envoie: Simplement le nom du channel à supprimer.
+
+status : À faire
+
+------------------------------
+
+Objectif 8: Mettre à jour certains paramètres d'un channel.
+			Ca sera utilisé à chaque fois que des users sont ajoutés ou que le type, le nom ou le mdp change
+
+Demande: socket.emit('updateChannel', newSettings: ChatChannel);
+Réponse: N/A
+
+Ce que j'envoie:
+Un objet contenant les données suivantes :
+ChatChannel:
+	name: string;
+	owner: string;
+	admins: string[];
+	users: string[];
+	type: string; (Public, Privé, Protégé)
+	password: string = "";
+	messages: ChatMessage[]; (Peut-être ignoré ici)
+
+status : À faire
