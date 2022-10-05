@@ -336,13 +336,13 @@ export class Game {
             this.computerPaddle.update(this.ball, data.HEIGHT);
             if (data.ACTION == undefined)
                 scoreModifier = this.ball.update(this.playerOne.paddle.y, this.computerPaddle.y, data.HEIGHT, data.WIDTH);
-            if (scoreModifier === 1)
+            if (scoreModifier === -1)
                 this.playerOne.score++;
-            else if (scoreModifier === -1)
+            else if (scoreModifier === 1)
                 this.computerScore++;
                 if (this.playerOne.score === 11 || this.computerScore === 11) {
                     this.gameState = GameState.OVER;
-                    if (this.playerOne.score === 11)
+                    if (this.playerOne.score == 11)
                         this.winner = "Player One";
                     else
                         this.winner = "Computer";
@@ -364,13 +364,13 @@ export class Game {
             if (data.ACTION == undefined && this.equilibrium % 2)
                 scoreModifier = this.ball.update(this.playerOne.paddle.y, this.playerTwo.paddle.y, data.HEIGHT, data.WIDTH);
                 this.equilibrium++;
-            if (scoreModifier === 1)
+            if (scoreModifier === -1)
                 this.playerOne.score++;
-            else if (scoreModifier === -1)
+            else if (scoreModifier === 1)
                 this.playerTwo.score++;
             if (this.playerOne.score === 11 || this.playerTwo.score === 11) {
                 this.gameState = GameState.OVER;
-                if (this.playerOne.score === 11)
+                if (this.playerOne.score == 11)
                     this.winner = "Player One";
                 else
                     this.winner = "Player Two";

@@ -18,7 +18,8 @@ export class PongGateway {
 
   @SubscribeMessage('update')
   async handleAction(client: any, payload: any) {
-    let socket_id = payload[0].SOCKET;    
+    let socket_id = payload[0].SOCKET;
+    let user_id = payload[0].NAME;    
     if (this.games.has(socket_id)) {
       if (this.games.get(socket_id).gameState == GameState.MENU) {
         this.games.get(socket_id).changeStateMenu(payload[0]);
