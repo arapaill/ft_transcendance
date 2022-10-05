@@ -8,7 +8,7 @@ RUN chown node:node ../app
 RUN npm config set fetch-retry-mintimeout 20000
 RUN npm config set fetch-retry-maxtimeout 120000
 # D'abord les package pour installer les dépendances.
-COPY --chown=node:node package*.json .
+COPY --chown=node:node package*.json ./
 # On s'assure d'avoir les dependances installée, apparement ci est plus léger et recommandé pour les 
 # build automatiques par rapport a npm install
 RUN npm ci

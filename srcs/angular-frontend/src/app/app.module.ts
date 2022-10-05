@@ -12,7 +12,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { InfoProfilComponent } from './info-profil/info-profil.component';
 import { PopupModifierProfilComponent } from './popup-modifier-profil/popup-modifier-profil.component';
 import { PopupAddFriendComponent } from './popup-add-friend/popup-add-friend.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PopupChatAddComponent } from './popup-chat-add/popup-chat-add.component';
 import { PopupChatSettingsComponent } from './popup-chat-settings/popup-chat-settings.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -30,6 +30,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { PopupChatPasswordComponent } from './popup-chat-password/popup-chat-password.component';
 import { PopupDisplayFriendsComponent } from './popup-display-friends/popup-display-friends.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { PopupDisplayFriendsComponent } from './popup-display-friends/popup-disp
     PopupClickHereComponent,
     PopupChatPasswordComponent,
     PopupDisplayFriendsComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -66,6 +68,7 @@ import { PopupDisplayFriendsComponent } from './popup-display-friends/popup-disp
     HttpClientModule,
     MatFormFieldModule,
     MatAutocompleteModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

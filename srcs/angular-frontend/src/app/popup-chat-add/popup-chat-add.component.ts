@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import { myUser, User } from '../models/user.model';
 
 @Component({
   selector: 'app-popup-chat-add',
@@ -8,10 +9,15 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class PopupChatAddComponent implements OnInit {
   isPasswordChecked = false;
+  myUserCpy: User = myUser;
+  friendsList: string[] = [];
 
   constructor(public dialogRef: MatDialogRef<PopupChatAddComponent>) { }
 
   ngOnInit(): void {
+    myUser.friends.forEach((key, value) => {
+      this.friendsList.push(value);
+    })
   }
 
   onToggle(event: any) {

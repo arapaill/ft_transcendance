@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Put } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 // import { User, Prisma } from '@prisma/client';
 import { toFileStream } from 'qrcode';
@@ -47,6 +47,146 @@ export class UserService {
     return 0;
     // if (u) {return "Yes";}else{return "No";}
   }
+  
+  
+  
+  async requestUserInfos( nameg: string) {
+    let u =  this.PrismaService.user.findFirst({
+		where: {
+			name: nameg,
+		  },
+    });
+    let id = (await u).id;
+    let Name = (await u).name;
+    // let avatar = (await u).avatar;
+    // let Description = (await u).Description;
+    // let date = (await u).Date;
+    // let victoires = (await u).wins;
+    // let match = (await u).match;
+    return {
+		id,Name,
+		// avatar,Description, date, victoires ,match
+    }
+  }
+  
+  
+  
+/*  Objectif 2: faire une demande de match history sous forme de tableau de string*/
+
+  
+async requestUserMatchsHistory( nameg: string) {
+    let u =  this.PrismaService.user.findFirst({
+		where: {
+			name: nameg,
+		  },
+    });
+    let MatchsHistory ;
+    // = (await u).MatchsHistory;
+
+    return MatchsHistory;
+ }
+
+  /*
+Objectif 3: faire une demande des 5 meilleurs joueurs en fonction du nombres de victoirs sous forme de tableau d'objet User (voir objectif 1)
+
+
+Demande: socket.emit("requestTopFiveUsers");
+Réponse : socket.on(getTopFiveUsers");
+
+Ce que je voudrais récupérer :
+
+top : User[] (voir Objectif: 1)
+
+status : À faire*/
+
+
+ 
+/* Objectif 9: Update la friendlist de l'user */
+
+async updateFriendlist( nameg: string, oneto: number) {
+	let y = this.PrismaService.user.findFirst({
+		where: {
+			id: oneto,
+		  },
+    });
+    let frd = (await y).name;
+    if( frd != null){
+		let u =  this.PrismaService.user.update({
+			where: {
+				name: nameg,
+			  },
+			  data:{
+			    friends:{
+					push: frd,
+			    } 
+			  }
+	    });    
+    }
+
+ }
+
+
+/* Objectif 10: Savoir si le user est en cours de partie ou non */
+
+async requestIsUserPlaying( nameg: string) {
+	let u =  this.PrismaService.user.findFirst({
+		where: {
+			name: nameg,
+		  },
+    });
+	let status = (await u).line_status
+	if(status == "in game")
+	{
+		return true;
+	}
+    return false;
+ }
+
+  
+/*Objectif 11: Faire une demande de login.
+
+Réponse : socket.on("getLogin");
+
+Ce que je voudrais récupérer :
+	recevoir une confirmation de login + un objet du User
+
+status : À faire*/
+  
+  
+  
+  
+
+/*Objectif 12: Check si un pseudo existe deja.*/
+
+
+
+ async requestCheckUserName( nameg: string) {
+    let u =  this.PrismaService.user.findFirst({
+		where: {
+			name: nameg,
+		  },
+    });
+	if((await u) != null){ return true;}
+    return false;
+    // if (u) {return "Yes";}else{return "No";}
+  }
+  
+/*Objectif 13: Inviter un joueur à jouer au pong
+
+Demande: socket.emit("inviteUserToPlay", userID);
+Réponse: socket.on("getUserToPlay");
+
+Ce que j'envoie: L'id (number) de l'user.
+Ce que je voudrais recevoir: 
+Alors ici c'est un peu plus complexe. Il faudrait envoyer
+sur le socket de l'userID envoyé un simple boolean true.
+Il faut donc trouver le socket de l'user dont l'id est userID.
+Ca risque d'être un peu compliqué donc on pourra en discuter. 
+
+status : À faire*/
+  
+  
+  
   
   async find_already_2FA( nameg: string) {
   

@@ -1,4 +1,4 @@
-<img class="img" [src]="Personne.avatar" [alt]="Personne.avatarName">
+<img class="img" [src]="Personne.avatar">
 
 <p>{{ Personne.Name }}</p>
 <p>{{ Personne.Description }}</p>
@@ -8,5 +8,5 @@
 <div *ngFor="let match of matchs">
 	<p>{{match}}</p>
 </div>
-<button mat-raised-button color="accent" (click)="openDialog()">Ajouter en amis</button>
+<button mat-raised-button color="accent" (click)="addToFriends()"> {{ myUserCpy.friends.has(this.Personne.Name) ? 'Retirer des amis' : 'Ajouter en amis'     }}</button>
 <button *ngIf="Personne.match" mat-raised-button color="accent">Voir match</button>

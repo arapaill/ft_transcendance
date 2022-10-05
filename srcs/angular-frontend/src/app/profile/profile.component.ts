@@ -17,6 +17,8 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
 
   }
+
+
   openDialog(){
     let ret = this.dialogRef.open(PopupModifierProfilComponent);
     ret.afterClosed().subscribe(result=>{

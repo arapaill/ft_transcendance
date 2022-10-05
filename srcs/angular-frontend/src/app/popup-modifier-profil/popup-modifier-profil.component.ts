@@ -44,9 +44,13 @@ export class PopupModifierProfilComponent implements OnInit {
     }
 
   save(value : any){
-    this.dialogRef.close(value);
-    if(this.url)
-      myUser.avatar = this.url;
+    this.webSocketService.emit("requestCheckUserName", value.Nom);
+    this.webSocketService.listen("getCheckUserName").subscribe((check) => {
+      if(check)
+        this.dialogRef.close(value);
+        if(this.url)
+          myUser.avatar = this.url;
+    });
   }
   close(){
     this.dialogRef.close();
