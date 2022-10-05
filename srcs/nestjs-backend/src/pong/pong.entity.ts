@@ -155,15 +155,15 @@ export class Player {
     leftOrRight: LeftOrRight;
     state: string;
 
-    constructor(socket: any, leftOrRight : LeftOrRight) {
+    constructor(data: any, leftOrRight : LeftOrRight) {
         this.score = 0;
         this.state = "iddle";
         this.leftOrRight = leftOrRight;
-        this.socket = socket;
+        this.socket = data.SOCKET;
         if (this.leftOrRight = LeftOrRight.LEFT)
-            this.paddle = new PlayerPaddle(10, 60, 20, 300);
+            this.paddle = new PlayerPaddle(10, 60, 0 + data.WIDTH / 18, data.HEIGHT / 2);
         else if (this.leftOrRight = LeftOrRight.RIGHT)
-            this.paddle = new PlayerPaddle(10, 60, 1180, 300);      // On regarde si jamais il est a droite ou a gauche pour la pos de base
+            this.paddle = new PlayerPaddle(10, 60, data.WIDTH - data.WIDTH / 18, data.HEIGHT / 2);      // On regarde si jamais il est a droite ou a gauche pour la pos de base
     }
 }
 
@@ -291,21 +291,21 @@ export class Game {
         }
     }
 
-    addPlayer(socket_id: any, user_id: string) : void {
+    addPlayer(data: any, user_id: string) : void {
         if (this.playerOne == undefined) {
             this.playerOneName = user_id;
-            this.playerOne = new Player(socket_id, LeftOrRight.LEFT);
+            this.playerOne = new Player(data, LeftOrRight.LEFT);
         }
         else {
             this.playerTwoName = user_id;
-            this.playerTwo = new Player(socket_id, LeftOrRight.RIGHT);
+            this.playerTwo = new Player(data, LeftOrRight.RIGHT);
         }
     }
 
     changeStateGame(data: any) : void {
         switch (this.menuState) {
             case MenuState.SOLO: {
-                this.playerOne = new Player(data.SOCKET, LeftOrRight.LEFT);
+                this.playerOne = new Player(data, LeftOrRight.LEFT);
                 this.playerOneName = data.NAME;
                 this.computerPaddle = new ComputerPaddle(data.WIDTH / 50, data.HEIGHT / 10, data.WIDTH / 50 * 48, data.HEIGHT / 2);
                 this.playerTwoName = "Computer";
@@ -351,17 +351,17 @@ export class Game {
                 if (this.playerOne.score === 11 || this.computerScore === 11) {
                     this.gameState = GameState.OVER;
                     if (this.playerOne.score == 11)
-                        this.winner = "Player One";
+                        this.winner = this.playerOneName;
                     else
-                        this.winner = "Computer";
+                        this.winner = this.playerTwoName;
                 }
         }
         else if (this.gameState == GameState.MULTI) {
             if (data.ACTION == "QUIT") {
                 if (data.SOCKET == this.playerOne.socket)
-                    this.winner = "Player Two";
+                    this.winner = this.playerTwoName;
                 else
-                    this.winner = "Player One";
+                    this.winner = this.playerOneName;
                 this.gameState = GameState.OVER;
                 return ;
             }
@@ -379,18 +379,18 @@ export class Game {
             if (this.playerOne.score === 11 || this.playerTwo.score === 11) {
                 this.gameState = GameState.OVER;
                 if (this.playerOne.score == 11)
-                    this.winner = "Player One";
+                    this.winner = this.playerOneName;
                 else
-                    this.winner = "Player Two";
+                    this.winner = this.playerTwoName;
             }
         }
         else if (this.gameState == GameState.SPECTATING) {
             if (this.playerOne.score === 11 || this.playerTwo.score === 11) {
                 this.gameState = GameState.OVER;
                 if (this.playerOne.score === 11)
-                    this.winner = "Player One";
+                    this.winner = this.playerOneName;
                 else
-                    this.winner = "Player Two";
+                    this.winner = this.playerTwoName;
             }
         }
     }

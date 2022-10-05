@@ -43,13 +43,13 @@ export class PongGateway {
       else if (this.games.get(socket_id).gameState == GameState.SEARCHING) {
         for (let [key, value] of this.games) {
           if (key != socket_id && value.gameState == GameState.WAITING) {
-            this.games.get(key).addPlayer(socket_id, user_id);
+            this.games.get(key).addPlayer(payload[0], user_id);
             this.games.set(socket_id, this.games.get(key));
             this.games.get(key).gameState = GameState.MULTI;
           }
           if (this.games.get(socket_id).gameState == GameState.SEARCHING) {
             this.games.get(socket_id).gameState = GameState.WAITING;
-            this.games.get(socket_id).addPlayer(socket_id, user_id);
+            this.games.get(socket_id).addPlayer(payload[0], user_id);
           }
         }
         this.games.get(socket_id).update(payload[0]);
