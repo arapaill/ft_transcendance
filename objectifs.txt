@@ -1,20 +1,21 @@
-Objectif 1: Faire un demande d'info sur un user.
+Objectif 1: Faire une demande d'info sur un user.
 
 Demande : socket.emit("requestUserInfos", userName: string);
 Réponse : socket.on(getUserInfos");
 
 Ce que je voudrais récupérer :
-id: number;
-Name!: string;
-avatar!: string;
-Description!: string;
-date!: Date;
-victoires!: number;
-match!: boolean;
+User:
+	id: number;
+	Name: string;
+	avatar: string;
+	Description: string;
+	date: Date;
+	victoires: number;
+	match: boolean;
 
-status : a Faire
+status : À faire
 
-
+------------------------------
 
 Objectif 2: faire une demande de match history sous forme de tableau de string
 
@@ -25,8 +26,9 @@ Ce que je voudrais récupérer :
 
 matchs : string[];
 
-status : a Faire
+status : À faire
 
+------------------------------
 
 Objectif 3: ffaire une demande des 5 meilleurs joueurs en fonction du nombres de victoirs sous forme de tableau d'objet User (voir objectif 1)
 
@@ -38,4 +40,34 @@ Ce que je voudrais récupérer :
 
 top : User[] (voir Objectif: 1)
 
-status : a faire
+status : À faire
+
+------------------------------
+
+Objectif 4: Obtenir tous les channels auquel l'user actuel à le droit d'accèder. C'est à dire tous les channels de type "Public" et "Protégé",
+			ainsi que tous les channels de type "Privé" que dans lequel l'user est présent soit en tant qu'user soit en tant qu'admin. 
+
+Demande: socket.emit("requestChannels", myUserPseudo: string);
+Réponse: socket.on("getChannels");
+
+Ce que je voudrais récupérer:
+Un tableau d'objet contenant les données suivantes :
+ChatChannel:
+	name: string;
+	owner: string;
+	admins: string[];
+	users: string[];
+	type: string; (Public, Privé, Protégé)
+	password: string = "";
+	messages: ChatMessage[]; (Tableau de messages)
+
+ChatMessage:
+	userPseudo: string;
+	userAvatar: string;
+	text: string;
+	date: Date;
+	channelName: string;
+
+status : À faire
+
+------------------------------
