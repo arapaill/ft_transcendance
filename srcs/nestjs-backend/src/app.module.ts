@@ -13,33 +13,35 @@ import { UserService } from './user/user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Chat } from './chat/chat.entity';
 import { ChatModule } from './chat/chat.module';
+import { AuthGateway } from './auth/auth.gateway';
 
 @Module({
-  imports: [
-	//ChatModule, 
-	PongModule,
-	TypeOrmModule.forRoot({
-		type: 'postgres',
-		host: 'postgres',
-		username: 'jandre',
-		password: 'jandrepass',
-		database: 'transcendance',
-		entities: [Chat],
-		synchronize: false,
-	}),
-	TypeOrmModule.forFeature([Chat]),
-	AuthModule,
- 	UserModule,
- 	PrismaModule
-	],
-  controllers: [
-	AppController
-	],
-  providers: [
-	AppService,
-  	//AppGateway,
-  	//ChatGateway,
-  	FortyTwoStrategy
-	],
-})
-export class AppModule {}
+	imports: [
+	  //ChatModule, 
+	  PongModule,
+	  TypeOrmModule.forRoot({
+		  type: 'postgres',
+		  host: 'postgres',
+		  username: 'jandre',
+		  password: 'jandrepass',
+		  database: 'transcendance',
+		  entities: [Chat],
+		  synchronize: false,
+	  }),
+	  TypeOrmModule.forFeature([Chat]),
+	  AuthModule,
+	   UserModule,
+	   PrismaModule
+	  ],
+	controllers: [
+	  AppController
+	  ],
+	providers: [
+	  AppService,
+	  AuthGateway,
+		// AppGateway,
+		//ChatGateway,
+		FortyTwoStrategy
+	  ],
+  })
+  export class AppModule {}

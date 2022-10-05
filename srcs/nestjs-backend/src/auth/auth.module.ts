@@ -19,6 +19,7 @@ import { AuthController } from './auth.controller';
 import { UserService } from '../user/user.service';
 import { SessionSerializer } from "./session.serializer"
 // import { LocalStrategy  } from "./strategy/local.strategy"
+import { AuthGateway } from './auth.gateway';
 
 
 @Module({
@@ -32,13 +33,13 @@ import { SessionSerializer } from "./session.serializer"
 		// UserService,
 
 	  ],
-	providers: [ 
+	controllers: [AuthController],
+		providers: [ 
 		UserService,
 		SessionSerializer,
 		// LocalStrategy,
 	// JwtStrategy,
 	PassportModule , FortyTwoStrategy , AuthService],
 	exports: [ PassportModule ,AuthService , FortyTwoStrategy],
-	controllers: [AuthController],
 })
 export class AuthModule{}

@@ -37,19 +37,27 @@ export class AuthController {
 		) {}
 	
 	
-	@UseGuards(AuthenticatedGuard)
-	@Get('name')
-	async hhh(@Request() req,){
-	return req.user.username;
+	// @UseGuards(AuthenticatedGuard)
+	@Get('1111')
+	async hhh(@Req() req,){
+	let h = this.UserService.requestUserInfos( "fejjed");
+	return h
 	
 	}
 	
+	
+	@Get('111')
+	async hhvvh(@Req() req,){
+	return this.UserService.requestUserInfos(req.user.username);
+	
+	}
 	
 	// @Public()
 	@Get('code')
 	// @UseFilters(HttpExceptionFilter)
 	@UseGuards(FortyTwoAuthGuard)
 	// @UseGuards(LocalAuthGuard)
+	// @UseGuards(AuthenticatedGuard)
      async getHello(
         @Request() req,
         
@@ -62,56 +70,97 @@ export class AuthController {
 	    
 	    @Res() response: Response,
 	)   {
-	
+	// console.log(req);
 	if(req.url.startsWith("/auth2/code/?code="))  {
 	
-	let ok = this.UserService.findBySaad(req.user.username);
-	let fac = this.UserService.find2FA(req.user.username);
-	if( (await ok) == 0){
-	
-		let id_num = req.user.id;
-		var y: number = +id_num;
-		id = y ;
-		name = req.user.username ;
-		// global = name ;
-		Full_Name = req.user.displayName;
-		two_factor = false;
-		avatar = req.user.photos[0].value;
-		line_status = "online";
-		wins = 0;
-		losses = 0;
-		ladder_level = 0;
-		
-		achievements = null;
-		secret = null;
-		email = req.user.emails[0].value ;
-		qrCode = null;
-		response.send("Happy to   your first time login , we created your user ");
-		await this.prismaService.user.create({
-		    data : { id, name,
-			    Full_Name, two_factor, avatar, line_status,
-			    wins, losses, ladder_level, achievements, 
-				secret ,
-				email ,
-				qrCode ,
-				friends,
-				demFriends ,
-			},
-	    });
-	    
-	}
-	else if (( (await ok) == 1)) {
-	console.log(">>>",fac,"<<<");
+		if(1)
+		{
+			let ok = this.UserService.findBySaad(req.user.username);
+			let fac = this.UserService.find2FA(req.user.username);
+			if( (await ok) == 0){
+			
+				let id_num = req.user.id;
+				var y: number = +id_num;
+				id = y ;
+				name = req.user.username ;
+				// global = name ;
+				Full_Name = req.user.displayName;
+				two_factor = false;
+				avatar = req.user.photos[0].value;
+				line_status = "online";
+				wins = 0;
+				losses = 0;
+				ladder_level = 0;
+				
+				achievements = null;
+				secret = null;
+				email = req.user.emails[0].value ;
+				qrCode = null;
+				response.send("Happy to   your first time login , we created your user ");
+				await this.prismaService.user.create({
+				    data : { id, name,
+					    Full_Name, two_factor, avatar, line_status,
+					    wins, losses, ladder_level, achievements, 
+						secret ,
+						email ,
+						qrCode ,
+						friends,
+						demFriends ,
+					},
+			    });
+		}
+		else if (( (await ok) == 1)) {
+	// console.log(">>>",fac,"<<<");
 	
 		if(await fac == 1){ 
-			response.redirect("http://localhost:9876/auth2/verify",302); 
+			// response.redirect("http://localhost:9876/auth2/verify",302); 
+			
+			
+			// let name = req.user.username;
+			// let id = (await this.UserService.findid(name)) ;
+			// let secret = (await this.UserService.findSecret(name) ) ;
+			
+			// console.log("-*-name:",name,"-*-id:",id, "-*-secret:",secret);
+			// let phrase = '<form><div><label for="example">Veuillez saisir du texte</label><input id="example" type="text" name="text"></div><div><input type="submit" value="Envoyer"accesskey="s"></div></form>';
+			// if(req.url.split("?text=")[1]){
+			// 	let f = (await this.authService.verifyCode(id,req.url.split("?text=")[1],secret));
+			// 	if ((await f) == 1){
+				// response.redirect("http://localhost:4200/",302);
+				// req.session.wait;
+				//  req.session.cookie.originalMaxAge= 1 ;
+				// req.session.originalMaxAge == 110000;
+				// req.params = "0";
+				// console.log("YYYYY? " , req.session.originalMaxAge )
+				req.socket._sockname = "987";
+				response.redirect("http://localhost:9876/auth2/verify",302); 
+				// response.sendFile( "/Users/saad/FINAL_RARE/srcs/nestjs-backend/src/auth/123.html");
+				// console.log(req.session.cookie.httpOnly);
+				// return await req.session.cookie;
+				// response.send("1");
+				// }
+				// if ((await f) == 0){
+				// phrase += " \n \n False code try again"; 
+				// response.send(phrase);			
+				// }
+				
+			// }
+			// else{
+			// response.send(phrase);
+			// }
+			
 		}
 		else { 
-			response.send("Happy to see you again login , welcome to your favorite game" ); }
+		// return "Happy to see you again login , welcome to your favorite game"; 
+		// response.redirect("http://localhost:9876/auth2/111",302); 
+			response.send("Happy to see you again login , welcome to your favorite game" );
+			}
 		return fac;	
 	}
 
-	}	
+	}
+	    
+	}
+	
     }
     
 
@@ -158,7 +207,7 @@ export class AuthController {
 	}
 	
 	@Get('un2FA')
-	@UseGuards(AuthenticatedGuard)
+	// @UseGuards(AuthenticatedGuard)
 	async un2fa(@Body() i: string,@Req() req,){
 		let name = req.user.username;
 		let already = await this.UserService.find_already_2FA(name);
@@ -183,30 +232,51 @@ export class AuthController {
 	}
 
 	@Get('verify')
-	async findA(@Body() i: string,@Req() req,	@Res() response: Response,){
+	// @UseGuards(AuthenticatedGuard)
+	// @UseGuards(FortyTwoAuthGuard)
+	async findA(@Body() i: string,@Request() req,	@Res() response: Response,){
 		// req.socket.parser[0] = "sejjed";
-		// console.log(req.socket.parser[0])
+		// console.log("dsaas",req.isUnauthenticated);
+		// ≈
+		// req.body = "true";
 		
-		let name = req.user.username;
-		let id = (await this.UserService.findid(name)) ;
-		let secret = (await this.UserService.findSecret(name) ) ;
-		
-		// console.log("-*-name:",name,"-*-id:",id, "-*-secret:",secret);
-		let phrase = '<form><div><label for="example">Veuillez saisir du texte</label><input id="example" type="text" name="text"></div><div><input type="submit" value="Envoyer"accesskey="s"></div></form>';
-		if(req.url.split("verify?text=")[1]){
-			let f = (await this.authService.verifyCode(id,req.url.split("verify?text=")[1],secret));
-			if ((await f) == 1){
-			response.redirect("http://localhost:4200/",302);
-			// response.send(1phrase);
-			}
-			if ((await f) == 0){
-			phrase += " \n \n False code try again"; 
-			response.send(phrase);			
-			}
+		// response.sendFile( "/Users/saad/FINAL_RARE/srcs/nestjs-backend/src/auth/123.html");
+		// if(!req.user.username)
+		// 	return "f"
+		// console.log(req.socket._sockname)
+		// console.log(req.user.username)
+		if(req.user.username)
+		{
+			// if(req.socket._sockname)
+			// {
+			
+				let phrase = '<form><div><label for="example">Veuillez saisir du texte</label><input id="example" type="text" name="text"></div><div><input type="submit" value="Envoyer"accesskey="s"></div></form>';
+				let name = req.user.username;
+				let id = (await this.UserService.findid(name)) ;
+				let secret = (await this.UserService.findSecret(name) ) ;
+			
+				if(req.url.split("verify?text=")[1]){
+					let f = (await this.authService.verifyCode(id,req.url.split("verify?text=")[1],secret));
+					if ((await f) == 1){
+						// return req.session.fff ==  0 ;
+						// req.session.cookie.httpOnly = false ;
+						// console.log(">>>>", req.session.cookie);
+						
+						response.redirect("http://localhost:4200/",302);
+					// response.send(1phrase);
+					}
+					if ((await f) == 0){
+					phrase += " \n \n False code try again"; 
+					response.send(phrase);			
+					}
+				}
+				else{
+				response.send(phrase);
+				} 
+			// }		
 		}
-		else{
-		response.send(phrase);
-		}
+
+                                          
 		
 	}
 
@@ -216,10 +286,6 @@ export class AuthController {
 	@Req() req,
 	@Res() response: Response,
 	){
-		let name = req.user.username;
-		let path = "http://localhost:9876/auth2/logout/" + name ;
-		let path_ingame = "http://localhost:9876/auth2/ingame/" + name ;
-		response.redirect(path_ingame,302);
 
 	}
 
@@ -255,6 +321,11 @@ export class AuthController {
 	@Get('123')
 	findAll(): any {
 	  console.log(this.prismaService.user.findFirst());
+	}
+
+	@Get('999')
+	finvvAll(@Req() req): any {
+	  console.log(req.socket._sockname);
 	}
 
 	@Get('login')

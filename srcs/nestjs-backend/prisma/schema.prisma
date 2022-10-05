@@ -28,7 +28,34 @@ model User {
   friends      String[]   
   demFriends   String[]
 
+  Description  String?
+  MatchsHistory String[]
+  Date           DateTime @default(now())   
+  match         Boolean?
+  toUse         String?
+  toUses        String[]
+
   @@map("users")
 }
 
+
+model PARTIE_EN_COURS {
+  id           Int      @id @default(autoincrement())
+  JOUEUR_1_SOCKET    String?
+  JOUEUR_1_PSEUDO    String?
+  JOUEUR_2_SOCKET    String?
+  JOUEUR_2_PSEUDO    String?
+}
+
+
+
+
+model HISTORIQUE_DES_PARTIES {
+  id           Int      @id @default(autoincrement())
+  JOUEUR_1      String?
+  JOUEUR_2      String?
+  VAINQUEUR      String?
+  SCORE      String?
+
+}
 
