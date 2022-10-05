@@ -39,7 +39,7 @@ model User {
 }
 
 
-model PARTIE_EN_COURS {
+model ongoingGames {
   id           Int      @id @default(autoincrement())
   JOUEUR_1_SOCKET    String?
   JOUEUR_1_PSEUDO    String?
@@ -50,7 +50,7 @@ model PARTIE_EN_COURS {
 
 
 
-model HISTORIQUE_DES_PARTIES {
+model gameHistory {
   id           Int      @id @default(autoincrement())
   JOUEUR_1      String?
   JOUEUR_2      String?
