@@ -52,10 +52,11 @@ model ongoingGames {
 
 model gameHistory {
   id           Int      @id @default(autoincrement())
-  JOUEUR_1      String?
-  JOUEUR_2      String?
-  VAINQUEUR      String?
-  SCORE      String?
+  JOUEUR_1        String?
+  JOUEUR_2        String?
+  VAINQUEUR       String?
+  SCORE_JOUEUR_1  String?
+  SCORE_JOUEUR_2  String?
 
 }
 

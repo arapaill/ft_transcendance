@@ -16,11 +16,6 @@ export class PongGateway {
     this.games = new Map();
   }
 
-  @SubscribeMessage('clear')
-  async clearGames(client: any, payload: any) {
-    this.games.clear();
-  }
-
   @SubscribeMessage('update')
   async handleAction(client: any, payload: any) {
     let socket_id = payload[0].SOCKET;
