@@ -1,4 +1,5 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
+import { myUser } from '../models/user.model';
 import { WebSocketService } from '../web-socket.service';
 import { Pong } from './Pong'
 
@@ -33,6 +34,7 @@ export class PongComponent implements OnInit, AfterViewInit {
         case 'ControlLeft': {
           socket.emit('update', {
             SOCKET : socket.socket.id,
+            NAME : myUser.pseudo,
             ACTION : "GO",
             WIDTH : this.canvas.nativeElement.width,
             HEIGHT : this.canvas.nativeElement.height,
@@ -42,6 +44,7 @@ export class PongComponent implements OnInit, AfterViewInit {
         case 'ArrowUp': {
           socket.emit('update', {
             SOCKET : socket.socket.id,
+            NAME : myUser.pseudo,
             ACTION : "UP",
             WIDTH : this.canvas.nativeElement.width,
             HEIGHT : this.canvas.nativeElement.height,
@@ -51,6 +54,7 @@ export class PongComponent implements OnInit, AfterViewInit {
         case 'ArrowLeft': {
           socket.emit('update', {
             SOCKET : socket.socket.id,
+            NAME : myUser.pseudo,
             ACTION : "LEFT",
             WIDTH : this.canvas.nativeElement.width,
             HEIGHT : this.canvas.nativeElement.height,
@@ -60,6 +64,7 @@ export class PongComponent implements OnInit, AfterViewInit {
         case 'ArrowRight': {
           socket.emit('update', {
             SOCKET : socket.socket.id,
+            NAME : myUser.pseudo,
             ACTION : "RIGHT",
             WIDTH : this.canvas.nativeElement.width,
             HEIGHT : this.canvas.nativeElement.height,
@@ -69,6 +74,7 @@ export class PongComponent implements OnInit, AfterViewInit {
         case 'ArrowDown': {
           socket.emit('update', {
             SOCKET : socket.socket.id,
+            NAME : myUser.pseudo,
             ACTION : "DOWN",
             WIDTH : this.canvas.nativeElement.width,
             HEIGHT : this.canvas.nativeElement.height,
@@ -78,6 +84,7 @@ export class PongComponent implements OnInit, AfterViewInit {
         case 'Escape': {
           socket.emit('update', {
             SOCKET : socket.socket.id,
+            NAME : myUser.pseudo,
             ACTION : "QUIT",
             WIDTH : this.canvas.nativeElement.width,
             HEIGHT : this.canvas.nativeElement.height,
@@ -170,8 +177,10 @@ export class PongComponent implements OnInit, AfterViewInit {
     this.pong.ctx.fillRect(width / 50, this.response.PADDLEONEPOS, width / 50, height / 8);
     this.pong.ctx.fillRect(width / 50 * 48, this.response.PADDLETWOPOS, width / 50, height / 8);
     this.pong.ctx.fillRect(this.response.BALLX, this.response.BALLY, width / 50, width / 50);
-    this.pong.ctx.strokeText(this.response.SCORE2, width / 4, height / 10);
-    this.pong.ctx.strokeText(this.response.SCORE1, width / 4 * 3, height / 10);
+    this.pong.ctx.strokeText(this.response.NAME1, width / 4, height / 10);
+    this.pong.ctx.strokeText(this.response.NAME2, width / 4 * 3, height / 10);
+    this.pong.ctx.strokeText(this.response.SCORE1, width / 4, height / 10 + 35);
+    this.pong.ctx.strokeText(this.response.SCORE2, width / 4 * 3, height / 10 + 35);
   }
 
   drawSearching() {
@@ -218,6 +227,7 @@ export class PongComponent implements OnInit, AfterViewInit {
     console.log(socket.socket.id);
     socket.emit('update', {
       SOCKET : socket.socket.id,
+      NAME : myUser.pseudo,
       ACTION : undefined,
       HEIGHT : this.canvas.nativeElement.height,
       WIDTH : this.canvas.nativeElement.width,
