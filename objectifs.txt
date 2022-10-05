@@ -1,0 +1,41 @@
+Objectif 1: Faire un demande d'info sur un user.
+
+Demande : socket.emit("requestUserInfos", userName: string);
+Réponse : socket.on(getUserInfos");
+
+Ce que je voudrais récupérer :
+id: number;
+Name!: string;
+avatar!: string;
+Description!: string;
+date!: Date;
+victoires!: number;
+match!: boolean;
+
+status : a Faire
+
+
+
+Objectif 2: faire une demande de match history sous forme de tableau de string
+
+Demande: socket.emit("requestUserMatchsHistory", userName: string);
+Réponse : socket.on(getUserMatchsHistory");
+
+Ce que je voudrais récupérer :
+
+matchs : string[];
+
+status : a Faire
+
+
+Objectif 3: ffaire une demande des 5 meilleurs joueurs en fonction du nombres de victoirs sous forme de tableau d'objet User (voir objectif 1)
+
+
+Demande: socket.emit("requestTopFiveUsers");
+Réponse : socket.on(getTopFiveUsers");
+
+Ce que je voudrais récupérer :
+
+top : User[] (voir Objectif: 1)
+
+status : a faire
