@@ -174,7 +174,9 @@ Ce que je voudrais récupérer :
 
 status : À faire
 
-Objectif: Check si un pseudo existe deja.
+-----------------------------
+
+Objectif 12: Check si un pseudo existe deja.
 
 Demande : socket.emit("requestCheckUserName", value.Nom);
 Réponse : ocket.on("getCheckUserName");
