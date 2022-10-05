@@ -182,3 +182,21 @@ Demande : socket.emit("requestCheckUserName", value.Nom);
 Réponse : ocket.on("getCheckUserName");
 
 status : À faire
+
+-----------------------------
+
+Objectif 13: Inviter un joueur à jouer au pong
+
+Demande: socket.emit("inviteUserToPlay", userID);
+Réponse: socket.on("getUserToPlay");
+
+Ce que j'envoie: L'id (number) de l'user.
+Ce que je voudrais recevoir: 
+Alors ici c'est un peu plus complexe. Il faudrait envoyer
+sur le socket de l'userID envoyé un simple boolean true.
+Il faut donc trouver le socket de l'user dont l'id est userID.
+Ca risque d'être un peu compliqué donc on pourra en discuter. 
+
+status : À faire
+
+------------------------------
