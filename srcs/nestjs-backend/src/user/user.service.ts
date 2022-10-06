@@ -5,6 +5,7 @@ import { toFileStream } from 'qrcode';
 import { Response } from 'express';
 import { authenticator } from 'otplib';
 import { Any } from 'typeorm';
+import { User } from '@prisma/client'
 
 @Injectable()
 export class UserService {
@@ -50,24 +51,15 @@ export class UserService {
   
   
   
-  async requestUserInfos( nameg: string) {
-    let u =  this.PrismaService.user.findFirst({
-		where: {
-			name: nameg,
-		  },
-    });
-    let id = (await u).id;
-    let Name = (await u).name;
-    let avatar = (await u).avatar;
-    let Description = (await u).Description;
-    let date = (await u).Date;
-    let victoires = (await u).wins;
-    let match = (await u).match;
-    return {
-		id,Name,
-		avatar,Description, date, victoires ,match
-    }
-  }
+	async requestUserInfos(nameg: string) {
+		let u =  this.PrismaService.user.findFirst({
+			where: {
+				name: nameg[0],
+			},
+		});
+
+		return u;
+  	}
   
   
   
