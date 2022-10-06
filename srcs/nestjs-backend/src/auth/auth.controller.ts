@@ -1,9 +1,9 @@
 import { Body, Controller, Get, Post , Delete, Redirect, Req , Request,Param, Headers, Query ,Res, HttpCode , UseGuards
-	, ExceptionFilter,UseFilters , ExecutionContext ,RawBodyRequest,} from '@nestjs/common';
+	, ExceptionFilter,UseFilters , ExecutionContext ,RawBodyRequest, HttpStatus,} from '@nestjs/common';
 import { AuthService } from './auth.service';
 // import { AuthDto } from './dto';
 import { request, Response} from 'express';
-import { Socket, Server } from 'socket.io';
+// import { Socket, Server } from 'socket.io';
 import { Logger } from '@nestjs/common';
 import { FortyTwoAuthGuard } from './guards/42-auth.guard';
 // import { Public } from './decorators/public.decorator';
@@ -21,30 +21,29 @@ import { Buffer } from 'buffer';
 import { Public } from './decorators/public.decorator';
 import { LocalAuthGuard } from './guards/local.auth.guard';
 import { AuthenticatedGuard } from './guards/authenticated.guard';
-import { WebSocketServer } from '@nestjs/websockets';
-import { ConnectableObservable, Subscriber } from 'rxjs';
-
+// import { WebSocketServer,  	WebSocketGateway,} from '@nestjs/websockets';
+import { ConnectableObservable } from 'rxjs';
 // let global  = "sejjed";
 
-const fs = require('fs');
-// var imagejk = new Image();
+
+var export_name = null;
 @Controller('auth2')
 export class AuthController {
-	@WebSocketServer() server: Server;
-	// constructor() {}
+
 	constructor(
 	private readonly prismaService: PrismaService,
 	private authService: AuthService,
 	private readonly UserService: UserService,
 		) {}
-	
-	
+
+
 	// @UseGuards(AuthenticatedGuard)
 
-	@Get('createFakeUsers')
-	controllerCreateFakeUsef() {
-		console.log("createFakeUsers called !");
-		this.authService.createFakeUsers();
+
+	@Get('111')
+	controllerCreateFakeUsef(@Request() req,@Res() response: Response,) {
+		console.log(req.user);
+		response.send(req.user);
 	}
 
 	@Get('recupFakeUser')
@@ -55,7 +54,8 @@ export class AuthController {
 
 
 	@Get('testit')
-	async hhh(@Req() req,        @Body() {id, name,
+	async hhh(@Req() req,        @Body() {
+		id, name,
 	    Full_Name, two_factor, avatar, line_status,
 	    wins, losses, ladder_level, achievements, 
 	    
@@ -64,7 +64,23 @@ export class AuthController {
 		Description,MatchsHistory,match ,
 		toUse,toUses, }: UserDto,){
 		
-		await this.prismaService.user.create({
+			two_factor == null;
+			line_status == null;
+			wins == null;
+			losses == null; 
+			ladder_level == null; 
+			achievements == null; 	
+			secret == null;
+			email == null;
+			qrCode == null;
+			friends == null;
+			demFriends == null;
+			match == null;
+			toUse == null ;
+			toUses== null;
+			
+			
+		let a1 = await this.prismaService.user.create({
 			data : { 
 				id: 1,
 				name: "test1",
@@ -80,7 +96,7 @@ export class AuthController {
 		avatar = "https://cdn.intra.42.fr/users/arapaill.png";
 		Description = "tester ici la description du test 2";
 		let hgh = "0 - 0";
-		await this.prismaService.user.create({
+		let a2 = await this.prismaService.user.create({
 			data : { 
 				id,
 				name,
@@ -96,7 +112,7 @@ export class AuthController {
 		name = "test3";
 		avatar = "https://cdn.intra.42.fr/users/cgoncalv.png";
 		Description = "tester ici la description du test 3";	
-		await this.prismaService.user.create({
+		let a3 = await this.prismaService.user.create({
 			data : { 
 				id,
 				name,
@@ -105,6 +121,7 @@ export class AuthController {
 				MatchsHistory: [ "1 - 9","6 - 6","8 - 0"],
 			}
 		});
+		return {a1,a2,a3};
 
 	}
 	
@@ -117,7 +134,6 @@ export class AuthController {
 	// @UseGuards(AuthenticatedGuard)
      async getHello(
         @Request() req,
-        
         @Body() {id, name,
 	    Full_Name, two_factor, avatar, line_status,
 	    wins, losses, ladder_level, achievements, 
@@ -126,10 +142,15 @@ export class AuthController {
 		
 		Description,MatchsHistory,match ,
 		toUse,toUses, }: UserDto,
-	    
 	    @Res() response: Response,
 	)   {
 	// console.log(req);
+	let hh = req.session.passport;
+	if(!hh)
+	{
+		response.redirect("http://localhost:3000/login",302);
+	}
+
 	if(req.url.startsWith("/auth2/code/?code="))  {
 	
 		if(1)
@@ -157,7 +178,8 @@ export class AuthController {
 				qrCode = null;
 				
 				
-				//this.server.emit("getLogin", req.user.username , id );
+				// this.server.emit("getLogin", "req.user.username" , "id ");
+				// export_name = req.user.username;
 				response.redirect("http://localhost:4200/",302);
 				await this.prismaService.user.create({
 				    data : { id, name,
@@ -173,7 +195,7 @@ export class AuthController {
 		}
 			else if (( (await ok) == 1)) {
 			if(await fac == 1){ 
-					response.redirect("http://localhost:9876/auth2/verify",302); 
+					response.redirect("http://localhost:3000/auth2/verify",302); 
 			}
 			else { 
 			// return "Happy to see you again login , welcome to your favorite game"; 
@@ -183,8 +205,14 @@ export class AuthController {
 				id = y ;
 				name = req.user.username ;
 				// console.log( "88888" , id , "---" , name, "8888")
-				// this.server.emit("getLogin", req.user.username , id );
-				response.redirect("http://localhost:4200/",302);
+				// this.server.emit("getLogin", "req.user.username" , "id ");
+				// export_name = name ;
+				
+				// console.log("--" , name );
+				// req.user = "name" ;
+				
+				response.redirect("http://localhost:4200",302);
+				// req.session.destroy();
 				// response.send("Happy to see you again login , welcome to your favorite game" );
 				}
 			return fac;	
@@ -236,7 +264,7 @@ export class AuthController {
 	@Get('2FA')
 	async a2fa(@Body() i: string,@Req() req
 	,@Res() response: Response,){
-		response.redirect("http://localhost:9876/auth2/generate",302);
+		response.redirect("http://localhost:3000/auth2/generate",302);
 	}
 	
 	@Get('un2FA')
@@ -263,10 +291,32 @@ export class AuthController {
 		}
 
 	}
+	@Get('username')
+	async Chat(@Res() res,@Req() req) {
+	  // const messages = await this.appService.getMessages();
+	  
+	  if (req.session.passport)
+	  {
+		  let gg = req.user.username;
+		  if( gg != undefined)
+		  {
+		   res.json(req.user.username);
+		  }
+		  else{
+		  res.json(null);	  
+		  }
+		  
+	  }
+	  else
+	  {
+	  res.json(null);	  
+	  }
+	  
 
+	}
 	@Get('verify')
+	// @HttpCode(301)
 	// @UseGuards(AuthenticatedGuard)
-	// @UseGuards(FortyTwoAuthGuard)
 	async findA(@Body() i: string,@Request() req,	@Res() response: Response,){
 		// req.socket.parser[0] = "sejjed";
 		// console.log("dsaas",req.isUnauthenticated);
@@ -280,48 +330,51 @@ export class AuthController {
 		// console.log(req.user.username)
 		// console.log(req)
 		
-		//********************************* */
+		// //********************************* */
 		// let hh = req.session.passport;
 		// if(!hh)
 		// {
-		// 	response.send("YES FIX ITTTT");
-		// }else if(hh )
-		// {
-		// 	response.send("NOOOOOOO");
+		// 	response.redirect("http://localhost:9876/auth2/login",302);
 		// }
-		//************************************* */
-		
-		// if(req.user.username)
+		// else
 		// {
-		// 	// if(req.socket._sockname)
-		// 	// {
+		
+		
+		let gg = (await this.UserService.find2FA( req.user.username));
+		// let name_to_save = req.user.username;
+		// req.session.destroy();
+		if(gg == 1)
+		{
+				let phrase = '<form><div><label for="example">Veuillez saisir du texte</label><input id="example" type="text" name="text"></div><div><input type="submit" value="Envoyer"accesskey="s"></div></form>';
+				// let name = name_to_save;
+				
+				let id = (await this.UserService.findid(req.user.username)) ;
+				let secret = (await this.UserService.findSecret(req.user.username) ) ;
 			
-		// 		let phrase = '<form><div><label for="example">Veuillez saisir du texte</label><input id="example" type="text" name="text"></div><div><input type="submit" value="Envoyer"accesskey="s"></div></form>';
-		// 		let name = req.user.username;
-		// 		let id = (await this.UserService.findid(name)) ;
-		// 		let secret = (await this.UserService.findSecret(name) ) ;
-			
-		// 		if(req.url.split("verify?text=")[1]){
-		// 			let f = (await this.authService.verifyCode(id,req.url.split("verify?text=")[1],secret));
-		// 			if ((await f) == 1){
-		// 				// return req.session.fff ==  0 ;
-		// 				// req.session.cookie.httpOnly = false ;
-		// 				// console.log(">>>>", req.session.cookie);
-		// 				this.server.emit("getLogin", req.user.username , req.user.username );
-		// 				response.redirect("http://localhost:4200/",302);
-		// 			// response.send(1phrase);
-		// 			}
-		// 			if ((await f) == 0){
-		// 			phrase += " \n \n False code try again"; 
-		// 			response.send(phrase);			
-		// 			}
-		// 		}
-		// 		else{
-		// 		response.send(phrase);
-		// 		} 
-		// 	// }		
+				if(req.url.split("verify?text=")[1]){
+					let f = (await this.authService.verifyCode(id,req.url.split("verify?text=")[1],secret));
+					if ((await f) == 1){
+						// return req.session.fff ==  0 ;
+						// req.session.cookie.httpOnly = false ;
+						// console.log(">>>>", req.session.cookie);
+						// this.server.emit("getLogin", "req.user.username" , "id " );
+						// export_name = name;
+						response.redirect("http://localhost:4200/",302);
+					// response.send(1phrase);
+					}
+					if ((await f) == 0){
+					phrase += " \n \n False code try again"; 
+					response.send(phrase);			
+					}
+				}
+				else{
+				response.send(phrase);
+				}
+		}		
+		// response.redirect("http://localhost:9876",302);
 		// }
 
+		// 
                                           
 		
 	}
@@ -383,3 +436,4 @@ export class AuthController {
 
 }
 
+export const user_export = export_name;
