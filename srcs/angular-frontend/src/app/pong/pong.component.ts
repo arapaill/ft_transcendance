@@ -38,7 +38,7 @@ export class PongComponent implements OnInit, AfterViewInit {
         case 'ControlLeft': {
           this.webSocketService.emit('update', {
             SOCKET : this.webSocketService.socket.id,
-            NAME : myUser.pseudo,
+            NAME : this.myUser.pseudo,
             ACTION : "GO",
             WIDTH : this.canvas.nativeElement.width,
             HEIGHT : this.canvas.nativeElement.height,
@@ -48,7 +48,7 @@ export class PongComponent implements OnInit, AfterViewInit {
         case 'ArrowUp': {
           this.webSocketService.emit('update', {
             SOCKET : this.webSocketService.socket.id,
-            NAME : myUser.pseudo,
+            NAME : this.myUser.pseudo,
             ACTION : "UP",
             WIDTH : this.canvas.nativeElement.width,
             HEIGHT : this.canvas.nativeElement.height,
@@ -58,7 +58,7 @@ export class PongComponent implements OnInit, AfterViewInit {
         case 'ArrowLeft': {
           this.webSocketService.emit('update', {
             SOCKET : this.webSocketService.socket.id,
-            NAME : myUser.pseudo,
+            NAME : this.myUser.pseudo,
             ACTION : "LEFT",
             WIDTH : this.canvas.nativeElement.width,
             HEIGHT : this.canvas.nativeElement.height,
@@ -68,7 +68,7 @@ export class PongComponent implements OnInit, AfterViewInit {
         case 'ArrowRight': {
           this.webSocketService.emit('update', {
             SOCKET : this.webSocketService.socket.id,
-            NAME : myUser.pseudo,
+            NAME : this.myUser.pseudo,
             ACTION : "RIGHT",
             WIDTH : this.canvas.nativeElement.width,
             HEIGHT : this.canvas.nativeElement.height,
@@ -78,7 +78,7 @@ export class PongComponent implements OnInit, AfterViewInit {
         case 'ArrowDown': {
           this.webSocketService.emit('update', {
             SOCKET : this.webSocketService.socket.id,
-            NAME : myUser.pseudo,
+            NAME : this.myUser.pseudo,
             ACTION : "DOWN",
             WIDTH : this.canvas.nativeElement.width,
             HEIGHT : this.canvas.nativeElement.height,
@@ -88,7 +88,7 @@ export class PongComponent implements OnInit, AfterViewInit {
         case 'Escape': {
           this.webSocketService.emit('update', {
             SOCKET : this.webSocketService.socket.id,
-            NAME : myUser.pseudo,
+            NAME : this.myUser.pseudo,
             ACTION : "QUIT",
             WIDTH : this.canvas.nativeElement.width,
             HEIGHT : this.canvas.nativeElement.height,
@@ -287,7 +287,7 @@ export class PongComponent implements OnInit, AfterViewInit {
   async update() {
     this.webSocketService.emit('update', {
       SOCKET : this.webSocketService.socket.id,
-      NAME : myUser.pseudo,
+      NAME : this.myUser.pseudo,
       ACTION : undefined,
       HEIGHT : this.canvas.nativeElement.height,
       WIDTH : this.canvas.nativeElement.width,
