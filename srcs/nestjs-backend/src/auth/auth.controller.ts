@@ -376,13 +376,10 @@ export class AuthController {
 
 	@Get('login')
 	@UseGuards(FortyTwoAuthGuard)
-	async logi(@Body('id') displayName: string ,
-				 @Body('displayName') id: string ,
-				 @Body('username') username: string ,
-				 @Request() req,
-				 ) {
-			
-	}
+	async logi( @Body('id') displayName: string,
+				@Body('displayName') id: string,
+				@Body('username') username: string,
+				@Request() req,) {}
 
 }
 
