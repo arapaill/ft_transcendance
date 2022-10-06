@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { myUser, User } from '../models/user.model';
+import { WebSocketService } from '../web-socket.service';
 
 @Component({
   selector: 'app-popup-chat-add',
@@ -9,13 +10,20 @@ import { myUser, User } from '../models/user.model';
 })
 export class PopupChatAddComponent implements OnInit {
   isPasswordChecked = false;
-  myUserCpy: User = myUser;
   friendsList: string[] = [];
 
-  constructor(public dialogRef: MatDialogRef<PopupChatAddComponent>) { }
+  constructor(private webSocketService: WebSocketService, public dialogRef: MatDialogRef<PopupChatAddComponent>, public myUser : myUser) { }
 
   ngOnInit(): void {
-    myUser.friends.forEach((key, value) => {
+    this.webSocketService.emit("requestUserInfosID", Number(localStorage.getItem('id')));
+    this.webSocketService.listen("getUserInfosID").subscribe((data: any) => {
+      this.myUser.avatar = data.avatar;
+      this.myUser.pseudo = data.name;
+      this.myUser.description = data.Description;
+      this.myUser.blacklist = data.blacklist;
+      this.myUser.id = data.id;
+    });
+    this.myUser.friends.forEach((key, value) => {
       this.friendsList.push(value);
     })
   }

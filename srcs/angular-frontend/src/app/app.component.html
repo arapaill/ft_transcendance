@@ -7,11 +7,7 @@
   <title>Transcendance</title>
 </head>
 <body>
-  <app-login *ngIf="!myUserCpy.pseudo"></app-login>
-
-  <div *ngIf="myUserCpy.pseudo">
     <app-navbar></app-navbar>
     <router-outlet></router-outlet>
-  </div>
 </body>
 </html>

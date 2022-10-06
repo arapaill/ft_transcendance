@@ -14,12 +14,21 @@ import { myUser } from '../models/user.model';
 export class PopupModifierProfilComponent implements OnInit {
 
   
-  constructor(private webSocketService: WebSocketService, private http: HttpClient, private dialogRef: MatDialogRef<PopupModifierProfilComponent>) { }
+  constructor(public myUser : myUser, private webSocketService: WebSocketService, private http: HttpClient, private dialogRef: MatDialogRef<PopupModifierProfilComponent>,) { }
 
   url: any;
   msg = "";
 
   ngOnInit(): void {
+    console.log(Number(localStorage.getItem('id')));
+    this.webSocketService.emit("requestUserInfosID", Number(localStorage.getItem('id')));
+    this.webSocketService.listen("getUserInfosID").subscribe((data: any) => {
+      this.myUser.avatar = data.avatar;
+      this.myUser.pseudo = data.name;
+      this.myUser.description = data.Description;
+      this.myUser.blacklist = data.blacklist;
+      this.myUser.id = data.id;
+    });
   }
   processFile(event : any){ //Angular 8
       if(!event.target.files[0] || event.target.files[0].length == 0) {
@@ -44,13 +53,20 @@ export class PopupModifierProfilComponent implements OnInit {
     }
 
   save(value : any){
+    
     this.webSocketService.emit("requestCheckUserName", value.Nom);
-    this.webSocketService.listen("getCheckUserName").subscribe((check) => {
+    this.webSocketService.listen("getCheckUserName").subscribe((check : any) => {
       if(check)
-        this.dialogRef.close(value);
-        if(this.url)
-          myUser.avatar = this.url;
+        this.myUser.pseudo = value.Nom;
+        if(value.Description)
+        this.myUser.description = value.Description;
+      if(this.url)
+        this.myUser.avatar = this.url;
+    console.log("PSEUDO: ", this.myUser.pseudo);
+    this.webSocketService.emit("updateUser", this.myUser);
+    this.dialogRef.close(this.myUser);
     });
+   
   }
   close(){
     this.dialogRef.close();

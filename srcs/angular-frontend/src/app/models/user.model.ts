@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core';
 export class User {
 	id!: number;
 	pseudo!: string;
@@ -6,13 +7,12 @@ export class User {
 	friends!: Map<string, number>;
 	blacklist!: Map<string, number>;
 }
-
-export let myUser : User = {
-	id : 0,
-	pseudo : "cgoncalv",
-	avatar : "assets/avatar-placeholder-1.png",
-	description : "TEST",
-	friends : new Map(),
-	blacklist : new Map(),
+@Injectable()
+export class myUser  {
+	id : number = 0;
+	pseudo : string = "";
+	avatar : string ="";
+	description : string ="";
+	friends : Map<string, number> = new Map();
+	blacklist : Map<string, number> =new Map();
 }
-
