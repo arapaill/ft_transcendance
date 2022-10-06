@@ -48,7 +48,7 @@ export class UserService {
   }
   
   
-  
+/*  Objectif 1                                                                    */
 	async requestUserInfos(nameg: string) {
 		let u =  this.prisma.user.findFirst({
 			where: {
