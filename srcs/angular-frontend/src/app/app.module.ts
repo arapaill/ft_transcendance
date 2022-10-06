@@ -31,6 +31,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { PopupChatPasswordComponent } from './popup-chat-password/popup-chat-password.component';
 import { PopupDisplayFriendsComponent } from './popup-display-friends/popup-display-friends.component';
 import { LoginComponent } from './login/login.component';
+import { PopupPongInvitationComponent } from './popup-pong-invitation/popup-pong-invitation.component';
+import { myUser } from './models/user.model';
 
 @NgModule({
   declarations: [
@@ -51,6 +53,7 @@ import { LoginComponent } from './login/login.component';
     PopupChatPasswordComponent,
     PopupDisplayFriendsComponent,
     LoginComponent,
+    PopupPongInvitationComponent,
   ],
   imports: [
     BrowserModule,
@@ -70,7 +73,9 @@ import { LoginComponent } from './login/login.component';
     MatAutocompleteModule,
     ReactiveFormsModule,
   ],
-  providers: [],
+  providers: [
+    myUser
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

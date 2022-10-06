@@ -178,6 +178,10 @@ export enum GameState {
     OVER,
     MENUSPEC,
     OPTION,
+    DESTROYINGGAME,
+    WAITINGFOR,
+    DECLINED,
+    SEARCHINGFOR,
 }
 
 export enum MenuState {
@@ -196,8 +200,8 @@ export enum OptionState {
 }
 
 export class Game {
-    private playerOne: Player;
-    private playerTwo: Player;
+    playerOne: Player;
+    playerTwo: Player;
     playerOneName : string;
     playerTwoName : string;
     private computerPaddle : ComputerPaddle;
@@ -212,6 +216,7 @@ export class Game {
     color: string;
     equilibrium: number;
     specMenuState: number;
+    waitedPseudo: string;
 
     constructor(data : any, color : string) {
         this.data_multi = data;
@@ -321,6 +326,7 @@ export class Game {
                 break ;
             }
             case MenuState.OPTION: {
+                console.log("OPTION");
                 this.gameState = GameState.OPTION;
                 break ;
             }
@@ -364,22 +370,23 @@ export class Game {
                     this.winner = this.playerTwoName;
                 else
                     this.winner = this.playerOneName;
-                this.gameState = GameState.OVER;
+                if (data.SOCKET == this.playerOne.socket || data.SOCKET == this.playerTwo.socket)
+                    this.gameState = GameState.DESTROYINGGAME;
                 return ;
             }
             if (data.SOCKET == this.playerOne.socket)
                 this.playerOne.paddle.update(data.ACTION, data.HEIGHT);
             else if (data.SOCKET == this.playerTwo.socket)
                 this.playerTwo.paddle.update(data.ACTION, data.HEIGHT);
-            if (data.ACTION == undefined && this.equilibrium % 2)
+            if (data.ACTION == undefined && this.equilibrium % 2 && (data.SOCKET == this.playerOne.socket || data.SOCKET == this.playerTwo.socket))
                 scoreModifier = this.ball.update(this.playerOne.paddle.y, this.playerTwo.paddle.y, data.HEIGHT, data.WIDTH);
-                this.equilibrium++;
+            this.equilibrium++;
             if (scoreModifier === -1)
                 this.playerOne.score++;
             else if (scoreModifier === 1)
                 this.playerTwo.score++;
             if (this.playerOne.score === 11 || this.playerTwo.score === 11) {
-                this.gameState = GameState.OVER;
+                this.gameState = GameState.DESTROYINGGAME;
                 if (this.playerOne.score == 11)
                     this.winner = this.playerOneName;
                 else
@@ -395,6 +402,8 @@ export class Game {
                     this.winner = this.playerTwoName;
             }
         }
+        else if (this.gameState == GameState.DESTROYINGGAME)
+            this.gameState = GameState.OVER;
     }
 
     returnGameState() : any {
@@ -448,6 +457,13 @@ export class Game {
                 GAMESTATE: this.gameState,
                 OPTIONSTATE: this.optionState,
                 COLOR: this.color,
+            }
+        }
+        else if (this.gameState == GameState.WAITINGFOR) {
+            return {
+                GAMESTATE: this.gameState,
+                COLOR: this.color,
+                PSEUDO: this.waitedPseudo,
             }
         }
         else {

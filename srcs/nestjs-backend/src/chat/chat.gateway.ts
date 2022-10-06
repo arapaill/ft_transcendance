@@ -44,7 +44,7 @@ export class ChatGateway {
   }
 
   @SubscribeMessage('requestChannels')
-  async handleRequestChannels(@MessageBody() data: string) {
+  async handleRequestChannels(@MessageBody() data: unknown) {
     let channels = await this.chatService.requestChannels(data);
     this.server.emit('getChannels', channels);
   }
@@ -52,7 +52,6 @@ export class ChatGateway {
   @SubscribeMessage('requestChannelMessages')
   async handleRequestChannelMessages(@MessageBody() data: string) {
     let messages = await this.chatService.requestChannelMessages(data);
-    console.log(messages);
     this.server.emit('getChannelMessages', messages);
   }
 

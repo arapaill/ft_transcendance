@@ -10,14 +10,13 @@ import { myUser, User } from '../models/user.model';
   styleUrls: ['./popup-display-friends.component.scss']
 })
 export class PopupDisplayFriendsComponent implements OnInit {
-  user : User = myUser;
   friends : string[] = [];
-  constructor(private  dialogRef : MatDialog) { }
+  constructor(private  dialogRef : MatDialog, public myUser : myUser) { }
  
   ngOnInit(): void {
-    myUser.friends.set("Arapaill", 0);
-    myUser.friends.set("Cgoncalv", 2);
-    myUser.friends.forEach((key,value) : any =>{
+    this.myUser.friends.set("Arapaill", 0);
+    this.myUser.friends.set("Cgoncalv", 2);
+    this.myUser.friends.forEach((key,value) : any =>{
       this.friends.push(value);
     });
   }

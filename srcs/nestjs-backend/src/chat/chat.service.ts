@@ -6,6 +6,7 @@ export class ChatService {
 	/*constructor(private prisma: PrismaService) {}
 
 	async createNewChannel(channel: unknown) {
+		console.log("New channel created: " + channel[0].name);
 		const newChannel = await (this.prisma.chatChannel.create({
 			data: {
 				name: channel[0].name,
@@ -20,14 +21,21 @@ export class ChatService {
 		return newChannel;
 	}
 
-	async requestChannels(user: string) {
+	async requestChannels(user: unknown) {
+		console.log("User " + user[0].pseudo + " requested all channels.");
+
 		const channels = await this.prisma.chatChannel.findMany({
 			where: {
-				owner: user[0],
+				OR: [
+					{ owner:	user[0].pseudo,			},
+					{ users:	{ has: user[0].pseudo,	}},
+					{ admins:	{ has: user[0].pseudo,	}},
+					{ type:		'Public',				},
+					{ type:		'Protégé',				},
+				]
 			}
 		});
 		
-		console.log(channels);
 		return channels;
 	}
 
@@ -38,12 +46,14 @@ export class ChatService {
 			}
 		});
 		
-		console.log(messages);
 		return messages;
 	}
 
 	async sendNewMessage(message: unknown) {
-		const channelID = await this.prisma.chatChannel.findFirst({
+		console.log("User " + message[0].userPseudo + " send a new message:");
+		console.log(message[0]);
+
+		let channelID = await this.prisma.chatChannel.findFirst({
 			where: {
 				name: message[0].channelName
 			}
@@ -64,7 +74,8 @@ export class ChatService {
 	}
 
 	async deleteChannel(channelName: string) {
-		console.log(channelName);
+		console.log("Channel" + channelName[0] + " was deleted");
+
 		const channel = await this.prisma.chatChannel.findFirst({
 			where: {
 				name: channelName[0],

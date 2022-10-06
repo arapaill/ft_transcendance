@@ -6,6 +6,7 @@ import { authenticator } from 'otplib';
 import { Any } from 'typeorm';
 import { User } from '@prisma/client'
 import { PrismaService } from '../prisma/prisma.service';
+import { userInfo } from 'os';
 
 @Injectable()
 export class UserService {
@@ -85,6 +86,27 @@ async requestUserMatchsHistory( nameg: string) {
     return MatchsHistory;
  }
 
+/*
+ async requestUpdateFriendList(userID: number) {
+    let ret = await this.prisma.user.findFirst({
+		where: {
+			friendsList: {
+				has: userID,
+			},
+		  },
+    });
+
+	if (ret) {
+		let index = ret.friendsList.indexOf(userID);
+		ret.friendsList.splice(index, 1);
+		await this.prisma.user.update({
+			where: {
+				
+			}
+		})
+	}
+ } */
+
 
   /*
 Objectif 3: faire une demande des 5 meilleurs joueurs en fonction du nombres de victoirs sous forme de tableau d'objet User (voir objectif 1)
@@ -117,17 +139,17 @@ async requestTopFiveUsers() {
  
 /* Objectif 9: Update la friendlist de l'user */
 
-async updateFriendlist( nameg: string, oneto: number) {
+async updateFriendlist(user: unknown) {
 	let y = this.prisma.user.findFirst({
 		where: {
-			id: oneto,
+			id: user[0].id,
 		  },
     });
     let frd = (await y).name;
     if( frd != null){
 		let u =  this.prisma.user.update({
 			where: {
-				name: nameg,
+				name: user[0].pseudo,
 			  },
 			  data:{
 			    friends:{
@@ -141,8 +163,8 @@ async updateFriendlist( nameg: string, oneto: number) {
 
 
 /* Objectif 10: Savoir si le user est en cours de partie ou non */
-async requestIsUserPlaying( nameg: string) {
-	let u =  this.prisma.user.findFirst({
+async requestIsUserPlaying(nameg: string) {
+	let u = this.prisma.user.findFirst({
 		where: {
 			name: nameg,
 		  },

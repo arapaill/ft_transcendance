@@ -19,14 +19,20 @@ export class InfoProfilComponent implements OnInit {
   matchs !: string[];
   nameProfil !: string;
   userID : number = 0;
-  myUserCpy : User = myUser;
-  constructor(private webSocketService: WebSocketService, private  dialogRef : MatDialog, @Inject(MAT_DIALOG_DATA) public data : any) {
+  constructor(private webSocketService: WebSocketService, private  dialogRef : MatDialog, @Inject(MAT_DIALOG_DATA) public data : any, public myUser : myUser) {
     this.nameProfil = data.name;
 
   }
 
   ngOnInit(): void {
-    
+    this.webSocketService.emit("requestUserInfosID", Number(localStorage.getItem('id')));
+    this.webSocketService.listen("getUserInfosID").subscribe((data: any) => {
+      this.myUser.avatar = data.avatar;
+      this.myUser.pseudo = data.name;
+      this.myUser.description = data.Description;
+      this.myUser.blacklist = data.blacklist;
+      this.myUser.id = data.id;
+    });
     this.Personne = 
       {
         avatar: 'assets/avatar-placeholder-1.png',
@@ -60,12 +66,12 @@ export class InfoProfilComponent implements OnInit {
   } //end of ngoninit
   
   addToFriends() {
-    if (!myUser.friends.has(this.Personne.name)) {
-      myUser.friends.set(this.Personne.name, this.userID);
-      this.myUserCpy.friends = myUser.friends;
+    if (!this.myUser.friends.has(this.Personne.name)) {
+      this.myUser.friends.set(this.Personne.name, this.userID);
+      this.myUser.friends = this.myUser.friends;
     }
     else
-      myUser.friends.delete(this.Personne.name);
+      this.myUser.friends.delete(this.Personne.name);
     this.webSocketService.emit("updateFriendlist", this.userID);
   }
 }

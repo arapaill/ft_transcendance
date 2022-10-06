@@ -52,17 +52,17 @@ import {
 	}
 
 	@SubscribeMessage('updateFriendlist')
-	async handleupdateFriendlist(client, userName: string, newFriendID: number ): Promise<void> {
-		let update = await this.userService.updateFriendlist( userName, newFriendID)
+	async handleupdateFriendlist(client, user: unknown ): Promise<void> {
+		let update = await this.userService.updateFriendlist(user);
 		// this.server.emit("getUserInfos", matchs );
 	}
 	
 	
-	@SubscribeMessage('requestIsUserPlaying')
+/* 	@SubscribeMessage('requestIsUserPlaying')
 	async handlerequestIsUserPlaying(client, userName: string): Promise<void> {
 		let playing =  await this.userService.requestIsUserPlaying( userName) ;
 		this.server.emit("getIsUserPlaying", playing);
-	}
+	} */
 	
 	@SubscribeMessage('requestCheckUserName')
 	async handlerequestCheckUserName(client, userName: string): Promise<void> {

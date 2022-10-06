@@ -3,10 +3,6 @@ import { myUser } from '../models/user.model';
 import { WebSocketService } from '../web-socket.service';
 import { Pong } from './Pong'
 
-
-let socket : WebSocketService;
-socket = new WebSocketService;
-
 @Component({
   selector: 'app-pong',
   templateUrl: './pong.component.html',
@@ -19,11 +15,19 @@ export class PongComponent implements OnInit, AfterViewInit {
   response : any;
   state! : string;
   
-  constructor(private webSocketService: WebSocketService, private renderer : Renderer2) {
+  constructor(private webSocketService: WebSocketService, private renderer : Renderer2, public myUser : myUser) {
     this.state = "MENU";
   }
   
   ngOnInit(): void {
+    this.webSocketService.emit("requestUserInfosID", Number(localStorage.getItem('id')));
+    this.webSocketService.listen("getUserInfosID").subscribe((data: any) => {
+      this.myUser.avatar = data.avatar;
+      this.myUser.pseudo = data.name;
+      this.myUser.description = data.Description;
+      this.myUser.blacklist = data.blacklist;
+      this.myUser.id = data.id;
+    });
     this.pong = new Pong(this.canvas);
   }
   
@@ -32,8 +36,8 @@ export class PongComponent implements OnInit, AfterViewInit {
       let state: any;
       switch(e.code) {
         case 'ControlLeft': {
-          socket.emit('update', {
-            SOCKET : socket.socket.id,
+          this.webSocketService.emit('update', {
+            SOCKET : this.webSocketService.socket.id,
             NAME : myUser.pseudo,
             ACTION : "GO",
             WIDTH : this.canvas.nativeElement.width,
@@ -42,8 +46,8 @@ export class PongComponent implements OnInit, AfterViewInit {
           break ;
         }
         case 'ArrowUp': {
-          socket.emit('update', {
-            SOCKET : socket.socket.id,
+          this.webSocketService.emit('update', {
+            SOCKET : this.webSocketService.socket.id,
             NAME : myUser.pseudo,
             ACTION : "UP",
             WIDTH : this.canvas.nativeElement.width,
@@ -52,8 +56,8 @@ export class PongComponent implements OnInit, AfterViewInit {
           break ;
         }
         case 'ArrowLeft': {
-          socket.emit('update', {
-            SOCKET : socket.socket.id,
+          this.webSocketService.emit('update', {
+            SOCKET : this.webSocketService.socket.id,
             NAME : myUser.pseudo,
             ACTION : "LEFT",
             WIDTH : this.canvas.nativeElement.width,
@@ -62,8 +66,8 @@ export class PongComponent implements OnInit, AfterViewInit {
           break ;
         }
         case 'ArrowRight': {
-          socket.emit('update', {
-            SOCKET : socket.socket.id,
+          this.webSocketService.emit('update', {
+            SOCKET : this.webSocketService.socket.id,
             NAME : myUser.pseudo,
             ACTION : "RIGHT",
             WIDTH : this.canvas.nativeElement.width,
@@ -72,8 +76,8 @@ export class PongComponent implements OnInit, AfterViewInit {
           break ;
         }
         case 'ArrowDown': {
-          socket.emit('update', {
-            SOCKET : socket.socket.id,
+          this.webSocketService.emit('update', {
+            SOCKET : this.webSocketService.socket.id,
             NAME : myUser.pseudo,
             ACTION : "DOWN",
             WIDTH : this.canvas.nativeElement.width,
@@ -82,8 +86,8 @@ export class PongComponent implements OnInit, AfterViewInit {
           break ;
         }
         case 'Escape': {
-          socket.emit('update', {
-            SOCKET : socket.socket.id,
+          this.webSocketService.emit('update', {
+            SOCKET : this.webSocketService.socket.id,
             NAME : myUser.pseudo,
             ACTION : "QUIT",
             WIDTH : this.canvas.nativeElement.width,
@@ -207,6 +211,31 @@ export class PongComponent implements OnInit, AfterViewInit {
     this.pong.ctx.fillText("WAITING FOR ANOTHER PLAYER\n.....", width / 2, height / 2 + 50);
   }
 
+  drawWaitingFor() {
+    let width = this.canvas.nativeElement.width;
+    let height = this.canvas.nativeElement.height;
+    this.pong.ctx.font = '45px orbitronregular';
+    this.pong.ctx.strokeStyle = this.response.COLOR;
+    this.pong.ctx.fillStyle = this.response.COLOR;
+    this.pong.ctx.textAlign = "center";
+    this.pong.ctx.clearRect(0, 0, width, height);
+    this.pong.ctx.strokeRect(25, 25, width - 50, height - 50);
+    this.pong.ctx.fillText("WAITING FOR", width / 2, height / 2)
+    this.pong.ctx.fillText(this.response.PSEUDO, width / 2, height / 2 + 50);
+  }
+
+  drawDeclined() {
+    let width = this.canvas.nativeElement.width;
+    let height = this.canvas.nativeElement.height;
+    this.pong.ctx.font = '45px orbitronregular';
+    this.pong.ctx.strokeStyle = this.response.COLOR;
+    this.pong.ctx.fillStyle = this.response.COLOR;
+    this.pong.ctx.textAlign = "center";
+    this.pong.ctx.clearRect(0, 0, width, height);
+    this.pong.ctx.strokeRect(25, 25, width - 50, height - 50);
+    this.pong.ctx.fillText("INVITATION DECLINED...", width / 2, height / 2)
+  }
+
   drawOver() {
     let width = this.canvas.nativeElement.width;
     let height = this.canvas.nativeElement.height;
@@ -254,21 +283,16 @@ export class PongComponent implements OnInit, AfterViewInit {
     if (this.response.STATE != 0)
       this.pong.ctx.fillRect(45, this.response.STATE * 25 + 80, 15, 15);
   }
-
-  drawSpecCursor(matchNumber : number) {
-    let state : number = 0;
-
-  }
   
   async update() {
-    socket.emit('update', {
-      SOCKET : socket.socket.id,
+    this.webSocketService.emit('update', {
+      SOCKET : this.webSocketService.socket.id,
       NAME : myUser.pseudo,
       ACTION : undefined,
       HEIGHT : this.canvas.nativeElement.height,
       WIDTH : this.canvas.nativeElement.width,
     });
-    socket.listen('update').subscribe((val : any) => {
+    this.webSocketService.listen('update').subscribe((val : any) => {
       this.response = val;
     });
     if (this.response.GAMESTATE == 0)
@@ -285,9 +309,14 @@ export class PongComponent implements OnInit, AfterViewInit {
       this.drawOver();
     if (this.response.GAMESTATE == 8)
       this.drawOption();
-    if (this.response.GAMESTATE == 7) {
+    if (this.response.GAMESTATE == 7)
       this.drawSpecMenu();
-    }
+    if (this.response.GAMESTATE == 9)
+      this.drawOver();
+    if (this.response.GAMESTATE == 10)
+      this.drawWaitingFor();
+    if (this.response.GAMESTATE == 11)
+      this.drawDeclined();
   }
   
   
