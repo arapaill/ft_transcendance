@@ -17,7 +17,14 @@ import { myUser, User } from '../models/user.model';
   styleUrls: ['./chat.component.scss']
 })
 export class ChatComponent implements OnInit {
-  @Input() channels: ChatChannel[] = [];
+  @Input() channels: ChatChannel[] = [{
+    name: 'Général',
+    owner: 'ADMIN',
+    admins: [],
+    users: [],
+    type: 'Public',
+    messages: []
+  }];
   currentChannel!: ChatChannel;
   selectedChannel!: string;
   myUserCpy: User = myUser;
@@ -25,7 +32,8 @@ export class ChatComponent implements OnInit {
   constructor(private webSocketService: WebSocketService, private dialogRef: MatDialog) {
     this.webSocketService.emit("requestChannels", myUser.pseudo);
     this.webSocketService.listen("getChannels").subscribe((data: any) => {
-      this.channels = [];
+      if (this.channels.length != 1)
+        this.channels = [];
       for (const channel of data) {
         let newChannel: ChatChannel = {
           name: channel.name,
