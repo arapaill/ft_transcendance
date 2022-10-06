@@ -41,6 +41,23 @@ export class ChatComponent implements OnInit {
       this.selectedChannel = this.currentChannel.name;
       this.getChannelMessages();
     })
+
+    this.webSocketService.listen('getChannelMessages').subscribe((data: any) => {
+      if (data.length == this.currentChannel.messages.length) {
+        return ;
+      }
+      this.currentChannel.messages = [];
+      for (let message of data) {
+        let newMessage: ChatMessage = {
+          userPseudo: message.userPseudo,
+          userAvatar: message.userAvatar,
+          text: message.text,
+          date: new Date(message.date),
+          channelName: message.channelName,
+        }
+        this.currentChannel.messages.push(newMessage);
+      }
+    });
    }
 
   ngOnInit(): void {
@@ -64,18 +81,6 @@ export class ChatComponent implements OnInit {
 
   getChannelMessages() {
     this.webSocketService.emit('requestChannelMessages', this.currentChannel.name);
-    this.webSocketService.listen('getChannelMessages').subscribe((data: any) => {
-      for (let message of data) {
-        let newMessage: ChatMessage = {
-          userPseudo: message.userPseudo,
-          userAvatar: message.userAvatar,
-          text: message.text,
-          date: new Date(message.date),
-          channelName: message.channelName,
-        }
-        this.currentChannel.messages.push(newMessage);
-      }
-    });
   }
 
   selectChannel(fchannel: string) {
