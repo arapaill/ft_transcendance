@@ -25,7 +25,7 @@ import { AuthGateway } from './auth.gateway';
 @Module({
 	imports: [
 		JwtModule.register({
-		  secret: 'b91fac0cfb65c4faa4714dd585045707c649e26f1149ca2afbb078f0d165b2bc',
+		  secret: '2adb6038a9d246fd31bedf11ca301e8864d8fc23809ac3fd7a0dbd114644f57f',
 		//   signOptions: { expiresIn: '7d' },
 		}),
 		PassportModule,
