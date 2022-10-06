@@ -8,7 +8,7 @@ import { PopupChatUserComponent } from '../popup-chat-user/popup-chat-user.compo
 import { PopupChatPasswordComponent } from '../popup-chat-password/popup-chat-password.component';
 
 import { ChatChannel, ChatMessage } from '../models/chat.model';
-import { myUser, User } from '../models/user.model';
+import { myUser } from '../models/user.model';
 
 
 @Component({
@@ -33,10 +33,9 @@ export class ChatComponent implements OnInit {
   }];
   currentChannel: ChatChannel = this.channels[0];
   selectedChannel!: string;
-  myUserCpy: User = myUser;
 
-  constructor(private webSocketService: WebSocketService, private dialogRef: MatDialog) {
-    this.webSocketService.emit("requestChannels", myUser);
+  constructor(private webSocketService: WebSocketService, private dialogRef: MatDialog, public myUser: myUser ) {
+    this.webSocketService.emit("requestChannels", this.myUser.pseudo);
     this.webSocketService.listen("getChannels").subscribe((data: any) => {
       if (data.length == 0)
         return ;
@@ -77,14 +76,22 @@ export class ChatComponent implements OnInit {
    }
 
   ngOnInit(): void {
+    this.webSocketService.emit("requestUserInfosID", Number(localStorage.getItem('id')));
+    this.webSocketService.listen("getUserInfosID").subscribe((data: any) => {
+      this.myUser.avatar = data.avatar;
+      this.myUser.pseudo = data.name;
+      this.myUser.description = data.Description;
+      this.myUser.blacklist = data.blacklist;
+      this.myUser.id = data.id;
+    });
   }
 
   sendNewMessage(msg: any): void {
     if (msg.value == "")
     return ;
     let newMessage: ChatMessage = {
-      userPseudo: myUser.pseudo,
-      userAvatar: myUser.avatar,
+      userPseudo: this.myUser.pseudo,
+      userAvatar: this.myUser.avatar,
       text: msg.value,
       date: new Date(),
       channelName: this.currentChannel.name
@@ -118,7 +125,7 @@ export class ChatComponent implements OnInit {
   createNewChannel(settings: any) {
     let newChannel: ChatChannel = {
       name: settings.name,
-      owner: myUser.pseudo,
+      owner: this.myUser.pseudo,
       admins: settings.admin,
       users: settings.users,
       type: settings.type,
@@ -148,10 +155,10 @@ export class ChatComponent implements OnInit {
 
   createMPChannel(user: string) {
     let newChannel: ChatChannel = {
-      name: myUser.pseudo + ' & ' + user,
-      owner: myUser.pseudo,
-      admins: [myUser.pseudo, user],
-      users: [myUser.pseudo, user],
+      name: this.myUser.pseudo + ' & ' + user,
+      owner: this.myUser.pseudo,
+      admins: [this.myUser.pseudo, user],
+      users: [this.myUser.pseudo, user],
       type: "Privé",
       messages: []
     }
@@ -188,7 +195,7 @@ export class ChatComponent implements OnInit {
       data: {
         userName: user.userPseudo,
         userAvatar: user.userAvatar,
-        blockedUsers: myUser.blacklist
+        blockedUsers: this.myUser.blacklist
       }
     });
 

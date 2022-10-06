@@ -4,6 +4,7 @@ import { FormControl } from '@angular/forms';
 
 import { ChatChannel } from '../models/chat.model';
 import { myUser, User } from '../models/user.model';
+import { WebSocketService } from '../web-socket.service';
 
 @Component({
   selector: 'app-popup-chat-settings',
@@ -22,11 +23,11 @@ export class PopupChatSettingsComponent implements OnInit {
     messages: []
   };
   disableSelect: boolean = true;
-  myUserCpy: User = myUser;
   friendsList: string[] = [];
 
   constructor(
-    public dialogRef: MatDialogRef<PopupChatSettingsComponent>,
+    private webSocketService: WebSocketService,
+    public dialogRef: MatDialogRef<PopupChatSettingsComponent>, public myUser : myUser,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
       this.currentSettings.name = data.name,
       this.currentSettings.owner = data.owner,
@@ -36,12 +37,20 @@ export class PopupChatSettingsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.currentSettings.owner === myUser.pseudo)
+    this.webSocketService.emit("requestUserInfosID", Number(localStorage.getItem('id')));
+    this.webSocketService.listen("getUserInfosID").subscribe((data: any) => {
+      this.myUser.avatar = data.avatar;
+      this.myUser.pseudo = data.name;
+      this.myUser.description = data.Description;
+      this.myUser.blacklist = data.blacklist;
+      this.myUser.id = data.id;
+    });
+    if (this.currentSettings.owner === this.myUser.pseudo)
       this.disableSelect = false;
     else
       this.disableSelect = true;
 
-    myUser.friends.forEach((key, value) => {
+    this.myUser.friends.forEach((key, value) => {
       this.friendsList.push(value);
     })
   }
@@ -54,7 +63,7 @@ export class PopupChatSettingsComponent implements OnInit {
   }
 
   isOwner() {
-    if (this.currentSettings.owner === myUser.pseudo)
+    if (this.currentSettings.owner === this.myUser.pseudo)
       return new FormControl(true);
     else
       return new FormControl(false);
