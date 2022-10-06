@@ -41,6 +41,20 @@ export class AuthController {
 
 
 	// @UseGuards(AuthenticatedGuard)
+
+	@Get('createFakeUsers')
+	controllerCreateFakeUsef() {
+		console.log("createFakeUsers called !");
+		this.authService.createFakeUsers();
+	}
+
+	@Get('recupFakeUser')
+	controllerRecupFakeUsef() {
+		console.log("recupFakeUsers called !");
+		this.authService.recupFakeUsers();
+	}
+
+
 	@Get('testit')
 	async hhh(@Req() req,        @Body() {
 		id, name,
@@ -387,13 +401,10 @@ export class AuthController {
 
 	@Get('login')
 	@UseGuards(FortyTwoAuthGuard)
-	async logi(@Body('id') displayName: string ,
-				 @Body('displayName') id: string ,
-				 @Body('username') username: string ,
-				 @Request() req,
-				 ) {
-			
-	}
+	async logi( @Body('id') displayName: string,
+				@Body('displayName') id: string,
+				@Body('username') username: string,
+				@Request() req,) {}
 
 }
 

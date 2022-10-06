@@ -1,20 +1,19 @@
 import { Injectable, Put } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
 // import { User, Prisma } from '@prisma/client';
 import { toFileStream } from 'qrcode';
 import { Response } from 'express';
 import { authenticator } from 'otplib';
 import { Any } from 'typeorm';
+import { User } from '@prisma/client'
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class UserService {
-  constructor(private PrismaService: PrismaService) {}
-  
-  
-  
-    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//
+
+  constructor(private prisma: PrismaService) {}
+
   async setTwoFactorAuthenticationSecret(secret: string, userId: number) {
-    return this.PrismaService.user.update({
+    return this.prisma.user.update({
 		where: {
 			id: userId,
 		  },
@@ -26,7 +25,7 @@ export class UserService {
   }
   
   async findBySaad( nameg: string) {
-    let u =  this.PrismaService.user.findFirst({
+    let u =  this.prisma.user.findFirst({
 		where: {
 			name: nameg,
 		  },
@@ -37,7 +36,7 @@ export class UserService {
   }
   
   async find2FA( nameg: string) {
-    let u =  this.PrismaService.user.findFirst({
+    let u =  this.prisma.user.findFirst({
 		where: {
 			name: nameg,
 			two_factor: true,
@@ -50,24 +49,15 @@ export class UserService {
   
   
   
-  async requestUserInfos( nameg: string) {
-    let u =  this.PrismaService.user.findFirst({
-		where: {
-			name: nameg,
-		  },
-    });
-    let id = (await u).id;
-    let Name = (await u).name;
-    let avatar = (await u).avatar;
-    let Description = (await u).Description;
-    let date = (await u).Date;
-    let victoires = (await u).wins;
-    let match = (await u).match;
-    return {
-		id,Name,
-		avatar,Description, date, victoires ,match
-    }
-  }
+	async requestUserInfos(nameg: string) {
+		let u =  this.prisma.user.findFirst({
+			where: {
+				name: nameg[0],
+			},
+		});
+
+		return u;
+  	}
   
   
   
@@ -75,7 +65,7 @@ export class UserService {
 
   
 async requestUserMatchsHistory( nameg: string) {
-    let u =  this.PrismaService.user.findFirst({
+    let u =  this.prisma.user.findFirst({
 		where: {
 			name: nameg,
 		  },
@@ -84,6 +74,7 @@ async requestUserMatchsHistory( nameg: string) {
 
     return MatchsHistory;
  }
+
 
   /*
 Objectif 3: faire une demande des 5 meilleurs joueurs en fonction du nombres de victoirs sous forme de tableau d'objet User (voir objectif 1)
@@ -103,14 +94,14 @@ status : À faire*/
 /* Objectif 9: Update la friendlist de l'user */
 
 async updateFriendlist( nameg: string, oneto: number) {
-	let y = this.PrismaService.user.findFirst({
+	let y = this.prisma.user.findFirst({
 		where: {
 			id: oneto,
 		  },
     });
     let frd = (await y).name;
     if( frd != null){
-		let u =  this.PrismaService.user.update({
+		let u =  this.prisma.user.update({
 			where: {
 				name: nameg,
 			  },
@@ -126,9 +117,8 @@ async updateFriendlist( nameg: string, oneto: number) {
 
 
 /* Objectif 10: Savoir si le user est en cours de partie ou non */
-
 async requestIsUserPlaying( nameg: string) {
-	let u =  this.PrismaService.user.findFirst({
+	let u =  this.prisma.user.findFirst({
 		where: {
 			name: nameg,
 		  },
@@ -152,23 +142,19 @@ Ce que je voudrais récupérer :
 status : À faire*/
   
   
-  
-  
 
 /*Objectif 12: Check si un pseudo existe deja.*/
-
-
-
- async requestCheckUserName( nameg: string) {
-    let u =  this.PrismaService.user.findFirst({
+ async requestCheckUserName(nameg: string) {
+    let u =  this.prisma.user.findFirst({
 		where: {
-			name: nameg,
+			name: nameg[0],
 		  },
     });
-	if((await u) != null){ return true;}
+
+	if ((await u) != null)
+		return true;
     return false;
-    // if (u) {return "Yes";}else{return "No";}
-  }
+}
   
 /*Objectif 13: Inviter un joueur à jouer au pong
 
@@ -183,13 +169,27 @@ Il faut donc trouver le socket de l'user dont l'id est userID.
 Ca risque d'être un peu compliqué donc on pourra en discuter. 
 
 status : À faire*/
-  
-  
-  
+
+async updateUser(userInfos: any) {
+	console.log(userInfos);
+
+	let userUpdated = this.prisma.user.update({
+		where: {
+			id: userInfos[0].id,
+		  },
+		  data: {
+			name: userInfos[0].pseudo,
+			avatar: userInfos[0].avatar,
+			Description: userInfos[0].description
+		  }
+    });
+
+	return userUpdated;
+}
   
   async find_already_2FA( nameg: string) {
   
-    let u =  this.PrismaService.user.findFirst({
+    let u =  this.prisma.user.findFirst({
 		where: {
 			name: nameg,
 			secret: null,
@@ -204,7 +204,7 @@ status : À faire*/
   
   async findQrcode( nameg: string) {
   
-    let u =  this.PrismaService.user.findFirst({
+    let u =  this.prisma.user.findFirst({
 		where: {
 			name: nameg,
 			// secret: null,
@@ -215,7 +215,7 @@ status : À faire*/
   
   async findid( nameg: string) {
   
-    let u =  this.PrismaService.user.findFirst({
+    let u =  this.prisma.user.findFirst({
 		where: {
 			name: nameg,
 			// secret: null,
@@ -225,7 +225,7 @@ status : À faire*/
   }
   async findSecret( nameg: string) {
   
-    let u =  this.PrismaService.user.findFirst({
+    let u =  this.prisma.user.findFirst({
 		where: {
 			name: nameg,
 			// secret: null,
@@ -249,73 +249,4 @@ status : À faire*/
   public async pipeQrCodeStream(stream: Response, otpauthUrl: string) {
     return toFileStream(stream, otpauthUrl);
   }
-  
-  //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<//
-  
-  
-  
-  
-  
-  
-  
-//   async getAllUser(): Promise<User[]> {
-//     return this.prisma.user.findMany();
-//   }
-//   async getUser(id: number): Promise<User | null> {
-//     return this.prisma.user.findUnique({ where: { id: Number(id) } });
-//   }
-//   async createUser(
-// 	id   :          number ,
-// 	name    :       String,
-// 	Full_Nam   :   String,
-// 	two_factor  :   Boolean ,
-// 	avatar       :  String,
-// 	line_status :   String,
-// 	wins         :  number,
-// 	losses       :  number,
-// 	ladder_level :  number,
-// 	achievements  : String,
-// 	friends       : String,
-//   ): Promise<User> {
-//     return this.prisma.user.create({
-//       data: { 
-// 		id   :          id ,
-// 		name    :       name,
-// 		Full_Name   :   Full_Nam,
-// 		two_factor  :   false ,
-// 		avatar       :  String,
-// 		line_status :   String,
-// 		wins         :  number,
-// 		losses       :  number,
-// 		ladder_level :  number,
-// 		achievements  : String,
-// 		friends       : String,
-//       },
-//     });
-//    }
-//    async updateUser(  
-//    id   :          number ,
-// 	name    :       String,
-// 	Full_Name   :   String,
-// 	two_factor  :   Boolean ,
-// 	avatar       :  String,
-// 	line_status :   String,
-// 	wins         :  number,
-// 	losses       :  number,
-// 	ladder_level :  number,
-// 	achievements  : String,
-// 	friends       : String,
-// 	): Promise<User> {
-//     return this.prisma.user.update({
-//       where: { name: name },
-//       data: { two_factor: true , avatar: "fdg",Full_Name: "Full_Name"},
-//     });
-//   }
-//   async deleteUser(id: number): Promise<User> {
-//     return this.prisma.user.delete({
-//       where: { id: Number(id) },
-//     });
-//   }
-
-
 }
