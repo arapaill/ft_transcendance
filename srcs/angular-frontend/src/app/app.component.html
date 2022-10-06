@@ -7,7 +7,11 @@
   <title>Transcendance</title>
 </head>
 <body>
+
+  <app-login *ngIf="!userID"></app-login>
+  <div *ngIf="userID">
     <app-navbar></app-navbar>
     <router-outlet></router-outlet>
+  </div >
 </body>
 </html>
