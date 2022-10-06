@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "chatChannel" ALTER COLUMN "admins" SET DATA TYPE TEXT[],
+ALTER COLUMN "users" SET DATA TYPE TEXT[];

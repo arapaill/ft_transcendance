@@ -22,7 +22,7 @@ export class PopupChatUserComponent implements OnInit {
   constructor(private webSocketService: WebSocketService,
     public dialogRef: MatDialogRef<PopupChatUserComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
-      this.blockedUsers = data.blockedUsers,
+      //this.blockedUsers = data.blockedUsers,
       this.tmpUserName = data.userName,
       this.tmpUserAvatar = data.userAvatar
   }
@@ -31,7 +31,7 @@ export class PopupChatUserComponent implements OnInit {
     this.Personne = {
       avatar: this.tmpUserAvatar,
       name: this.tmpUserName,
-      description: "I am Tester and I test things like this website or some other stuffs.",
+      description: "User not found",
       date: new Date(),
       victoires: 0,
       match: true,
@@ -39,15 +39,20 @@ export class PopupChatUserComponent implements OnInit {
     }
     this.webSocketService.emit("requestUserInfos", this.Personne.name);
     this.webSocketService.listen("getUserInfos").subscribe((data: any) => {
-      this.Personne.name = data.name;
-      this.userID = data.id;
+      if (data !== undefined) {
+        this.Personne.name = data.name;
+        this.userID = data.id;
+        this.Personne.victoires = data.victoires;
+        this.Personne.id = data.id;
+      }
     });
   }
 
   isUserPlaying(): boolean {
     this.webSocketService.emit("requestIsUserPlaying", this.userID);
     this.webSocketService.listen("getIsUserPlaying").subscribe((data: any) => {
-      return (data);
+      if (data != undefined)
+        return (data);
     });
     return false;
   }
@@ -56,6 +61,7 @@ export class PopupChatUserComponent implements OnInit {
     if (this.isUserPlaying()) {
       this.webSocketService.emit("spectate", {
         MYUSER: myUser.pseudo,
+        MYSOCKET: this.webSocketService.socket.id,
         USER: this.Personne.name,
         USERID: this.userID,
       })
@@ -68,13 +74,6 @@ export class PopupChatUserComponent implements OnInit {
         USER: this.Personne.name,
         USERID: this.userID,
       });
-
-      /* this.webSocketService.emit("invitation", {
-        TYPETYPE: "Accepte/Refuse",
-        MYUSER: myUser,
-        USER: this.Personne.Name,
-        USERID: this.userID
-      }) */
     }
     this.dialogRef.close();
   }

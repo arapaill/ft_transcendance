@@ -23,15 +23,23 @@ export class ChatComponent implements OnInit {
     admins: [],
     users: [],
     type: 'Public',
-    messages: []
+    messages: [{
+      userPseudo: 'Alexandre',
+      userAvatar: 'assets/avatar-placeholder-1.png',
+      text: 'Ceci est un unique message de test.',
+      date: new Date(),
+      channelName: 'Général',
+    }]
   }];
-  currentChannel!: ChatChannel;
+  currentChannel: ChatChannel = this.channels[0];
   selectedChannel!: string;
   myUserCpy: User = myUser;
 
   constructor(private webSocketService: WebSocketService, private dialogRef: MatDialog) {
-    this.webSocketService.emit("requestChannels", myUser.pseudo);
+    this.webSocketService.emit("requestChannels", myUser);
     this.webSocketService.listen("getChannels").subscribe((data: any) => {
+      if (data.length == 0)
+        return ;
       if (this.channels.length != 1)
         this.channels = [];
       for (const channel of data) {
@@ -51,7 +59,7 @@ export class ChatComponent implements OnInit {
     })
 
     this.webSocketService.listen('getChannelMessages').subscribe((data: any) => {
-      if (data.length == this.currentChannel.messages.length) {
+      if (data.length == this.currentChannel.messages.length || data == undefined) {
         return ;
       }
       this.currentChannel.messages = [];
