@@ -12,7 +12,7 @@ import {
   import { AppService } from '../app.service';
   import { UserService } from '../user/user.service';
 
-  import { user_export } from '../auth/auth.controller';
+//   import { user_export } from '../auth/auth.controller';
   
   @WebSocketGateway({
 	cors: {

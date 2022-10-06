@@ -21,7 +21,7 @@ import { AuthGateway } from './auth/auth.gateway';
 	  PongModule,
 	  TypeOrmModule.forRoot({
 		  type: 'postgres',
-		  host: 'postgres',
+		  host: 'localhost',
 		  username: 'jandre',
 		  password: 'jandrepass',
 		  database: 'transcendance',
