@@ -58,6 +58,16 @@ export class UserService {
 
 		return u;
   	}
+
+	async requestUserInfosID(id: number) {
+		let u =  this.prisma.user.findFirst({
+			where: {
+				id: id[0],
+			},
+		});
+
+		return u;
+  	}
   
   
   

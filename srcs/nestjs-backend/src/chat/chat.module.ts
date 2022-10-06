@@ -1,22 +1,14 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Chat } from './chat.entity';
+import { PrismaModule } from '../prisma/prisma.module';
+import { ChatService } from './chat.service';
 import { ChatGateway } from './chat.gateway';
 
 @Module({
-	imports: [
-		TypeOrmModule.forRoot({
-		  type: 'postgres',
-		  host: 'postgres_container',
-		  username: 'jandre',
-		  password: 'jandrepass',
-		  database: 'chat',
-		  entities: [Chat],
-		  synchronize: true,
-		}),
-		TypeOrmModule.forFeature([Chat]),
-	],
+	imports: [PrismaModule],
 	controllers: [],
-	providers: [ChatGateway],
+	providers: [ChatService],
+	exports: [ChatService]
 })
 export class ChatModule {}
