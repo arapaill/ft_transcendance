@@ -126,12 +126,8 @@ export class AuthController {
 	}
 	
 	
-	// @Public()
 	@Get('code')
-	// @UseFilters(HttpExceptionFilter)
 	@UseGuards(FortyTwoAuthGuard)
-	// @UseGuards(LocalAuthGuard)
-	// @UseGuards(AuthenticatedGuard)
      async getHello(
         @Request() req,
         @Body() {id, name,
@@ -177,10 +173,9 @@ export class AuthController {
 				email = req.user.emails[0].value ;
 				qrCode = null;
 				
-				
-				// this.server.emit("getLogin", "req.user.username" , "id ");
-				// export_name = req.user.username;
-				response.redirect("http://localhost:4200/",302);
+			
+				let linki = "http://localhost:4200/accueil?id="  + id ;
+				response.redirect(linki,302);
 				await this.prismaService.user.create({
 				    data : { id, name,
 					    Full_Name, two_factor, avatar, line_status,
@@ -198,22 +193,13 @@ export class AuthController {
 					response.redirect("http://localhost:3000/auth2/verify",302); 
 			}
 			else { 
-			// return "Happy to see you again login , welcome to your favorite game"; 
-			// response.redirect("http://localhost:9876/auth2/111",302); 
+
 				let id_num = req.user.id;
 				var y: number = +id_num;
 				id = y ;
 				name = req.user.username ;
-				// console.log( "88888" , id , "---" , name, "8888")
-				// this.server.emit("getLogin", "req.user.username" , "id ");
-				// export_name = name ;
-				
-				// console.log("--" , name );
-				// req.user = "name" ;
-				
-				response.redirect("http://localhost:4200",302);
-				// req.session.destroy();
-				// response.send("Happy to see you again login , welcome to your favorite game" );
+				let link = "http://localhost:4200/accueil?id="  + id_num ;
+				response.redirect(link,302);
 				}
 			return fac;	
 		}
@@ -354,13 +340,8 @@ export class AuthController {
 				if(req.url.split("verify?text=")[1]){
 					let f = (await this.authService.verifyCode(id,req.url.split("verify?text=")[1],secret));
 					if ((await f) == 1){
-						// return req.session.fff ==  0 ;
-						// req.session.cookie.httpOnly = false ;
-						// console.log(">>>>", req.session.cookie);
-						// this.server.emit("getLogin", "req.user.username" , "id " );
-						// export_name = name;
-						response.redirect("http://localhost:4200/",302);
-					// response.send(1phrase);
+						let link = "http://localhost:4200/accueil?id=" + req.user.id;
+						response.redirect( link ,302);
 					}
 					if ((await f) == 0){
 					phrase += " \n \n False code try again"; 
@@ -436,4 +417,3 @@ export class AuthController {
 
 }
 
-export const user_export = export_name;
