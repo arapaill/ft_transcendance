@@ -17,56 +17,85 @@ import { myUser, User } from '../models/user.model';
   styleUrls: ['./chat.component.scss']
 })
 export class ChatComponent implements OnInit {
-  @Input() channels: ChatChannel[] = [];
+  @Input() channels: ChatChannel[] = [{
+    name: 'Général',
+    owner: 'ADMIN',
+    admins: [],
+    users: [],
+    type: 'Public',
+    messages: []
+  }];
   currentChannel!: ChatChannel;
   selectedChannel!: string;
-  myUserCpy: User = myUser;
 
-  constructor(private webSocketService: WebSocketService, private dialogRef: MatDialog) { }
+  constructor(private webSocketService: WebSocketService, private dialogRef: MatDialog, public myUser: myUser ) {
+    this.webSocketService.emit("requestChannels", this.myUser.pseudo);
+    this.webSocketService.listen("getChannels").subscribe((data: any) => {
+      if (this.channels.length != 1)
+        this.channels = [];
+      for (const channel of data) {
+        let newChannel: ChatChannel = {
+          name: channel.name,
+          owner: channel.owner,
+          admins: channel.admins,
+          users: channel.users,
+          type: channel.type,
+          messages: []
+        }
+        this.channels.push(newChannel);
+      }
+      this.currentChannel = this.channels[0];
+      this.selectedChannel = this.currentChannel.name;
+      this.getChannelMessages();
+    })
+
+    this.webSocketService.listen('getChannelMessages').subscribe((data: any) => {
+      if (data.length == this.currentChannel.messages.length) {
+        return ;
+      }
+      this.currentChannel.messages = [];
+      for (let message of data) {
+        let newMessage: ChatMessage = {
+          userPseudo: message.userPseudo,
+          userAvatar: message.userAvatar,
+          text: message.text,
+          date: new Date(message.date),
+          channelName: message.channelName,
+        }
+        this.currentChannel.messages.push(newMessage);
+      }
+    });
+   }
 
   ngOnInit(): void {
-    this.currentChannel = {
-      name: 'Général',
-      owner: myUser.pseudo,
-      admins: [],
-      users: ['Corentin', 'Alexandre'],
-      type: "Public",
-      messages: [
-      ]
-    }
-
-    let newChannel: ChatChannel = {
-      name: 'Autre',
-      owner: 'Corentin', // A changer
-      admins: [],
-      users: ['Corentin', 'Alexandre'],
-      type: "Public",
-      messages: []
-    }
-
-    this.channels.push(this.currentChannel);
-    this.channels.push(newChannel);
-    this.selectedChannel = this.currentChannel.name;
-
-    this.webSocketService.emit("requestChannels", myUser.pseudo);
-    this.webSocketService.listen("getChannels").subscribe((data: any) => {
-      this.channels = data;
-    })
+    this.webSocketService.emit("requestUserInfosID", Number(localStorage.getItem('id')));
+    this.webSocketService.listen("getUserInfosID").subscribe((data: any) => {
+      this.myUser.avatar = data.avatar;
+      this.myUser.pseudo = data.name;
+      this.myUser.description = data.Description;
+      this.myUser.blacklist = data.blacklist;
+      this.myUser.id = data.id;
+    });
   }
 
   sendNewMessage(msg: any): void {
     if (msg.value == "")
-      return ;
+    return ;
     let newMessage: ChatMessage = {
-      userPseudo: myUser.pseudo,
-      userAvatar: myUser.avatar,
+      userPseudo: this.myUser.pseudo,
+      userAvatar: this.myUser.avatar,
       text: msg.value,
       date: new Date(),
       channelName: this.currentChannel.name
     }
     msg.value = "";
-    this.currentChannel.messages.push(newMessage);
+    console.log(this.currentChannel);
     this.webSocketService.emit("sendNewMessage", newMessage);
+    this.currentChannel.messages.push(newMessage);
+  }
+
+  getChannelMessages() {
+    this.webSocketService.emit('requestChannelMessages', this.currentChannel.name);
   }
 
   selectChannel(fchannel: string) {
@@ -82,12 +111,13 @@ export class ChatComponent implements OnInit {
       else
         this.currentChannel = tmpChannel;
     }
+    this.getChannelMessages();
   }
 
   createNewChannel(settings: any) {
     let newChannel: ChatChannel = {
       name: settings.name,
-      owner: myUser.pseudo,
+      owner: this.myUser.pseudo,
       admins: settings.admin,
       users: settings.users,
       type: settings.type,
@@ -95,12 +125,12 @@ export class ChatComponent implements OnInit {
       messages: []
     }
     this.channels.push(newChannel);
-    this.webSocketService.socket.emit('createNewChannel', newChannel);
+    this.webSocketService.emit('createNewChannel', newChannel);
   }
 
   changeCurrentChannel(newSettings: any) {
     if (newSettings == "Delete") {
-      this.webSocketService.emit("deleteChannel", newSettings.name);
+      this.webSocketService.emit("deleteChannel", this.currentChannel.name);
       let index = this.channels.indexOf(this.currentChannel);
       this.channels.splice(index, 1);
       return ;
@@ -117,10 +147,10 @@ export class ChatComponent implements OnInit {
 
   createMPChannel(user: string) {
     let newChannel: ChatChannel = {
-      name: myUser.pseudo + ' & ' + user,
-      owner: myUser.pseudo,
-      admins: [user],
-      users: [user],
+      name: this.myUser.pseudo + ' & ' + user,
+      owner: this.myUser.pseudo,
+      admins: [this.myUser.pseudo, user],
+      users: [this.myUser.pseudo, user],
       type: "Privé",
       messages: []
     }
@@ -157,7 +187,7 @@ export class ChatComponent implements OnInit {
       data: {
         userName: user.userPseudo,
         userAvatar: user.userAvatar,
-        blockedUsers: myUser.blacklist
+        blockedUsers: this.myUser.blacklist
       }
     });
 

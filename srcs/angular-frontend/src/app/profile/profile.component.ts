@@ -11,24 +11,22 @@ import { WebSocketService } from '../web-socket.service';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-  user : User = myUser;
-  constructor(private  dialogRef : MatDialog, private webSocketService: WebSocketService ){}
+  constructor(private  dialogRef : MatDialog, private webSocketService: WebSocketService, public myUser : myUser){}
 
   ngOnInit(): void {
+    this.webSocketService.emit("requestUserInfosID", Number(localStorage.getItem('id')));
+    this.webSocketService.listen("getUserInfosID").subscribe((data: any) => {
+      this.myUser.avatar = data.avatar;
+      this.myUser.pseudo = data.name;
+      this.myUser.description = data.Description;
+    });
 
   }
 
 
   openDialog(){
     let ret = this.dialogRef.open(PopupModifierProfilComponent);
-    ret.afterClosed().subscribe(result=>{
-      if(result.Nom)
-        myUser.pseudo = result.Nom;
-      if(result.Description)
-        myUser.description = result.Description;
-      this.user = myUser;
-      this.webSocketService.emit("updateUser", myUser);
-      
+    ret.afterClosed().subscribe((result: any)=>{
     })
   }
     displayFriends(){

@@ -15,11 +15,19 @@ export class PongComponent implements OnInit, AfterViewInit {
   response : any;
   state! : string;
   
-  constructor(private webSocketService: WebSocketService, private renderer : Renderer2) {
+  constructor(private webSocketService: WebSocketService, private renderer : Renderer2, public myUser : myUser) {
     this.state = "MENU";
   }
   
   ngOnInit(): void {
+    this.webSocketService.emit("requestUserInfosID", Number(localStorage.getItem('id')));
+    this.webSocketService.listen("getUserInfosID").subscribe((data: any) => {
+      this.myUser.avatar = data.avatar;
+      this.myUser.pseudo = data.name;
+      this.myUser.description = data.Description;
+      this.myUser.blacklist = data.blacklist;
+      this.myUser.id = data.id;
+    });
     this.pong = new Pong(this.canvas);
   }
   

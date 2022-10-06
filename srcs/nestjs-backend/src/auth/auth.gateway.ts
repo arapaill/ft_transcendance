@@ -12,7 +12,7 @@ import {
   import { AppService } from '../app.service';
   import { UserService } from '../user/user.service';
 
-  import { user_export } from '../auth/auth.controller';
+//   import { user_export } from '../auth/auth.controller';
   
   @WebSocketGateway({
 	cors: {
@@ -31,6 +31,12 @@ import {
 	async handlerequestUserInfos(client, @MessageBody() userName: string): Promise<void> {
 		let user = await this.userService.requestUserInfos(userName);
 		this.server.emit("getUserInfos", user);
+	}
+
+	@SubscribeMessage('requestUserInfosID')
+	async handlerequestUserInfosID(client, @MessageBody() id: number): Promise<void> {
+		let user = await this.userService.requestUserInfosID(id);
+		this.server.emit("getUserInfosID", user);
 	}
 
 

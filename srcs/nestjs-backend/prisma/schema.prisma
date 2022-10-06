@@ -1,7 +1,7 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl"]
-  output = "../node_modules/.prisma/client"
+  output        = "../node_modules/.prisma/client"
 }
 
 datasource db {
@@ -10,27 +10,27 @@ datasource db {
 }
 
 model User {
-  id            Int      @id @default(autoincrement())
-  name          String?  @unique
-  Full_Name     String?  @unique
-  two_factor    Boolean?
-  avatar        String?
-  line_status   String?
-  wins          Int?
-  losses        Int?
-  ladder_level  Int?
-  achievements  String?
-  secret        String?
-  
-  email         String?
-  qrCode        String?
-  
-  friends       String[]   
-  demFriends    String[]
+  id           Int      @id @default(autoincrement())
+  name         String?  @unique
+  Full_Name    String?  @unique
+  two_factor   Boolean?
+  avatar       String?
+  line_status  String?
+  wins         Int?
+  losses       Int?
+  ladder_level Int?
+  achievements String?
+  secret       String?
+
+  email  String?
+  qrCode String?
+
+  friends    String[]
+  demFriends String[]
 
   Description   String?
   MatchsHistory String[]
-  Date          DateTime @default(now())   
+  Date          DateTime @default(now())
   match         Boolean?
   toUse         String?
   toUses        String[]
@@ -38,22 +38,41 @@ model User {
   @@map("users")
 }
 
-
 model ongoingGame {
-  id                 Int      @id @default(autoincrement())
-  JOUEUR_1_SOCKET    String?
-  JOUEUR_1_PSEUDO    String?
-  JOUEUR_2_SOCKET    String?
-  JOUEUR_2_PSEUDO    String?
+  id              Int     @id @default(autoincrement())
+  JOUEUR_1_SOCKET String?
+  JOUEUR_1_PSEUDO String?
+  JOUEUR_2_SOCKET String?
+  JOUEUR_2_PSEUDO String?
 }
-
 
 model gameHistory {
-  id              Int     @id @default(autoincrement())
-  JOUEUR_1        String?
-  JOUEUR_2        String?
-  VAINQUEUR       String?
-  SCORE_JOUEUR_1  String?
-  SCORE_JOUEUR_2  String?
+  id             Int     @id @default(autoincrement())
+  JOUEUR_1       String?
+  JOUEUR_2       String?
+  VAINQUEUR      String?
+  SCORE_JOUEUR_1 String?
+  SCORE_JOUEUR_2 String?
 }
 
+model chatMessage {
+  id            Int          @id @default(autoincrement())
+  userPseudo    String
+  userAvatar    String
+  text          String
+  date          DateTime     @default(now())
+  channelName   String
+  chatChannel   chatChannel? @relation(fields: [chatChannelId], references: [id])
+  chatChannelId Int?
+}
+
+model chatChannel {
+  id       Int           @id @default(autoincrement())
+  name     String
+  owner    String
+  admins   Int[]
+  users    Int[]
+  type     String
+  password String?
+  messages chatMessage[]
+}

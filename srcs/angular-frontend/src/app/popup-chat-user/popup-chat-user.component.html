@@ -5,9 +5,9 @@
 <p class="description">{{ Personne.description }}</p>
 <p class="victoires">Victoires : {{ Personne.victoires }}</p>
 
-<div *ngIf="Personne.name !== myUserCpy.pseudo">
-	<button mat-raised-button color="accent" (click)="addToFriends()">{{ myUserCpy.friends.has(this.Personne.name) ? 'Retirer des amis' : 'Ajouter en amis'	 }}</button>
+<div *ngIf="Personne.name !== myUser.pseudo">
+	<button mat-raised-button color="accent" (click)="addToFriends()">{{ myUser.friends.has(this.Personne.name) ? 'Retirer des amis' : 'Ajouter en amis'	 }}</button>
 	<button mat-raised-button color="accent" (click)="inviteToPlayOrWatch()">{{ isUserPlaying() ? 'Voir match' : 'Inviter à jouer'}}</button>
 	<button mat-raised-button color="accent" (click)="sendPrivateMessage()">Message privé</button>
-	<button mat-raised-button color="warn" (click)="blockUser()">{{ !myUserCpy.blacklist.has(this.Personne.name) ? 'Bloquer' : 'Débloquer'}}</button>
+	<button mat-raised-button color="warn" (click)="blockUser()">{{ !myUser.blacklist.has(this.Personne.name) ? 'Bloquer' : 'Débloquer'}}</button>
 </div>
