@@ -16,4 +16,9 @@ export class UserDto{
 	
 	friends:       string[];
 	demFriends:   string[];
+	Description:  string;
+	MatchsHistory: string[];
+	match:         boolean;
+	toUse:         string;
+	toUses:        string[];
 }

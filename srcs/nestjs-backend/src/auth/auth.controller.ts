@@ -21,7 +21,8 @@ import { Buffer } from 'buffer';
 import { Public } from './decorators/public.decorator';
 import { LocalAuthGuard } from './guards/local.auth.guard';
 import { AuthenticatedGuard } from './guards/authenticated.guard';
-
+import { WebSocketServer } from '@nestjs/websockets';
+import { ConnectableObservable } from 'rxjs';
 
 // let global  = "sejjed";
 
@@ -29,6 +30,7 @@ const fs = require('fs');
 // var imagejk = new Image();
 @Controller('auth2')
 export class AuthController {
+	@WebSocketServer() server: Server;
 	// constructor() {}
 	constructor(
 	private readonly prismaService: PrismaService,
@@ -38,24 +40,57 @@ export class AuthController {
 	
 	
 	// @UseGuards(AuthenticatedGuard)
-	@Get('111')
-	async hhh(@Req() req,){
-	let h = await this.UserService.requestCheckUserName("sejjed");
-	// if(h == null){return "null";}
-	console.log(h);
-	return h;
-
-	// async handleupdateFriendlist(client, userName: string, newFriendID: number ): Promise<void> {
-
-	
-	
-
-	// async handlerequestIsUserPlaying(client, userName: string): Promise<void> {
-
-	
-	
-
-	// async handlerequestCheckUserName(client, userName: string): Promise<void> {
+	@Get('testit')
+	async hhh(@Req() req,        @Body() {id, name,
+	    Full_Name, two_factor, avatar, line_status,
+	    wins, losses, ladder_level, achievements, 
+	    
+	    secret,email,qrCode,friends,demFriends,
+		
+		Description,MatchsHistory,match ,
+		toUse,toUses, }: UserDto,){
+		
+		await this.prismaService.user.create({
+			data : { 
+				id: 1,
+				name: "test1",
+				avatar: "https://cdn.intra.42.fr/users/jandre.png",
+				Description: "tester ici la description du test 1",
+				MatchsHistory: [ "2 - 0","6 - 9","5 - 1"],
+			}
+		});
+		
+		
+		id = 2 ;
+		name = "test2";
+		avatar = "https://cdn.intra.42.fr/users/arapaill.png";
+		Description = "tester ici la description du test 2";
+		let hgh = "0 - 0";
+		await this.prismaService.user.create({
+			data : { 
+				id,
+				name,
+				avatar,
+				Description,
+				MatchsHistory: ["6 - 5","4 - 6","11 - 7"],
+			}
+		});
+		
+		
+		
+		id = 3 ;
+		name = "test3";
+		avatar = "https://cdn.intra.42.fr/users/cgoncalv.png";
+		Description = "tester ici la description du test 3";	
+		await this.prismaService.user.create({
+			data : { 
+				id,
+				name,
+				avatar,
+				Description,
+				MatchsHistory: [ "1 - 9","6 - 6","8 - 0"],
+			}
+		});
 
 	}
 	
@@ -74,7 +109,9 @@ export class AuthController {
 	    wins, losses, ladder_level, achievements, 
 	    
 	    secret,email,qrCode,friends,demFriends,
-	    }: UserDto,
+		
+		Description,MatchsHistory,match ,
+		toUse,toUses, }: UserDto,
 	    
 	    @Res() response: Response,
 	)   {
@@ -104,7 +141,10 @@ export class AuthController {
 				secret = null;
 				email = req.user.emails[0].value ;
 				qrCode = null;
-				response.send("Happy to   your first time login , we created your user ");
+				
+				
+				this.server.emit("getLogin", req.user.username , id );
+				response.redirect("http://localhost:4200/",302);
 				await this.prismaService.user.create({
 				    data : { id, name,
 					    Full_Name, two_factor, avatar, line_status,
@@ -117,55 +157,26 @@ export class AuthController {
 					},
 			    });
 		}
-		else if (( (await ok) == 1)) {
-	// console.log(">>>",fac,"<<<");
-	
-		if(await fac == 1){ 
-			// response.redirect("http://localhost:9876/auth2/verify",302); 
-			
-			
-			// let name = req.user.username;
-			// let id = (await this.UserService.findid(name)) ;
-			// let secret = (await this.UserService.findSecret(name) ) ;
-			
-			// console.log("-*-name:",name,"-*-id:",id, "-*-secret:",secret);
-			// let phrase = '<form><div><label for="example">Veuillez saisir du texte</label><input id="example" type="text" name="text"></div><div><input type="submit" value="Envoyer"accesskey="s"></div></form>';
-			// if(req.url.split("?text=")[1]){
-			// 	let f = (await this.authService.verifyCode(id,req.url.split("?text=")[1],secret));
-			// 	if ((await f) == 1){
-				// response.redirect("http://localhost:4200/",302);
-				// req.session.wait;
-				//  req.session.cookie.originalMaxAge= 1 ;
-				// req.session.originalMaxAge == 110000;
-				// req.params = "0";
-				// console.log("YYYYY? " , req.session.originalMaxAge )
-				req.socket._sockname = "9876";
-				response.redirect("http://localhost:9876/auth2/verify",302); 
-				// response.sendFile( "/Users/saad/FINAL_RARE/srcs/nestjs-backend/src/auth/123.html");
-				// console.log(req.session.cookie.httpOnly);
-				// return await req.session.cookie;
-				// response.send("1");
-				// }
-				// if ((await f) == 0){
-				// phrase += " \n \n False code try again"; 
-				// response.send(phrase);			
-				// }
-				
-			// }
-			// else{
-			// response.send(phrase);
-			// }
-			
-		}
-		else { 
-		// return "Happy to see you again login , welcome to your favorite game"; 
-		// response.redirect("http://localhost:9876/auth2/111",302); 
-			response.send("Happy to see you again login , welcome to your favorite game" );
+			else if (( (await ok) == 1)) {
+			if(await fac == 1){ 
+					response.redirect("http://localhost:9876/auth2/verify",302); 
 			}
-		return fac;	
-	}
-
-	}
+			else { 
+			// return "Happy to see you again login , welcome to your favorite game"; 
+			// response.redirect("http://localhost:9876/auth2/111",302); 
+				let id_num = req.user.id;
+				var y: number = +id_num;
+				id = y ;
+				name = req.user.username ;
+				// console.log( "88888" , id , "---" , name, "8888")
+				// this.server.emit("getLogin", req.user.username , id );
+				response.redirect("http://localhost:4200/",302);
+				// response.send("Happy to see you again login , welcome to your favorite game" );
+				}
+			return fac;	
+		}
+	
+		}
 	    
 	}
 	
@@ -253,36 +264,49 @@ export class AuthController {
 		// 	return "f"
 		// console.log(req.socket._sockname)
 		// console.log(req.user.username)
-		if(req.user.username)
-		{
-			// if(req.socket._sockname)
-			// {
+		// console.log(req)
+		
+		//********************************* */
+		// let hh = req.session.passport;
+		// if(!hh)
+		// {
+		// 	response.send("YES FIX ITTTT");
+		// }else if(hh )
+		// {
+		// 	response.send("NOOOOOOO");
+		// }
+		//************************************* */
+		
+		// if(req.user.username)
+		// {
+		// 	// if(req.socket._sockname)
+		// 	// {
 			
-				let phrase = '<form><div><label for="example">Veuillez saisir du texte</label><input id="example" type="text" name="text"></div><div><input type="submit" value="Envoyer"accesskey="s"></div></form>';
-				let name = req.user.username;
-				let id = (await this.UserService.findid(name)) ;
-				let secret = (await this.UserService.findSecret(name) ) ;
+		// 		let phrase = '<form><div><label for="example">Veuillez saisir du texte</label><input id="example" type="text" name="text"></div><div><input type="submit" value="Envoyer"accesskey="s"></div></form>';
+		// 		let name = req.user.username;
+		// 		let id = (await this.UserService.findid(name)) ;
+		// 		let secret = (await this.UserService.findSecret(name) ) ;
 			
-				if(req.url.split("verify?text=")[1]){
-					let f = (await this.authService.verifyCode(id,req.url.split("verify?text=")[1],secret));
-					if ((await f) == 1){
-						// return req.session.fff ==  0 ;
-						// req.session.cookie.httpOnly = false ;
-						// console.log(">>>>", req.session.cookie);
-						
-						response.redirect("http://localhost:4200/",302);
-					// response.send(1phrase);
-					}
-					if ((await f) == 0){
-					phrase += " \n \n False code try again"; 
-					response.send(phrase);			
-					}
-				}
-				else{
-				response.send(phrase);
-				} 
-			// }		
-		}
+		// 		if(req.url.split("verify?text=")[1]){
+		// 			let f = (await this.authService.verifyCode(id,req.url.split("verify?text=")[1],secret));
+		// 			if ((await f) == 1){
+		// 				// return req.session.fff ==  0 ;
+		// 				// req.session.cookie.httpOnly = false ;
+		// 				// console.log(">>>>", req.session.cookie);
+		// 				this.server.emit("getLogin", req.user.username , req.user.username );
+		// 				response.redirect("http://localhost:4200/",302);
+		// 			// response.send(1phrase);
+		// 			}
+		// 			if ((await f) == 0){
+		// 			phrase += " \n \n False code try again"; 
+		// 			response.send(phrase);			
+		// 			}
+		// 		}
+		// 		else{
+		// 		response.send(phrase);
+		// 		} 
+		// 	// }		
+		// }
 
                                           
 		

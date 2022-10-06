@@ -30,7 +30,7 @@ import {
 		console.log("fdvfdffddddddddd");
 		let User = this.userService.requestUserInfos( userName) ;
 		// console.log(User);
-		// this.server.emit("getUserInfos", User );
+		this.server.emit("getUserInfos", User );
 	}
   
 

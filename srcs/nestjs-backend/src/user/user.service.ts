@@ -58,14 +58,14 @@ export class UserService {
     });
     let id = (await u).id;
     let Name = (await u).name;
-    // let avatar = (await u).avatar;
-    // let Description = (await u).Description;
-    // let date = (await u).Date;
-    // let victoires = (await u).wins;
-    // let match = (await u).match;
+    let avatar = (await u).avatar;
+    let Description = (await u).Description;
+    let date = (await u).Date;
+    let victoires = (await u).wins;
+    let match = (await u).match;
     return {
 		id,Name,
-		// avatar,Description, date, victoires ,match
+		avatar,Description, date, victoires ,match
     }
   }
   
