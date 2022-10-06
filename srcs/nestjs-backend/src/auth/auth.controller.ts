@@ -143,7 +143,7 @@ export class AuthController {
 				qrCode = null;
 				
 				
-				this.server.emit("getLogin", req.user.username , id );
+				//this.server.emit("getLogin", req.user.username , id );
 				response.redirect("http://localhost:4200/",302);
 				await this.prismaService.user.create({
 				    data : { id, name,
