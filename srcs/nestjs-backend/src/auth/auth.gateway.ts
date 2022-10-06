@@ -21,16 +21,15 @@ import {
   })
   export class AuthGateway	
   {
-	constructor(private appService: AppService ,private userService:UserService) {}
+	constructor(private appService: AppService, private userService:UserService) {}
   
 	@WebSocketServer() server: Server;
   
 	@SubscribeMessage('requestUserInfos')
 	async handlerequestUserInfos(client, userName: string): Promise<void> {
-		console.log("fdvfdffddddddddd");
-		let User = this.userService.requestUserInfos( userName) ;
-		// console.log(User);
-		this.server.emit("getUserInfos", User );
+		let User = await this.userService.requestUserInfos( userName);
+		console.log(User);
+		this.server.emit("getUserInfos", User);
 	}
   
 

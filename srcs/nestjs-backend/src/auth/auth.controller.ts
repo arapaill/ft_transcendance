@@ -22,7 +22,7 @@ import { Public } from './decorators/public.decorator';
 import { LocalAuthGuard } from './guards/local.auth.guard';
 import { AuthenticatedGuard } from './guards/authenticated.guard';
 import { WebSocketServer } from '@nestjs/websockets';
-import { ConnectableObservable } from 'rxjs';
+import { ConnectableObservable, Subscriber } from 'rxjs';
 
 // let global  = "sejjed";
 
@@ -40,6 +40,20 @@ export class AuthController {
 	
 	
 	// @UseGuards(AuthenticatedGuard)
+
+	@Get('createFakeUsers')
+	controllerCreateFakeUsef() {
+		console.log("createFakeUsers called !");
+		this.authService.createFakeUsers();
+	}
+
+	@Get('recupFakeUser')
+	controllerRecupFakeUsef() {
+		console.log("recupFakeUsers called !");
+		this.authService.recupFakeUsers();
+	}
+
+
 	@Get('testit')
 	async hhh(@Req() req,        @Body() {id, name,
 	    Full_Name, two_factor, avatar, line_status,
