@@ -33,6 +33,12 @@ import {
 		this.server.emit("getUserInfos", user);
 	}
 
+	@SubscribeMessage('requestUserInfosID')
+	async handlerequestUserInfosID(client, @MessageBody() id: number): Promise<void> {
+		let user = await this.userService.requestUserInfosID(id);
+		this.server.emit("getUserInfosID", user);
+	}
+
 
 	@SubscribeMessage('requestUserMatchsHistory')
 	async handlerequestUserMatchsHistory(client, userName: string): Promise<void> {
