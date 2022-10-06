@@ -30,23 +30,23 @@ export class InfoProfilComponent implements OnInit {
     this.Personne = 
       {
         avatar: 'assets/avatar-placeholder-1.png',
-        avatarName: 'avatar-placeholder-1',
-        Name: this.nameProfil,
-        Description: "I am Tester and I test things like this website or some other stuffs.",
+        name: this.nameProfil,
+        description: "I am Tester and I test things like this website or some other stuffs.",
         date: new Date(),
         victoires: 0,
-        match: false
+        match: false,
+        id: 13
       }
-    this.webSocketService.emit("requestUserInfos", this.Personne.Name);
+    this.webSocketService.emit("requestUserInfos", this.Personne.name);
     this.webSocketService.listen("getUserInfos").subscribe((data: any) => {
-      
-      //this.Personne.Name = data.name;
-      //this.userID = data.id;
+      console.log(data);
+      this.Personne.name = data.name;
+      this.userID = data.id;
       
     });
     
-    this.webSocketService.emit("requestUserMatchHistory", this.Personne.Name);
-    this.webSocketService.listen("getMatchHistory").subscribe((userMatchs) => {
+    this.webSocketService.emit("requestUserMatchHistory", this.Personne.name);
+    this.webSocketService.listen("getMatchHistory").subscribe((userMatchs : any) => {
       console.log(userMatchs);
       //this.matchs = userMatchs,
     });
@@ -60,12 +60,12 @@ export class InfoProfilComponent implements OnInit {
   } //end of ngoninit
   
   addToFriends() {
-    if (!myUser.friends.has(this.Personne.Name)) {
-      myUser.friends.set(this.Personne.Name, this.userID);
+    if (!myUser.friends.has(this.Personne.name)) {
+      myUser.friends.set(this.Personne.name, this.userID);
       this.myUserCpy.friends = myUser.friends;
     }
     else
-      myUser.friends.delete(this.Personne.Name);
+      myUser.friends.delete(this.Personne.name);
     this.webSocketService.emit("updateFriendlist", this.userID);
   }
 }

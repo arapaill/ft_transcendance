@@ -60,40 +60,40 @@ export class ClassementComponent implements OnInit {
     this.profils = [
       {
         avatar: 'assets/avatar-placeholder-1.png',
-        avatarName: 'avatar-placeholder-1',
-        Name: "User",
-        Description: "I am the User and I am real",
+        name: "User",
+        description: "I am the User and I am real",
         date: new Date(),
         victoires : 9001,
-        match: false
+        match: false,
+        id:52
       },
       {
         avatar: 'assets/avatar-placeholder-1.png',
-        avatarName: 'avatar-placeholder-1',
-        Name: "LOLZ",
-        Description: "troll",
+        name: "LOLZ",
+        description: "troll",
         date: new Date(),
         victoires: 9,
-        match: true
+        match: true,
+        id:96
       },
       
       {
         avatar: 'assets/avatar-placeholder-1.png',
-        avatarName: 'avatar-placeholder-1',
-        Name: "Tester 2",
-        Description: "I am Tester and I test things like this website or some other stuffs.",
+        name: "Tester 2",
+        description: "I am Tester and I test things like this website or some other stuffs.",
         date: new Date(),
         victoires: 7,
-        match: true
+        match: true,
+        id: 47
       },
       {
         avatar: 'assets/avatar-placeholder-1.png',
-        avatarName: 'avatar-placeholder-1',
-        Name: "Tester",
-        Description: "I am Tester and I test things like this website or some other stuffs.",
+        name: "Tester",
+        description: "I am Tester and I test things like this website or some other stuffs.",
         date: new Date(),
         victoires: 0,
-        match: true
+        match: true,
+        id: 12
       }
     ]
 

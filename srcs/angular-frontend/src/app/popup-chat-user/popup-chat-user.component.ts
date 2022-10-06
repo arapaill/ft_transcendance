@@ -30,16 +30,16 @@ export class PopupChatUserComponent implements OnInit {
   ngOnInit(): void {
     this.Personne = {
       avatar: this.tmpUserAvatar,
-      avatarName: 'avatar-placeholder-1',
-      Name: this.tmpUserName,
-      Description: "I am Tester and I test things like this website or some other stuffs.",
+      name: this.tmpUserName,
+      description: "I am Tester and I test things like this website or some other stuffs.",
       date: new Date(),
       victoires: 0,
-      match: true
+      match: true,
+      id: 108
     }
-    this.webSocketService.emit("requestUserInfos", this.Personne.Name);
+    this.webSocketService.emit("requestUserInfos", this.Personne.name);
     this.webSocketService.listen("getUserInfos").subscribe((data: any) => {
-      this.Personne.Name = data.name;
+      this.Personne.name = data.name;
       this.userID = data.id;
     });
   }
@@ -56,7 +56,7 @@ export class PopupChatUserComponent implements OnInit {
     if (this.isUserPlaying()) {
       this.webSocketService.emit("spectate", {
         MYUSER: myUser.pseudo,
-        USER: this.Personne.Name,
+        USER: this.Personne.name,
         USERID: this.userID,
       })
     }
@@ -65,7 +65,7 @@ export class PopupChatUserComponent implements OnInit {
       this.webSocketService.emit("invitation", {
         TYPE: "Demande",
         MYUSER: myUser.pseudo,
-        USER: this.Personne.Name,
+        USER: this.Personne.name,
         USERID: this.userID,
       });
 
@@ -81,29 +81,29 @@ export class PopupChatUserComponent implements OnInit {
 
   sendPrivateMessage() {
     this.dialogRef.close({
-      'user': this.Personne.Name,
+      'user': this.Personne.name,
       'action': 'PM'
     });
   }
 
   blockUser() {
-    if (!myUser.blacklist.has(this.Personne.Name)) {
-      myUser.blacklist.set(this.Personne.Name, this.userID);
+    if (!myUser.blacklist.has(this.Personne.name)) {
+      myUser.blacklist.set(this.Personne.name, this.userID);
       this.myUserCpy.blacklist = myUser.blacklist;
     }
     else
-      myUser.blacklist.delete(this.Personne.Name);
+      myUser.blacklist.delete(this.Personne.name);
     this.webSocketService.emit("updateBlacklist", this.userID);
     this.dialogRef.close();
   }
 
   addToFriends() {
-    if (!myUser.friends.has(this.Personne.Name)) {
-      myUser.friends.set(this.Personne.Name, this.userID);
+    if (!myUser.friends.has(this.Personne.name)) {
+      myUser.friends.set(this.Personne.name, this.userID);
       this.myUserCpy.friends = myUser.friends;
     }
     else
-      myUser.friends.delete(this.Personne.Name);
+      myUser.friends.delete(this.Personne.name);
     this.webSocketService.emit("updateFriendlist", this.userID);
     this.dialogRef.close();
   }

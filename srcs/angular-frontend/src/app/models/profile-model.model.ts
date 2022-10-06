@@ -1,9 +1,9 @@
 export class ProfileModel {
 	avatar!: string;
-	avatarName!: string;
-	Name!: string;
-	Description!: string;
+	name!: string;
+	description!: string;
  	date!: Date;
   	victoires!: number;
 	match!: boolean;
+	id !: number;
 }
