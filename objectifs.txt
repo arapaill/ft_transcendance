@@ -13,7 +13,7 @@ User:
 	victoires: number;
 	match: boolean;
 
-status : À faire
+status : FAIT
 
 ------------------------------
 
@@ -26,7 +26,7 @@ Ce que je voudrais récupérer :
 
 matchs : string[];
 
-status : À faire
+status : FAIT
 
 ------------------------------
 
@@ -149,8 +149,7 @@ Réponse: N/A
 
 Ce que j'envoie: L'id (number) de l'user que je veux ajouter à la liste d'ami de l'utilisateur.
 
-status : À faire
-
+status : FAIT
 ------------------------------
 
 Objectif 10: Savoir si le user est en cours de partie ou non
@@ -161,7 +160,7 @@ Réponse: socket.on("getIsUserPlaying");
 Ce que j'envoie: L'id (number) de l'user.
 Ce que je voudrais recevoir: true or false;
 
-status : À faire
+status : FAIT
 
 ------------------------------
 
@@ -179,9 +178,9 @@ status : À faire
 Objectif 12: Check si un pseudo existe deja.
 
 Demande : socket.emit("requestCheckUserName", value.Nom);
-Réponse : ocket.on("getCheckUserName");
+Réponse : Socket.on("getCheckUserName");
 
-status : À faire
+status : FAIT
 
 -----------------------------
 
