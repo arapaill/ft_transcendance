@@ -35,6 +35,9 @@ model User {
   toUse         String?
   toUses        String[]
 
+  friendsList   Int[]
+  blockList     Int[]
+
   @@map("users")
 }
 
@@ -70,8 +73,8 @@ model chatChannel {
   id       Int           @id @default(autoincrement())
   name     String
   owner    String
-  admins   Int[]
-  users    Int[]
+  admins   String[]
+  users    String[]
   type     String
   password String?
   messages chatMessage[]

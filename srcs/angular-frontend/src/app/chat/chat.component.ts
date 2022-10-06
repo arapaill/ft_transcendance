@@ -8,7 +8,7 @@ import { PopupChatUserComponent } from '../popup-chat-user/popup-chat-user.compo
 import { PopupChatPasswordComponent } from '../popup-chat-password/popup-chat-password.component';
 
 import { ChatChannel, ChatMessage } from '../models/chat.model';
-import { myUser, User } from '../models/user.model';
+import { myUser } from '../models/user.model';
 
 
 @Component({
@@ -23,14 +23,22 @@ export class ChatComponent implements OnInit {
     admins: [],
     users: [],
     type: 'Public',
-    messages: []
+    messages: [{
+      userPseudo: 'Alexandre',
+      userAvatar: 'assets/avatar-placeholder-1.png',
+      text: 'Ceci est un unique message de test.',
+      date: new Date(),
+      channelName: 'Général',
+    }]
   }];
-  currentChannel!: ChatChannel;
+  currentChannel: ChatChannel = this.channels[0];
   selectedChannel!: string;
 
   constructor(private webSocketService: WebSocketService, private dialogRef: MatDialog, public myUser: myUser ) {
     this.webSocketService.emit("requestChannels", this.myUser.pseudo);
     this.webSocketService.listen("getChannels").subscribe((data: any) => {
+      if (data.length == 0)
+        return ;
       if (this.channels.length != 1)
         this.channels = [];
       for (const channel of data) {
@@ -50,7 +58,7 @@ export class ChatComponent implements OnInit {
     })
 
     this.webSocketService.listen('getChannelMessages').subscribe((data: any) => {
-      if (data.length == this.currentChannel.messages.length) {
+      if (data.length == this.currentChannel.messages.length || data == undefined) {
         return ;
       }
       this.currentChannel.messages = [];
