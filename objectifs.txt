@@ -6,8 +6,8 @@ Réponse : socket.on(getUserInfos");
 Demande: socket.emit("requestUserMatchsHistory", userName: string);
 Réponse : socket.on(getUserMatchsHistory");
 
-Demande: socket.emit("requestIsUserPlaying", userID);
-Réponse: socket.on("getIsUserPlaying");
+Demande: socket.emit("updateFriendlist", newFriendID);
+Réponse: N/A
 
 Demande: socket.emit("requestIsUserPlaying", userID);
 Réponse: socket.on("getIsUserPlaying");
