@@ -1,3 +1,20 @@
+
+Socket disponible :
+Demande : socket.emit("requestUserInfos", userName: string);
+Réponse : socket.on(getUserInfos");
+
+Demande: socket.emit("requestUserMatchsHistory", userName: string);
+Réponse : socket.on(getUserMatchsHistory");
+
+Demande: socket.emit("requestIsUserPlaying", userID);
+Réponse: socket.on("getIsUserPlaying");
+
+Demande: socket.emit("requestIsUserPlaying", userID);
+Réponse: socket.on("getIsUserPlaying");
+
+Demande : socket.emit("requestCheckUserName", value.Nom);
+Réponse : Socket.on("getCheckUserName");
+
 Objectif 1: Faire une demande d'info sur un user.
 
 Demande : socket.emit("requestUserInfos", userName: string);
