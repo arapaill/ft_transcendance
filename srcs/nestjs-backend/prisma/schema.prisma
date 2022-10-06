@@ -55,6 +55,5 @@ model gameHistory {
   VAINQUEUR       String?
   SCORE_JOUEUR_1  String?
   SCORE_JOUEUR_2  String?
-
 }
 
