@@ -21,24 +21,25 @@ import { Buffer } from 'buffer';
 import { Public } from './decorators/public.decorator';
 import { LocalAuthGuard } from './guards/local.auth.guard';
 import { AuthenticatedGuard } from './guards/authenticated.guard';
-import { WebSocketServer } from '@nestjs/websockets';
-import { ConnectableObservable, Subscriber } from 'rxjs';
-
+import { WebSocketServer,  	WebSocketGateway,} from '@nestjs/websockets';
+import { ConnectableObservable } from 'rxjs';
 // let global  = "sejjed";
 
-const fs = require('fs');
-// var imagejk = new Image();
+
+var export_name = null;
 @Controller('auth2')
 export class AuthController {
+
 	@WebSocketServer() server: Server;
+
 	// constructor() {}
 	constructor(
 	private readonly prismaService: PrismaService,
 	private authService: AuthService,
 	private readonly UserService: UserService,
 		) {}
-	
-	
+
+
 	// @UseGuards(AuthenticatedGuard)
 
 	@Get('createFakeUsers')
@@ -55,7 +56,8 @@ export class AuthController {
 
 
 	@Get('testit')
-	async hhh(@Req() req,        @Body() {id, name,
+	async hhh(@Req() req,        @Body() {
+		id, name,
 	    Full_Name, two_factor, avatar, line_status,
 	    wins, losses, ladder_level, achievements, 
 	    
@@ -64,7 +66,23 @@ export class AuthController {
 		Description,MatchsHistory,match ,
 		toUse,toUses, }: UserDto,){
 		
-		await this.prismaService.user.create({
+			two_factor == null;
+			line_status == null;
+			wins == null;
+			losses == null; 
+			ladder_level == null; 
+			achievements == null; 	
+			secret == null;
+			email == null;
+			qrCode == null;
+			friends == null;
+			demFriends == null;
+			match == null;
+			toUse == null ;
+			toUses== null;
+			
+			
+		let a1 = await this.prismaService.user.create({
 			data : { 
 				id: 1,
 				name: "test1",
@@ -80,7 +98,7 @@ export class AuthController {
 		avatar = "https://cdn.intra.42.fr/users/arapaill.png";
 		Description = "tester ici la description du test 2";
 		let hgh = "0 - 0";
-		await this.prismaService.user.create({
+		let a2 = await this.prismaService.user.create({
 			data : { 
 				id,
 				name,
@@ -96,7 +114,7 @@ export class AuthController {
 		name = "test3";
 		avatar = "https://cdn.intra.42.fr/users/cgoncalv.png";
 		Description = "tester ici la description du test 3";	
-		await this.prismaService.user.create({
+		let a3 = await this.prismaService.user.create({
 			data : { 
 				id,
 				name,
@@ -105,6 +123,7 @@ export class AuthController {
 				MatchsHistory: [ "1 - 9","6 - 6","8 - 0"],
 			}
 		});
+		return {a1,a2,a3};
 
 	}
 	
@@ -130,6 +149,12 @@ export class AuthController {
 	    @Res() response: Response,
 	)   {
 	// console.log(req);
+	let hh = req.session.passport;
+	if(!hh)
+	{
+		response.redirect("http://localhost:9876/login",302);
+	}
+
 	if(req.url.startsWith("/auth2/code/?code="))  {
 	
 		if(1)
@@ -157,7 +182,8 @@ export class AuthController {
 				qrCode = null;
 				
 				
-				//this.server.emit("getLogin", req.user.username , id );
+				// this.server.emit("getLogin", "req.user.username" , "id ");
+				export_name=name;
 				response.redirect("http://localhost:4200/",302);
 				await this.prismaService.user.create({
 				    data : { id, name,
@@ -183,7 +209,8 @@ export class AuthController {
 				id = y ;
 				name = req.user.username ;
 				// console.log( "88888" , id , "---" , name, "8888")
-				// this.server.emit("getLogin", req.user.username , id );
+				// this.server.emit("getLogin", "req.user.username" , "id ");
+				export_name = name ;
 				response.redirect("http://localhost:4200/",302);
 				// response.send("Happy to see you again login , welcome to your favorite game" );
 				}
@@ -281,46 +308,44 @@ export class AuthController {
 		// console.log(req)
 		
 		//********************************* */
-		// let hh = req.session.passport;
-		// if(!hh)
-		// {
-		// 	response.send("YES FIX ITTTT");
-		// }else if(hh )
-		// {
-		// 	response.send("NOOOOOOO");
-		// }
-		//************************************* */
-		
-		// if(req.user.username)
-		// {
-		// 	// if(req.socket._sockname)
-		// 	// {
+		let hh = req.session.passport;
+		if(!hh)
+		{
+			response.redirect("http://localhost:9876/auth2/login",302);
+		}
+		else
+		{
+		let gg = (await this.UserService.find2FA( req.user.username));
+		if(gg == 1)
+		{
+				let phrase = '<form><div><label for="example">Veuillez saisir du texte</label><input id="example" type="text" name="text"></div><div><input type="submit" value="Envoyer"accesskey="s"></div></form>';
+				let name = req.user.username;
+				
+				let id = (await this.UserService.findid(name)) ;
+				let secret = (await this.UserService.findSecret(name) ) ;
 			
-		// 		let phrase = '<form><div><label for="example">Veuillez saisir du texte</label><input id="example" type="text" name="text"></div><div><input type="submit" value="Envoyer"accesskey="s"></div></form>';
-		// 		let name = req.user.username;
-		// 		let id = (await this.UserService.findid(name)) ;
-		// 		let secret = (await this.UserService.findSecret(name) ) ;
-			
-		// 		if(req.url.split("verify?text=")[1]){
-		// 			let f = (await this.authService.verifyCode(id,req.url.split("verify?text=")[1],secret));
-		// 			if ((await f) == 1){
-		// 				// return req.session.fff ==  0 ;
-		// 				// req.session.cookie.httpOnly = false ;
-		// 				// console.log(">>>>", req.session.cookie);
-		// 				this.server.emit("getLogin", req.user.username , req.user.username );
-		// 				response.redirect("http://localhost:4200/",302);
-		// 			// response.send(1phrase);
-		// 			}
-		// 			if ((await f) == 0){
-		// 			phrase += " \n \n False code try again"; 
-		// 			response.send(phrase);			
-		// 			}
-		// 		}
-		// 		else{
-		// 		response.send(phrase);
-		// 		} 
-		// 	// }		
-		// }
+				if(req.url.split("verify?text=")[1]){
+					let f = (await this.authService.verifyCode(id,req.url.split("verify?text=")[1],secret));
+					if ((await f) == 1){
+						// return req.session.fff ==  0 ;
+						// req.session.cookie.httpOnly = false ;
+						// console.log(">>>>", req.session.cookie);
+						// this.server.emit("getLogin", "req.user.username" , "id " );
+						export_name = name;
+						response.redirect("http://localhost:4200/",302);
+					// response.send(1phrase);
+					}
+					if ((await f) == 0){
+					phrase += " \n \n False code try again"; 
+					response.send(phrase);			
+					}
+				}
+				else{
+				response.send(phrase);
+				}
+		}		
+		}
+
 
                                           
 		
@@ -383,3 +408,4 @@ export class AuthController {
 
 }
 
+export const user_export = export_name;
