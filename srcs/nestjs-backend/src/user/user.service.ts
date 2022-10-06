@@ -5,7 +5,7 @@ import { Response } from 'express';
 import { authenticator } from 'otplib';
 import { Any } from 'typeorm';
 import { User } from '@prisma/client'
-import { PrismaService } from 'nestjs-prisma';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class UserService {
