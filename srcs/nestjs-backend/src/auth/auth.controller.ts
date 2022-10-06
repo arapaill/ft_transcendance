@@ -41,9 +41,8 @@ export class AuthController {
 
 
 	@Get('111')
-	controllerCreateFakeUsef(@Request() req,@Res() response: Response,) {
-		console.log(req.user);
-		response.send(req.user);
+	async controllerCreateFakeUsef() {
+		return await this.UserService.requestTopFiveUsers();
 	}
 
 	@Get('recupFakeUser')
@@ -66,7 +65,7 @@ export class AuthController {
 		
 			two_factor == null;
 			line_status == null;
-			wins == null;
+			wins == 5;
 			losses == null; 
 			ladder_level == null; 
 			achievements == null; 	
@@ -87,6 +86,7 @@ export class AuthController {
 				avatar: "https://cdn.intra.42.fr/users/jandre.png",
 				Description: "tester ici la description du test 1",
 				MatchsHistory: [ "2 - 0","6 - 9","5 - 1"],
+				wins: 5,
 			}
 		});
 		
@@ -103,6 +103,7 @@ export class AuthController {
 				avatar,
 				Description,
 				MatchsHistory: ["6 - 5","4 - 6","11 - 7"],
+				wins: 1,
 			}
 		});
 		
@@ -119,9 +120,74 @@ export class AuthController {
 				avatar,
 				Description,
 				MatchsHistory: [ "1 - 9","6 - 6","8 - 0"],
+				wins: 0,
 			}
 		});
-		return {a1,a2,a3};
+		
+		id = 4 ;
+		name = "test4";
+		avatar = "https://cdn.intra.42.fr/users/cgoncalv.png";
+		Description = "tester ici la description du test 3";	
+		let a4 = await this.prismaService.user.create({
+			data : { 
+				id,
+				name,
+				avatar,
+				Description,
+				MatchsHistory: [ "1 - 9","6 - 6","8 - 0"],
+				wins: 5785,
+			}
+		});
+		
+		id = 5 ;
+		name = "test5";
+		avatar = "https://cdn.intra.42.fr/users/cgoncalv.png";
+		Description = "tester ici la description du test 3";	
+		let a5 = await this.prismaService.user.create({
+			data : { 
+				id,
+				name,
+				avatar,
+				Description,
+				MatchsHistory: [ "1 - 9","6 - 6","8 - 0"],
+				wins: 0,
+			}
+		});
+		
+		
+		id = 6 ;
+		name = "test6";
+		avatar = "https://cdn.intra.42.fr/users/cgoncalv.png";
+		Description = "tester ici la description du test 3";	
+		let a6 = await this.prismaService.user.create({
+			data : { 
+				id,
+				name,
+				avatar,
+				Description,
+				MatchsHistory: [ "1 - 9","6 - 6","8 - 0"],
+				wins: 105,
+			}
+		});
+		
+		id = 7 ;
+		name = "test7";
+		avatar = "https://cdn.intra.42.fr/users/cgoncalv.png";
+		Description = "tester ici la description du test 3";	
+		let a7 = await this.prismaService.user.create({
+			data : { 
+				id,
+				name,
+				avatar,
+				Description,
+				MatchsHistory: [ "1 - 9","6 - 6","8 - 0"],
+				wins: 105,
+			}
+		});
+		
+		
+		
+		return {a1,a2,a3,a4,a5,a6,a7};
 
 	}
 	

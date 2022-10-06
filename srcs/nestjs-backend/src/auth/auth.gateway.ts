@@ -39,13 +39,18 @@ import {
 		this.server.emit("getUserInfosID", user);
 	}
 
-
 	@SubscribeMessage('requestUserMatchsHistory')
 	async handlerequestUserMatchsHistory(client, userName: string): Promise<void> {
 		let matchs = await this.userService.requestUserMatchsHistory( userName)
 		this.server.emit("getUserMatchsHistory", matchs );
+	}	
+
+	@SubscribeMessage('requestTopFiveUsers')
+	async hanldeRequestTopFiveUsers(client){
+		let top5 = await  this.userService.requestTopFiveUsers();
+		this.server.emit("getCheckUserName", top5);
 	}
-	
+
 	@SubscribeMessage('updateFriendlist')
 	async handleupdateFriendlist(client, userName: string, newFriendID: number ): Promise<void> {
 		let update = await this.userService.updateFriendlist( userName, newFriendID)
@@ -55,20 +60,22 @@ import {
 	
 	@SubscribeMessage('requestIsUserPlaying')
 	async handlerequestIsUserPlaying(client, userName: string): Promise<void> {
-		let playing = this.userService.requestIsUserPlaying( userName) ;
+		let playing =  await this.userService.requestIsUserPlaying( userName) ;
 		this.server.emit("getIsUserPlaying", playing);
 	}
 	
 	@SubscribeMessage('requestCheckUserName')
 	async handlerequestCheckUserName(client, userName: string): Promise<void> {
-		let ret = this.userService.requestCheckUserName(userName);
+		let ret = await  this.userService.requestCheckUserName(userName);
 		this.server.emit("getCheckUserName", ret);
 	}
 
 	@SubscribeMessage('updateUser')
 	async handleUpdateUser(client, userName: string): Promise<void> {
-		this.userService.updateUser(userName);
+		let updateUser = await this.userService.updateUser(userName);
 	}
+	
+
 	
 	handleConnection(client: Socket, ...args: any[]) {
 	  // console.log(`Connected ${client.id}`);
