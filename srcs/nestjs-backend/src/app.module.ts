@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ChatGateway } from './chat/chat.gateway';
 //import { AppGateway } from './app.gateway';
 import { PongModule } from './pong/pong.module';
 import { AuthModule } from './auth/auth.module';
@@ -12,36 +11,36 @@ import { FortyTwoStrategy } from './auth/strategy/42.strategy';
 import { UserService } from './user/user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Chat } from './chat/chat.entity';
-import { ChatModule } from './chat/chat.module';
 import { AuthGateway } from './auth/auth.gateway';
+import { ChatGateway } from './chat/chat.gateway';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
 	imports: [
-	  //ChatModule, 
-	  PongModule,
-	  TypeOrmModule.forRoot({
-		  type: 'postgres',
-		  host: 'postgres',
-		  username: 'jandre',
-		  password: 'jandrepass',
-		  database: 'transcendance',
-		  entities: [Chat],
-		  synchronize: false,
-	  }),
-	  TypeOrmModule.forFeature([Chat]),
-	  AuthModule,
-	   UserModule,
-	   PrismaModule
+		PongModule,
+		TypeOrmModule.forRoot({
+			type: 'postgres',
+			host: 'postgres',
+			username: 'jandre',
+			password: 'jandrepass',
+			database: 'transcendance',
+			entities: [Chat],
+			synchronize: false,
+		}),
+		TypeOrmModule.forFeature([Chat]),
+		AuthModule,
+		UserModule,
+		PrismaModule,
+		ChatModule
 	  ],
 	controllers: [
 	  AppController
 	  ],
 	providers: [
-	  AppService,
-	  AuthGateway,
-		// AppGateway,
-		//ChatGateway,
-		FortyTwoStrategy
+	  	AppService,
+	  	AuthGateway,
+		ChatGateway,
+		FortyTwoStrategy,
 	  ],
   })
   export class AppModule {}

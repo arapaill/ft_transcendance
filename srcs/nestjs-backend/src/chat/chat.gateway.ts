@@ -5,12 +5,16 @@ import {
   WebSocketServer,
   OnGatewayConnection,
   OnGatewayDisconnect,
+  MessageBody,
 } from '@nestjs/websockets';
 import { Console } from 'console';
 import { Socket, Server } from 'socket.io';
 import { AppService } from '../app.service';
 import { Chat } from './chat.entity';
-var usernames = {};
+import { ChatService } from './chat.service';
+
+
+/* var usernames = {};
 var rooms = [
   { name: "global", creator: "Anonymous", mdp: "test" },
 ];
@@ -19,20 +23,65 @@ var bannedusers = [
 ];
 var BannedbyUser = [
   {User: "global", Banned_User: "Anonymous"},
-];
+]; */
+
 @WebSocketGateway({
-  cors: {
-    origin: '*',
-  },
+	cors: {
+	  origin: 'http://localhost:4200',
+	  credential: true,
+	  namespace: 'chat',
+	}
 })
-export class ChatGateway
-  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
-{
-  constructor(private appService: AppService) {}
+export class ChatGateway {
+  constructor(private appService: AppService, private chatService: ChatService) {}
 
   @WebSocketServer() server: Server;
 
-  @SubscribeMessage('sendMessage')
+
+  @SubscribeMessage('createNewChannel')
+  async handleCreateNewChannel(@MessageBody() data: unknown) {
+    await this.chatService.createNewChannel(data);
+  }
+
+  @SubscribeMessage('requestChannels')
+  async handleRequestChannels(@MessageBody() data: string) {
+    let channels = await this.chatService.requestChannels(data);
+    this.server.emit('getChannels', channels);
+  }
+
+  @SubscribeMessage('requestChannelMessages')
+  async handleRequestChannelMessages(@MessageBody() data: string) {
+    let messages = await this.chatService.requestChannelMessages(data);
+    console.log(messages);
+    this.server.emit('getChannelMessages', messages);
+  }
+
+  @SubscribeMessage('deleteChannel')
+  async handleRequestDeleteChannel(@MessageBody() data: string) {
+    let messages = await this.chatService.deleteChannel(data);
+  }
+
+  @SubscribeMessage('sendNewMessage')
+  async handleSendNewMessage(@MessageBody() data: unknown) {
+    let channels = await this.chatService.sendNewMessage(data);
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // ----------------------------------------------
+
+/*   @SubscribeMessage('sendMessage')
   async handleSendMessage(client, payload: Chat): Promise<void> {
     await this.appService.createMessage(payload);
     console.log(client.id);
@@ -142,5 +191,5 @@ export class ChatGateway
   handleConnection(client: Socket, ...args: any[]) {
     // console.log(`Connected ${client.id}`);
     //Do stuffs
-  }
+  } */
 }
