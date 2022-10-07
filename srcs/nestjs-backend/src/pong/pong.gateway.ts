@@ -145,6 +145,9 @@ export class PongGateway {
           this.games.get(socket_id).gameState = GameState.MENU;
           this.games.get(socket_id).update(payload[0]);
         }
+        let currentgames = await this.prisma.ongoingGame.findMany();
+        console.log("BSJAIFSDIFOSDFIOSEIFOIFOEIFOSEIFOSEIFOSEIFOSEIFOISEOFOSE___________ASD_AS_D_____AS_D_ASD__AS_D_AS_D___AS_D_")
+        console.log(currentgames);
         let numberOfMatches: number = 0;
         let MatchList : any = { GAMESTATE : GameState.MENUSPEC, COLOR: this.games.get(socket_id).color, STATE: this.games.get(socket_id).specMenuState};
         let tmp : number = 0;
@@ -237,6 +240,16 @@ export class PongGateway {
             VAINQUEUR: this.games.get(socket_id).winner,
           }
         })
+
+        await this.prisma.user.update({
+          where: {
+            name: this.games.get(socket_id).winner,
+          },
+          data: {
+            wins: {increment: 1},
+          }
+        });
+
         client.emit('update', this.games.get(socket_id).returnData());
       }
       else {
