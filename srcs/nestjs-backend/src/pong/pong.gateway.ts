@@ -129,6 +129,22 @@ export class PongGateway {
                 JOUEUR_2_PSEUDO : user_id,
               }
             });
+            await this.prisma.user.update({
+              where: {
+                  name: this.games.get(key).playerOneName,
+                },
+              data: {
+                match: true,
+              }
+            })
+            await this.prisma.user.update({
+              where: {
+                  name: this.games.get(key).user_id,
+                },
+              data: {
+                match: true,
+              }
+            })
           }
           if (this.games.get(socket_id).gameState == GameState.SEARCHING) {
             this.games.get(socket_id).gameState = GameState.WAITING;
@@ -218,16 +234,32 @@ export class PongGateway {
           where: {
             JOUEUR_1_SOCKET: socket_id,
           }
-        })
+        });
         await this.prisma.ongoingGame.deleteMany({
           where: {
             JOUEUR_2_SOCKET: socket_id,
           }
-        })
+        });
+        await this.prisma.user.update({
+          where: {
+              name : this.games.get(socket_id).playerOneName,
+            },
+            data : {
+              match: false,
+            },
+          });
+        await this.prisma.user.update({
+          where: {
+              name : this.games.get(socket_id).playerTwoName,
+            },
+            data : {
+              match: false,
+            },
+          });
         await this.prisma.gameHistory.create({
           data: {
             JOUEUR_1: this.games.get(socket_id).playerOneName,
-            JOUEUR_2: this.games.get(socket_id).playerTswoName,
+            JOUEUR_2: this.games.get(socket_id).playerTwoName,
             VAINQUEUR: this.games.get(socket_id).winner,
           }
         })
