@@ -6,6 +6,25 @@ networks:
   frontend:
 
 services:
+  postgres:
+    build:
+      dockerfile: ./Dockerfile
+      context: ./srcs/database
+    image: postgres_image
+    container_name: postgres_container
+    restart: always
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - backend
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      DATABASE_URL: ${DATABASE_URL}
+    ports:
+      - '5432:5432'
+
   backend:
     build:
       dockerfile: ./Dockerfile
@@ -41,24 +60,6 @@ services:
       - frontend
     ports:
       - 4200:4200
-
-  postgres:
-    build:
-      dockerfile: ./Dockerfile
-      context: ./srcs/database
-    image: postgres_image
-    container_name: postgres_container
-    restart: always
-    volumes:
-      - db-data:/var/lib/postgresql/data
-    networks:
-      - backend
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    ports:
-      - '5432:5432'
 
 volumes:
   pg-admin:
