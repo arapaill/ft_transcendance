@@ -326,7 +326,6 @@ export class Game {
                 break ;
             }
             case MenuState.OPTION: {
-                console.log("OPTION");
                 this.gameState = GameState.OPTION;
                 break ;
             }
