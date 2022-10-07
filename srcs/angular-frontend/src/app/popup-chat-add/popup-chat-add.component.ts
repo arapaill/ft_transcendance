@@ -20,7 +20,7 @@ export class PopupChatAddComponent implements OnInit {
       this.myUser.avatar = data.avatar;
       this.myUser.pseudo = data.name;
       this.myUser.description = data.Description;
-      this.myUser.blacklist = data.blacklist;
+      this.myUser.blacklist = new Map();
       this.myUser.id = data.id;
     });
     this.myUser.friends.forEach((key, value) => {

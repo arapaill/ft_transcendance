@@ -42,7 +42,7 @@ export class PopupChatSettingsComponent implements OnInit {
       this.myUser.avatar = data.avatar;
       this.myUser.pseudo = data.name;
       this.myUser.description = data.Description;
-      this.myUser.blacklist = data.blacklist;
+      this.myUser.blacklist = new Map();
       this.myUser.id = data.id;
     });
     if (this.currentSettings.owner === this.myUser.pseudo)
