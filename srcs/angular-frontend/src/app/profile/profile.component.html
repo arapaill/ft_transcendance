@@ -6,5 +6,6 @@
 	<button mat-raised-button color="accent"  (click)="displayFriends()"> See friends </button>
 	</div>
 	<button class="button"  mat-raised-button color="accent"  (click)="openDialog()">  Modifer le profil</button>
-	<button class="button"  mat-raised-button color="accent" (click)="secureConect()"> Acctiver connexion 2FA </button>
+	<button class="button"  mat-raised-button color="accent" (click)="secureConect()"> Activer connexion 2FA </button>
+	<button *ngIF= "myUser.qr" class="button"  mat-raised-button color="accent" (click)="showQR()"> voir le code QR </button>
 </div>

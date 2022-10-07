@@ -15,11 +15,13 @@ export class ClassementComponent implements OnInit {
   constructor(private  dialogRef : MatDialog ,private webSocketService:WebSocketService){}
 
   ngOnInit(): void {
+    this.profils = [];
     this.webSocketService.emit("requestTopFiveUsers", undefined);
      this.webSocketService.listen("getTopFive").subscribe((top : any) => {
       console.log(top);
       for (const i of top) {
-        let profil : ProfileModel = 
+       
+          let profil : ProfileModel = 
           { 
             avatar: i.avatar,
             name: i.name,
@@ -30,6 +32,8 @@ export class ClassementComponent implements OnInit {
             id: i.id,
           }
           this.profils.push(profil);
+      
+        
       }
     });
     

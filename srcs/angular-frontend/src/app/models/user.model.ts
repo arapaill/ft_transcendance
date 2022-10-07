@@ -15,4 +15,5 @@ export class myUser  {
 	description : string ="";
 	friends : number[] = [];
 	blacklist : number[] = [];
+	qr : string = "";
 }

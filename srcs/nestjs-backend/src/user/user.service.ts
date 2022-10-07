@@ -7,6 +7,7 @@ import { Any } from 'typeorm';
 import { User } from '@prisma/client'
 import { PrismaService } from '../prisma/prisma.service';
 import { userInfo } from 'os';
+import { UserModule } from './user.module';
 
 @Injectable()
 export class UserService {
@@ -75,15 +76,19 @@ export class UserService {
 /*  Objectif 2: faire une demande de match history sous forme de tableau de string*/
 
   
-async requestUserMatchsHistory( nameg: string) {
-    let u =  this.prisma.user.findFirst({
+async requestUserMatchsHistory(userName: string) {
+    let matchsHistory = await this.prisma.gameHistory.findMany({
 		where: {
-			name: nameg,
+			 OR: [{
+			 	JOUEUR_1: userName[0],
+			 },
+			 {
+			 	JOUEUR_2: userName[0],
+			 },]
 		  },
     });
-    let MatchsHistory  = (await u).MatchsHistory;
 
-    return MatchsHistory;
+    return  matchsHistory;
  }
 
 /*
@@ -221,16 +226,17 @@ async requestUserWins(userID: number) {
 
 	let userName = await this.prisma.user.findFirst({
 		where: {
-			id: userID,
+			id: userID[0],
 		}
 	});
 
 	let wins = await this.prisma.gameHistory.findMany({
 		where: {
-			VAINQUEUR: userName[0],
+			VAINQUEUR: userName.name,
 		}
 	});
 
+	console.log("User " + userName.name + " has " + wins.length + " wins.");
 	return wins.length;
 }
 
