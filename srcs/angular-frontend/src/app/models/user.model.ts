@@ -4,8 +4,8 @@ export class User {
 	pseudo!: string;
 	avatar!: string;
 	description !: string;
-	friends!: string[];
-	blacklist!: string[];
+	friends!: number[];
+	blacklist!: number[];
 }
 @Injectable()
 export class myUser  {
@@ -13,6 +13,6 @@ export class myUser  {
 	pseudo : string = "";
 	avatar : string ="";
 	description : string ="";
-	friends : string[] = [];
-	blacklist : string[] = [];
+	friends : number[] = [];
+	blacklist : number[] = [];
 }
