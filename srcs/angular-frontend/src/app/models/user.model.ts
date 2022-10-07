@@ -4,8 +4,8 @@ export class User {
 	pseudo!: string;
 	avatar!: string;
 	description !: string;
-	friends!: Map<string, number>;
-	blacklist!: Map<string, number>;
+	friends!: string[];
+	blacklist!: string[];
 }
 @Injectable()
 export class myUser  {
@@ -13,6 +13,6 @@ export class myUser  {
 	pseudo : string = "";
 	avatar : string ="";
 	description : string ="";
-	friends : Map<string, number> = new Map();
-	blacklist : Map<string, number> =new Map();
+	friends : string[] = [];
+	blacklist : string[] = [];
 }
