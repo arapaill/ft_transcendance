@@ -25,42 +25,33 @@ export class InfoProfilComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.webSocketService.emit("requestUserInfosID", Number(localStorage.getItem('id')));
-    this.webSocketService.listen("getUserInfosID").subscribe((data: any) => {
+    this.webSocketService.emit("requestUserInfos", this.nameProfil);
+    this.webSocketService.listen("getUserInfos").subscribe((data: any) => {
       this.myUser.avatar = data.avatar;
       this.myUser.pseudo = data.name;
       this.myUser.description = data.Description;
       this.myUser.blacklist = data.blacklist;
       this.myUser.id = data.id;
-    });
-    this.Personne = 
+
+      this.Personne = 
       {
-        avatar: 'assets/avatar-placeholder-1.png',
-        name: this.nameProfil,
-        description: "I am Tester and I test things like this website or some other stuffs.",
+        avatar: this.myUser.avatar,
+        name:  this.myUser.pseudo,
+        description: this.myUser.description,
         date: new Date(),
         victoires: 0,
         match: false,
-        id: 13
+        id :this.myUser.id
       }
-    this.webSocketService.emit("requestUserInfos", this.Personne.name);
-    this.webSocketService.listen("getUserInfos").subscribe((data: any) => {
-      console.log(data);
-      this.Personne.name = data.name;
-      this.userID = data.id;
-      
     });
+ 
     
     this.webSocketService.emit("requestUserMatchHistory", this.Personne.name);
     this.webSocketService.listen("getMatchHistory").subscribe((userMatchs : any) => {
       console.log(userMatchs);
-      //this.matchs = userMatchs,
+      this.matchs = userMatchs;
     });
     
-    this.matchs = [
-      "arapaill vs Cgoncalv 1.0",
-      "arapaill vs pet 8.9",
-    ]
 
   
   } //end of ngoninit

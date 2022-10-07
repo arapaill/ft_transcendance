@@ -20,12 +20,12 @@ export class ClassementComponent implements OnInit {
       console.log(top);
       for (const i of top) {
         let profil : ProfileModel = 
-          {
+          { 
             avatar: i.avatar,
-            name: i.Name,
+            name: i.name,
             description: i.Description,
             date: i.date,
-            victoires : i.victory,
+            victoires : i.wins,
             match : i.match,
             id: i.id,
           }
