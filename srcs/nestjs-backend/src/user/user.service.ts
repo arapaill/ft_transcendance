@@ -228,7 +228,9 @@ async updateUser(userInfos: any) {
 		  data: {
 			name: userInfos[0].pseudo,
 			avatar: userInfos[0].avatar,
-			Description: userInfos[0].description
+			Description: userInfos[0].description,
+			friendsList: userInfos[0].friends,
+			blockList: userInfos[0].blackList,
 		  }
     });
 

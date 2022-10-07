@@ -28,27 +28,27 @@ import {
 	@WebSocketServer() server: Server;
   
 	@SubscribeMessage('requestUserInfos')
-	async handlerequestUserInfos(client, @MessageBody() userName: string): Promise<void> {
+	async handlerequestUserInfos(client, userName: string): Promise<void> {
 		let user = await this.userService.requestUserInfos(userName);
-		this.server.emit("getUserInfos", user);
+		this.server.to(client.id).emit("getUserInfos", user);
 	}
 
 	@SubscribeMessage('requestUserInfosID')
-	async handlerequestUserInfosID(client, @MessageBody() id: number): Promise<void> {
+	async handlerequestUserInfosID(client, id: number): Promise<void> {
 		let user = await this.userService.requestUserInfosID(id);
-		this.server.emit("getUserInfosID", user);
+		this.server.to(client.id).emit("getUserInfosID", user);
 	}
 
 	@SubscribeMessage('requestUserMatchsHistory')
 	async handlerequestUserMatchsHistory(client, userName: string): Promise<void> {
 		let matchs = await this.userService.requestUserMatchsHistory( userName)
-		this.server.emit("getUserMatchsHistory", matchs );
+		this.server.to(client.id).emit("getUserMatchsHistory", matchs );
 	}	
 
 	@SubscribeMessage('requestTopFiveUsers')
 	async hanldeRequestTopFiveUsers(client){
 		let top5 = await  this.userService.requestTopFiveUsers();
-		this.server.emit("getTopFive", top5);
+		this.server.to(client.id).emit("getTopFive", top5);
 	}
 
 	@SubscribeMessage('updateFriendlist')
@@ -73,7 +73,7 @@ import {
 	@SubscribeMessage('requestCheckUserName')
 	async handlerequestCheckUserName(client, userName: string): Promise<void> {
 		let ret = await  this.userService.requestCheckUserName(userName);
-		this.server.emit("getCheckUserName", ret);
+		this.server.to(client.id).emit("getCheckUserName", ret);
 	}
 
 	@SubscribeMessage('updateUser')

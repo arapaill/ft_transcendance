@@ -63,6 +63,7 @@ export class ChatGateway {
   @SubscribeMessage('sendNewMessage')
   async handleSendNewMessage(@MessageBody() data: unknown) {
     let channels = await this.chatService.sendNewMessage(data);
+    this.handleRequestChannelMessages(data[0].channelName);
   }
 
 
