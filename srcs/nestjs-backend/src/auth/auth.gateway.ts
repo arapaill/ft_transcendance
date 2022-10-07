@@ -51,6 +51,12 @@ import {
 		let update = await this.userService.updateFriendlist(user);
 		// this.server.emit("getUserInfos", matchs );
 	}
+
+	@SubscribeMessage('inviteUserToPlay')
+	async handleInviteUserToPlay(client, data: any ): Promise<void> {
+		this.server.emit("getInviteToPlay", data);
+	}
+
 	
 	
 /* 	@SubscribeMessage('requestIsUserPlaying')
