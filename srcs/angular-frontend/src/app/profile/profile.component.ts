@@ -32,8 +32,8 @@ export class ProfileComponent implements OnInit {
     displayFriends(){
       this.dialogRef.open(PopupDisplayFriendsComponent);
     }
+    
   secureConect(){
-    this.webSocketService.emit("request2FA", this.myUser.pseudo);
-    }
-
+    this.webSocketService.emit("request2FA", Number(localStorage.getItem('id')));
+  }
 }

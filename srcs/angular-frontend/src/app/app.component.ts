@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
       this.loc = (this.loc.split("id="))[1];
       this.userID = Number(this.loc);
       localStorage.setItem('id', this.loc);
-      console.log(this.userID);
+      
   
       this.webSocketService.emit("requestUserInfosID", this.userID);
       this.webSocketService.listen("getUserInfosID").subscribe((data: any) => {
@@ -37,6 +37,7 @@ export class AppComponent implements OnInit {
         this.myUser.pseudo = data.name;
     });
    }
+   console.log(this.userID);
 
     this.webSocketService.listen("getInviteToPlay").subscribe((data: any) => {
       if (data.userToInvite == this.myUser.pseudo) {

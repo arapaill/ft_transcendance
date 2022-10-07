@@ -48,7 +48,7 @@ import {
 	@SubscribeMessage('requestTopFiveUsers')
 	async hanldeRequestTopFiveUsers(client){
 		let top5 = await  this.userService.requestTopFiveUsers();
-		this.server.emit("getCheckUserName", top5);
+		this.server.emit("getTopFive", top5);
 	}
 
 	@SubscribeMessage('updateFriendlist')
