@@ -82,7 +82,6 @@ export class PongGateway {
       else if (this.games.get(socket_id).gameState == GameState.OPTION) {
         this.games.get(socket_id).changeOptionMenu(payload[0]);
         client.emit('update', this.games.get(socket_id).returnData());
-        console.log(this.games.get(socket_id).returnData());
       }
       else if (this.games.get(socket_id).gameState == GameState.WAITING) {
         if (payload[0].ACTION == "QUIT") {
