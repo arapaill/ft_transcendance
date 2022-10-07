@@ -62,6 +62,12 @@ import {
 		this.server.emit("getInviteToPlay", data);
 	}
 
+
+	@SubscribeMessage('requestUserWins')
+	async handleRequestUserWins(client, userID: number ): Promise<void> {
+		let wins = await this.userService.requestUserWins(userID);
+		this.server.to(client.id).emit("getUserWins", wins);
+	}
 	
 	
 /* 	@SubscribeMessage('requestIsUserPlaying')
