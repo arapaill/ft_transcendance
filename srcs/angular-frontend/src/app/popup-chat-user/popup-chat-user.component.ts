@@ -42,8 +42,8 @@ export class PopupChatUserComponent implements OnInit {
       description: "User not found",
       date: new Date(),
       victoires: 0,
-      match: false,
-      id: this.userID
+      id: this.userID,
+      match: []
     }
     this.webSocketService.emit("requestUserInfos", this.Personne.name);
     this.webSocketService.listen("getUserInfos").subscribe((data: any) => {
