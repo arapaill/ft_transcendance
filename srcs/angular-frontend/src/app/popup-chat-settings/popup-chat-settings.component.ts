@@ -23,7 +23,6 @@ export class PopupChatSettingsComponent implements OnInit {
     messages: []
   };
   disableSelect: boolean = true;
-  friendsList: string[] = [];
 
   constructor(
     private webSocketService: WebSocketService,
@@ -42,17 +41,14 @@ export class PopupChatSettingsComponent implements OnInit {
       this.myUser.avatar = data.avatar;
       this.myUser.pseudo = data.name;
       this.myUser.description = data.Description;
-      this.myUser.blacklist = new Map();
+      this.myUser.blacklist = data.blacklist;
+      this.myUser.friends = data.friends;
       this.myUser.id = data.id;
     });
     if (this.currentSettings.owner === this.myUser.pseudo)
       this.disableSelect = false;
     else
       this.disableSelect = true;
-
-    this.myUser.friends.forEach((key, value) => {
-      this.friendsList.push(value);
-    })
   }
 
   onToggle(event: any) {

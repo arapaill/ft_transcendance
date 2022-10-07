@@ -13,7 +13,6 @@ import { myUser } from '../models/user.model';
 })
 export class PopupChatUserComponent implements OnInit {
   @Input() Personne!: ProfileModel;
-  blockedUsers: string[] = [];
   tmpUserName: string = '';
   tmpUserAvatar: string = '';
   userID: number = 0;
@@ -32,7 +31,8 @@ export class PopupChatUserComponent implements OnInit {
       this.myUser.avatar = data.avatar;
       this.myUser.pseudo = data.name;
       this.myUser.description = data.Description;
-      this.myUser.blacklist = new Map();
+      this.myUser.blacklist = data.blacklist;
+      this.myUser.friends = data.friends;
       this.myUser.id = data.id;
     });
     this.Personne = {
@@ -96,21 +96,25 @@ export class PopupChatUserComponent implements OnInit {
   }
 
   blockUser() {
-    if (!this.myUser.blacklist.has(this.Personne.name)) {
-      this.myUser.blacklist.set(this.Personne.name, this.userID);
+    if (this.myUser.blacklist.indexOf(this.Personne.id) == -1) {
+      this.myUser.blacklist.push(this.Personne.id);
     }
-    else
-      this.myUser.blacklist.delete(this.Personne.name);
+    else {
+      let index = this.myUser.blacklist.indexOf(this.Personne.id);
+      this.myUser.blacklist.splice(index, 1);
+    }
     this.webSocketService.emit("updateBlacklist", this.userID);
     this.dialogRef.close();
   }
 
   addToFriends() {
-    if (!this.myUser.friends.has(this.Personne.name)) {
-      this.myUser.friends.set(this.Personne.name, this.userID);
+    if (this.myUser.friends.indexOf(this.Personne.id) == -1) {
+      this.myUser.friends.push(this.Personne.id);
     }
-    else
-      this.myUser.friends.delete(this.Personne.name);
+    else {
+      let index = this.myUser.friends.indexOf(this.Personne.id);
+      this.myUser.friends.splice(index, 1);
+    }
     this.webSocketService.emit("updateFriendlist", this.userID);
     this.dialogRef.close();
   }

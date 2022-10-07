@@ -10,7 +10,6 @@ import { WebSocketService } from '../web-socket.service';
 })
 export class PopupChatAddComponent implements OnInit {
   isPasswordChecked = false;
-  friendsList: string[] = [];
 
   constructor(private webSocketService: WebSocketService, public dialogRef: MatDialogRef<PopupChatAddComponent>, public myUser : myUser) { }
 
@@ -20,12 +19,10 @@ export class PopupChatAddComponent implements OnInit {
       this.myUser.avatar = data.avatar;
       this.myUser.pseudo = data.name;
       this.myUser.description = data.Description;
-      this.myUser.blacklist = new Map();
+      this.myUser.blacklist = data.blacklist;
+      this.myUser.friends = data.friends;
       this.myUser.id = data.id;
     });
-    this.myUser.friends.forEach((key, value) => {
-      this.friendsList.push(value);
-    })
   }
 
   onToggle(event: any) {

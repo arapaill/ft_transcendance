@@ -35,7 +35,19 @@ export class ChatComponent implements OnInit {
   selectedChannel: string = this.currentChannel.name;
 
   constructor(private webSocketService: WebSocketService, private dialogRef: MatDialog, public myUser: myUser ) {
-    this.webSocketService.emit("requestChannels", this.myUser.pseudo);
+    this.myUser.id = Number(localStorage.getItem('id'));
+    this.webSocketService.emit("requestUserInfosID", Number(localStorage.getItem('id')));
+    this.webSocketService.listen("getUserInfosID").subscribe((data: any) => {
+      this.myUser.avatar = data.avatar;
+      this.myUser.pseudo = data.name;
+      this.myUser.description = data.Description;
+      this.myUser.id = data.id; 
+      this.myUser.blacklist = data.blacklist;
+    });
+   }
+
+  ngOnInit(): void {
+    this.webSocketService.emit("requestChannels", this.myUser.id);
     this.webSocketService.listen("getChannels").subscribe((data: any) => {
       if (data.length == 0)
         return ;
@@ -72,17 +84,6 @@ export class ChatComponent implements OnInit {
         }
         this.currentChannel.messages.push(newMessage);
       }
-    });
-   }
-
-  ngOnInit(): void {
-    this.webSocketService.emit("requestUserInfosID", Number(localStorage.getItem('id')));
-    this.webSocketService.listen("getUserInfosID").subscribe((data: any) => {
-      this.myUser.avatar = data.avatar;
-      this.myUser.pseudo = data.name;
-      this.myUser.description = data.Description;
-      this.myUser.blacklist = new Map();
-      this.myUser.id = data.id; 
     });
   }
 
