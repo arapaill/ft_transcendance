@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
   userID : number = Number( localStorage.getItem('id'));
   ngOnInit(): void {
     this.loc = this.Location.path();
-    if((this.loc.split("id="))[1])
+    if((this.loc.split("id="))[1] && !this.userID)
     {
       this.loc = (this.loc.split("id="))[1];
       this.userID = Number(this.loc);
