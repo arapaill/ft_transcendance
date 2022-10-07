@@ -41,8 +41,10 @@ import {
 
 	@SubscribeMessage('requestUserMatchsHistory')
 	async handlerequestUserMatchsHistory(client, userName: string): Promise<void> {
-		let matchs = await this.userService.requestUserMatchsHistory( userName)
-		this.server.to(client.id).emit("getUserMatchsHistory", matchs );
+		console.log("Requested match history");
+		let matchs = await this.userService.requestUserMatchsHistory(userName)
+		console.log(matchs);
+		this.server.to(client.id).emit("getUserMatchsHistory", matchs);
 	}	
 
 	@SubscribeMessage('requestTopFiveUsers')

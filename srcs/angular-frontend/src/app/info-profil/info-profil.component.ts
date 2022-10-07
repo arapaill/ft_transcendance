@@ -14,7 +14,7 @@ import { myUser, User} from '../models/user.model';
 })
 export class InfoProfilComponent implements OnInit {
   Personne!: ProfileModel;
-  matchs !: string[];
+  matchs : string[] = [];
   nameProfil !: string;
   constructor(private webSocketService: WebSocketService, private  dialogRef : MatDialog, @Inject(MAT_DIALOG_DATA) public data : any, public myUser : myUser, public dude : myUser) {
     this.nameProfil = data.name;
@@ -22,6 +22,7 @@ export class InfoProfilComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log("TEST");
     
     this.webSocketService.emit("requestUserInfos", this.nameProfil);
     this.webSocketService.listen("getUserInfos").subscribe((data: any) => {
@@ -32,25 +33,23 @@ export class InfoProfilComponent implements OnInit {
 
       this.Personne = 
       {
-        avatar: this.dude.avatar,
-        name:  this.dude.pseudo,
-        description: this.dude.description,
+        avatar: data.avatar,
+        name:  data.name,
+        description: data.Description,
         date: new Date(),
-        victoires: 0,
-        match: false,
-        id :this.dude.id
+        victoires: data.wins,
+        match: [],
+        id :data.id
+      }
+    this.webSocketService.emit("requestUserMatchsHistory", this.Personne.name);
+    this.webSocketService.listen("getUserMatchsHistory").subscribe((userMatchs : any) => {
+      this.matchs = [];
+      for (const iterator of userMatchs) {
+        let match : string = iterator.JOUEUR_1 + " vs " + iterator.JOUEUR_2 + " score: " + iterator.SCORE_JOUEUR_1 + " : "+ iterator.SCORE_JOUEUR_2;
+        this.matchs.push(match);
       }
     });
- 
-    
-    this.webSocketService.emit("requestUserMatchHistory", this.Personne.name);
-    this.webSocketService.listen("getMatchHistory").subscribe((userMatchs : any) => {
-      console.log(userMatchs);
-      this.matchs = userMatchs;
     });
-    
-
-  
   } //end of ngoninit
   
   addToFriends() {

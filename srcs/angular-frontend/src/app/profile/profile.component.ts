@@ -19,6 +19,8 @@ export class ProfileComponent implements OnInit {
       this.myUser.avatar = data.avatar;
       this.myUser.pseudo = data.name;
       this.myUser.description = data.Description;
+      this.myUser.qr = data.qrCode;
+      console.log(this.myUser);
     });
 
   }
@@ -35,5 +37,9 @@ export class ProfileComponent implements OnInit {
     
   secureConect(){
     this.webSocketService.emit("request2FA", Number(localStorage.getItem('id')));
+  }
+
+  showQR(){
+    this.webSocketService.emit("requestQR", Number(localStorage.getItem('id')));
   }
 }
