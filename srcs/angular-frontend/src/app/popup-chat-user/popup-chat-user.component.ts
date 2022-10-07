@@ -16,6 +16,7 @@ export class PopupChatUserComponent implements OnInit {
   tmpUserName: string = '';
   tmpUserAvatar: string = '';
   userID: number = 0;
+  playing: boolean = false;
 
   constructor(private webSocketService: WebSocketService, public myUser:myUser,
     public dialogRef: MatDialogRef<PopupChatUserComponent>,
@@ -41,22 +42,25 @@ export class PopupChatUserComponent implements OnInit {
       description: "User not found",
       date: new Date(),
       victoires: 0,
-      match: true,
-      id: 108
+      match: false,
+      id: this.userID
     }
     this.webSocketService.emit("requestUserInfos", this.Personne.name);
     this.webSocketService.listen("getUserInfos").subscribe((data: any) => {
       if (data !== undefined) {
+        console.log(data.id);
         this.Personne.name = data.name;
         this.userID = data.id;
         this.Personne.victoires = data.victoires;
         this.Personne.id = data.id;
+        this.playing = this.isUserPlaying();
       }
     });
   }
 
   isUserPlaying(): boolean {
-    this.webSocketService.emit("requestIsUserPlaying", this.userID);
+    console.log(this.Personne.id);
+    this.webSocketService.emit("requestIsUserPlaying", this.Personne.id);
     this.webSocketService.listen("getIsUserPlaying").subscribe((data: any) => {
       if (data != undefined)
         return (data);
@@ -103,19 +107,20 @@ export class PopupChatUserComponent implements OnInit {
       let index = this.myUser.blacklist.indexOf(this.Personne.id);
       this.myUser.blacklist.splice(index, 1);
     }
-    this.webSocketService.emit("updateBlacklist", this.userID);
+    this.webSocketService.emit("updateUser", this.myUser);
     this.dialogRef.close();
   }
 
   addToFriends() {
     if (this.myUser.friends.indexOf(this.Personne.id) == -1) {
+      console.log('ADDED TO FRIENDS');
       this.myUser.friends.push(this.Personne.id);
     }
     else {
       let index = this.myUser.friends.indexOf(this.Personne.id);
       this.myUser.friends.splice(index, 1);
     }
-    this.webSocketService.emit("updateFriendlist", this.userID);
+    this.webSocketService.emit("updateUser", this.myUser);
     this.dialogRef.close();
   }
 }

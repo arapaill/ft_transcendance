@@ -163,18 +163,17 @@ async updateFriendlist(user: unknown) {
 
 
 /* Objectif 10: Savoir si le user est en cours de partie ou non */
-async requestIsUserPlaying(nameg: string) {
+async requestIsUserPlaying(userID: number) {
 	let u = this.prisma.user.findFirst({
 		where: {
-			name: nameg,
+			id: userID,
 		  },
     });
-	let status = (await u).line_status
-	if(status == "in game")
-	{
-		return true;
-	}
-    return false;
+
+	let status = (await u).match
+
+	console.log('Returning ' + status);
+    return status;
  }
 
   

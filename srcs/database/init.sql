@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS "chatMessage"(
    chatChannelId integer,
 );
 
-CREATE TABLE IF NOT EXISTS "chatChannel"{
+CREATE TABLE IF NOT EXISTS "chatChannel"(
    id SERIAL,
    name text COLLATE pg_catalog."default",
    owner text COLLATE pg_catalog."default",
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS "chatChannel"{
    users text[] COLLATE pg_catalog."default",
    type text COLLATE pg_catalog."default",
    password text COLLATE pg_catalog."default",
-}
+);
 
 INSERT INTO chatChannel(id, name, owner, type)
 VALUES (0, "Général", "ADMIN", "Public"); 

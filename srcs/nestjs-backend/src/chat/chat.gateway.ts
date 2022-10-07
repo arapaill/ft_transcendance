@@ -41,31 +41,33 @@ export class ChatGateway {
   @SubscribeMessage('createNewChannel')
   async handleCreateNewChannel(@MessageBody() data: unknown) {
     await this.chatService.createNewChannel(data);
+    this.server.emit('getNewChannel', data);
   }
 
   @SubscribeMessage('requestChannels')
-  async handleRequestChannels(@MessageBody() userID: number) {
+  async handleRequestChannels(client, userID: number) {
     let channels = await this.chatService.requestChannels(userID);
-    this.server.emit('getChannels', channels);
+    this.server.to(client.id).emit('getChannels', channels);
   }
 
   @SubscribeMessage('requestChannelMessages')
-  async handleRequestChannelMessages(@MessageBody() data: string) {
+  async handleRequestChannelMessages(client, data: string) {
     let messages = await this.chatService.requestChannelMessages(data);
     console.log("********");
     console.log(data);
-    this.server.emit('getChannelMessages', messages);
+    this.server.to(client.id).emit('getChannelMessages', messages);
   }
 
   @SubscribeMessage('deleteChannel')
   async handleRequestDeleteChannel(@MessageBody() data: string) {
     let messages = await this.chatService.deleteChannel(data);
+    this.server.emit('broadcastDeleteChannel', data);
   }
 
   @SubscribeMessage('sendNewMessage')
   async handleSendNewMessage(@MessageBody() data: unknown) {
     let channels = await this.chatService.sendNewMessage(data);
-    //this.handleRequestChannelMessages(data[0].channelName);
+    this.server.emit('getNewMessage', data);
   }
 
 

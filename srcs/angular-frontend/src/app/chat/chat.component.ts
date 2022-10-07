@@ -29,7 +29,7 @@ export class ChatComponent implements OnInit {
       text: 'Ceci est un unique message de test.',
       date: new Date(),
       channelName: 'Général',
-    }]
+    }] 
   }];
   currentChannel: ChatChannel = this.channels[0];
   selectedChannel: string = this.currentChannel.name;
@@ -49,6 +49,7 @@ export class ChatComponent implements OnInit {
   ngOnInit(): void {
     this.webSocketService.emit("requestChannels", this.myUser.id);
     this.webSocketService.listen("getChannels").subscribe((data: any) => {
+      console.log(data);
       if (data.length == 0)
         return ;
       if (this.channels.length != 1)
@@ -68,7 +69,6 @@ export class ChatComponent implements OnInit {
       this.selectedChannel = this.currentChannel.name;
       this.getChannelMessages();
     })
-
     this.webSocketService.listen('getChannelMessages').subscribe((data: any) => {
       if (data.length == this.currentChannel.messages.length || data == undefined) {
         return ;
@@ -84,6 +84,36 @@ export class ChatComponent implements OnInit {
         }
         this.currentChannel.messages.push(newMessage);
       }
+    });
+
+    this.webSocketService.listen('getNewChannel').subscribe((channel: any) => {
+      let newMessage: ChatChannel = {
+        name: channel[0].name,
+        owner: channel[0].owner,
+        admins: channel[0].admins,
+        users: channel[0].users,
+        type: channel[0].type,
+        messages: []
+      }
+      this.channels.push(newMessage);
+    });
+
+    this.webSocketService.listen('getNewMessage').subscribe((message: any) => {
+      if (this.currentChannel.name != message[0].channelName)
+        return ;
+      let newMessage: ChatMessage = {
+        userPseudo: message[0].userPseudo,
+        userAvatar: message[0].userAvatar,
+        text: message[0].text,
+        date: new Date(message[0].date),
+        channelName: message[0].channelName,
+      }
+      this.currentChannel.messages.push(newMessage);
+    });
+
+    this.webSocketService.listen('broadcastDeleteChannel').subscribe((channelName: any) => {
+      let index = this.channels.indexOf(channelName[0]);
+      this.channels.splice(index, 1);
     });
   }
 
@@ -101,6 +131,7 @@ export class ChatComponent implements OnInit {
     console.log(this.currentChannel);
     this.webSocketService.emit("sendNewMessage", newMessage);
     this.currentChannel.messages.push(newMessage);
+    this.webSocketService.emit("requestChannelMessages", this.currentChannel.name);
   }
 
   getChannelMessages() {
@@ -113,8 +144,14 @@ export class ChatComponent implements OnInit {
       if (tmpChannel.type == "Protégé") {
         let settingsDialog = this.dialogRef.open(PopupChatPasswordComponent);
         settingsDialog.afterClosed().subscribe(password => {
-          if (tmpChannel?.password !== undefined && password == tmpChannel?.password)
+          console.log(password);
+          console.log(tmpChannel);
+          if (tmpChannel?.password !== undefined && password == tmpChannel?.password) {
+            console.log('OK');
             this.currentChannel = tmpChannel;
+          }
+          else
+            console.log('DENIED');
         });
       }
       else

@@ -86,6 +86,14 @@ import {
 	async handleUpdateUser(client, user: unknown): Promise<void> {
 		let updateUser = await this.userService.updateUser(user);
 	}
+
+
+	@SubscribeMessage('requestIsUserPlaying')
+	async handleRequestIsUserPlaying(client, userID: number): Promise<void> {
+		console.log("isInMatch requested");
+		let match = await this.userService.requestIsUserPlaying(userID);
+		this.server.to(client.id).emit('getIsUserPlaying', match);
+	}
 	
 
 	
