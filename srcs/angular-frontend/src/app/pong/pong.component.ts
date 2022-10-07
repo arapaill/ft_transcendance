@@ -295,28 +295,30 @@ export class PongComponent implements OnInit, AfterViewInit {
     this.webSocketService.listen('update').subscribe((val : any) => {
       this.response = val;
     });
-    if (this.response.GAMESTATE == 0)
-      this.drawMenu();
-    if (this.response.GAMESTATE == 1 || this.response.GAMESTATE == 2)
-      this.drawGame();
-    if (this.response.GAMESTATE == 3)
-      this.drawSearching();
-    if (this.response.GAMESTATE == 4)
-      this.drawWaiting();
-    if (this.response.GAMESTATE == 5)
-      this.drawGame();
-    if (this.response.GAMESTATE == 6)
-      this.drawOver();
-    if (this.response.GAMESTATE == 8)
-      this.drawOption();
-    if (this.response.GAMESTATE == 7)
-      this.drawSpecMenu();
-    if (this.response.GAMESTATE == 9)
-      this.drawOver();
-    if (this.response.GAMESTATE == 10)
-      this.drawWaitingFor();
-    if (this.response.GAMESTATE == 11)
-      this.drawDeclined();
+    if (this.response != undefined) {
+      if (this.response.GAMESTATE == 0)
+        this.drawMenu();
+      if (this.response.GAMESTATE == 1 || this.response.GAMESTATE == 2)
+        this.drawGame();
+      if (this.response.GAMESTATE == 3)
+        this.drawSearching();
+      if (this.response.GAMESTATE == 4)
+        this.drawWaiting();
+      if (this.response.GAMESTATE == 5)
+        this.drawGame();
+      if (this.response.GAMESTATE == 6)
+        this.drawOver();
+      if (this.response.GAMESTATE == 8)
+        this.drawOption();
+      if (this.response.GAMESTATE == 7)
+        this.drawSpecMenu();
+      if (this.response.GAMESTATE == 9)
+        this.drawOver();
+      if (this.response.GAMESTATE == 10)
+        this.drawWaitingFor();
+      if (this.response.GAMESTATE == 11)
+        this.drawDeclined();
+    }
   }
   
   
