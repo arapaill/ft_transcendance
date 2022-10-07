@@ -121,30 +121,33 @@ export class PongGateway {
             this.games.delete(socket_id);
             this.games.set(socket_id, this.games.get(key));
             this.games.get(key).gameState = GameState.MULTI;
+            let name1 : string = this.games.get(key).playerOneName;
             await this.prisma.ongoingGame.create({
               data: {
                 JOUEUR_1_SOCKET : key,
-                JOUEUR_1_PSEUDO : this.games.get(key).playerOneName,
+                JOUEUR_1_PSEUDO : name1,
                 JOUEUR_2_SOCKET : socket_id,
                 JOUEUR_2_PSEUDO : user_id,
               }
             });
             await this.prisma.user.update({
               where: {
-                  name: this.games.get(key).playerOneName,
+                name: name1,
                 },
-              data: {
-                match: true,
-              }
-            })
+                data: {
+                  match: true,
+                }	
+                
+              });
             await this.prisma.user.update({
               where: {
-                  name: this.games.get(key).user_id,
+                name: user_id,
                 },
-              data: {
-                match: true,
-              }
-            })
+                data: {
+                  match: true,
+                }	
+                
+              });
           }
           if (this.games.get(socket_id).gameState == GameState.SEARCHING) {
             this.games.get(socket_id).gameState = GameState.WAITING;
@@ -263,7 +266,6 @@ export class PongGateway {
             VAINQUEUR: this.games.get(socket_id).winner,
           }
         })
-
         await this.prisma.user.update({
           where: {
             name: this.games.get(socket_id).winner,
