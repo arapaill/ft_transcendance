@@ -36,7 +36,7 @@ export class ChatGateway {
   constructor(private appService: AppService, private chatService: ChatService) {}
 
   @WebSocketServer() server: Server;
-
+/*
 
   @SubscribeMessage('createNewChannel')
   async handleCreateNewChannel(@MessageBody() data: unknown) {
@@ -68,7 +68,7 @@ export class ChatGateway {
 
 
 
-
+*/
 
 
 

@@ -20,7 +20,7 @@ import { ChatModule } from './chat/chat.module';
 		PongModule,
 		TypeOrmModule.forRoot({
 			type: 'postgres',
-			host: 'postgres',
+			host: 'localhost',
 			username: 'jandre',
 			password: 'jandrepass',
 			database: 'transcendance',

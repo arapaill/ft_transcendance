@@ -3,7 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class ChatService {
-	constructor(private prisma: PrismaService) {}
+	/*constructor(private prisma: PrismaService) {}
 
 	async createNewChannel(channel: unknown) {
 		console.log("New channel created: " + channel[0].name);
@@ -93,5 +93,5 @@ export class ChatService {
 				channelName: channelName[0],
 			}
 		});
-	}
+	}*/
 }

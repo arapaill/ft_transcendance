@@ -6,24 +6,24 @@ networks:
   frontend:
 
 services:
-  backend:
-    build:
-      dockerfile: ./Dockerfile
-      context: ./srcs/nestjs-backend
-      target: development
-    image: nestjs_image
-    container_name: nestjs_container
-    volumes:
-      - ./srcs/nestjs-backend:/usr/src/app
-      - back-package:/usr/src/app/node_modules
-    depends_on:
-      - postgres
-    networks:
-      - backend
-      - frontend
-    command: npm run start:dev
-    ports:
-      - 3000:3000
+  # backend:
+  #   build:
+  #     dockerfile: ./Dockerfile
+  #     context: ./srcs/nestjs-backend
+  #     target: development
+  #   image: nestjs_image
+  #   container_name: nestjs_container
+  #   volumes:
+  #     - ./srcs/nestjs-backend:/usr/src/app
+  #     - back-package:/usr/src/app/node_modules
+  #   depends_on:
+  #     - postgres
+  #   networks:
+  #     - backend
+  #     - frontend
+  #   command: npm run start:dev
+  #   ports:
+  #     - 3000:3000
 
   frontend:
     build:
@@ -35,7 +35,7 @@ services:
       - ./srcs/angular-frontend:/usr/src/app
       - front-package:/usr/src/app/node_modules
     depends_on:
-      - backend
+      # - backend
       - postgres
     networks:
       - frontend
