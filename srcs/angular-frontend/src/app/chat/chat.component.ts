@@ -32,7 +32,7 @@ export class ChatComponent implements OnInit {
     }]
   }];
   currentChannel: ChatChannel = this.channels[0];
-  selectedChannel!: string;
+  selectedChannel: string = this.currentChannel.name;
 
   constructor(private webSocketService: WebSocketService, private dialogRef: MatDialog, public myUser: myUser ) {
     this.webSocketService.emit("requestChannels", this.myUser.pseudo);
