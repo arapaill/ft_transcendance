@@ -55,7 +55,7 @@ services:
       - front-package:/usr/src/app/node_modules
     depends_on:
        - backend
-      - postgres
+       - postgres
     networks:
       - frontend
     ports:
