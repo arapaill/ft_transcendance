@@ -74,7 +74,10 @@ export class PopupChatUserComponent implements OnInit {
       })
     }
     else {
-      this.webSocketService.emit("inviteUserToPlay", this.userID);
+      this.webSocketService.emit("inviteUserToPlay", {
+        userToInvite: this.userID,
+        userWhoInvite: this.myUser.pseudo,
+      });
       this.webSocketService.emit("invitation", {
         TYPE: "Demande",
         MYUSER: this.myUser.pseudo,
