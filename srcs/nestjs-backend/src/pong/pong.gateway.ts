@@ -145,11 +145,12 @@ export class PongGateway {
                 match: true,
               }
             })
+          }
           if (this.games.get(socket_id).gameState == GameState.SEARCHING) {
             this.games.get(socket_id).gameState = GameState.WAITING;
             this.games.get(socket_id).addPlayer(payload[0], user_id);
           }
-        }}
+        }
         this.games.get(socket_id).update(payload[0]);
         client.emit('update', this.games.get(socket_id).returnData());
       }
