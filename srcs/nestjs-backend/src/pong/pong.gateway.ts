@@ -185,15 +185,8 @@ export class PongGateway {
           }
         }
         if (payload[0].ACTION == "GO") {
-          let tmp = 0;
-          for (let [key, value] of this.games) {
-            tmp++;
-            if (this.games.get(socket_id).specMenuState != 0) {
-              this.games.get(socket_id).gameState == GameState.SPECTATING;
-              if ((this.games.get(socket_id).specMenuState == tmp || this.games.get(socket_id).specMenuState == tmp + 1))
-                this.games.set(socket_id, value);
-            }
-          }
+          let tmp = await this.prisma.ongoingGame.findMany({});
+          this.games.set(socket_id, this.games.get(tmp[this.games.get(socket_id).specMenuState - 1].JOUEUR_1_SOCKET));
         }
         MatchList.STATE = this.games.get(socket_id).specMenuState;
         client.emit('update', MatchList);
@@ -243,6 +236,7 @@ export class PongGateway {
             JOUEUR_2_SOCKET: socket_id,
           }
         });
+        await this.prisma.ongoingGame.deleteMany({});
         await this.prisma.user.update({
           where: {
               name : this.games.get(socket_id).playerOneName,
