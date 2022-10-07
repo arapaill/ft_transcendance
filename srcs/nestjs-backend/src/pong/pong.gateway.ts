@@ -69,7 +69,7 @@ export class PongGateway {
     }
   }
   
-
+  
   @SubscribeMessage('update')
   async handleAction(client: any, payload: any) {
     let socket_id = payload[0].SOCKET;
@@ -146,24 +146,15 @@ export class PongGateway {
           this.games.get(socket_id).update(payload[0]);
         }
         let currentgames = await this.prisma.ongoingGame.findMany();
-        console.log("BSJAIFSDIFOSDFIOSEIFOIFOEIFOSEIFOSEIFOSEIFOSEIFOISEOFOSE___________ASD_AS_D_____AS_D_ASD__AS_D_AS_D___AS_D_")
-        console.log(currentgames);
-        let numberOfMatches: number = 0;
+        let numberOfMatches: number = currentgames.length;
+        if (numberOfMatches != 0 && this.games.get(socket_id).specMenuState == 0)
+          this.games.get(socket_id).specMenuState = 1;
         let MatchList : any = { GAMESTATE : GameState.MENUSPEC, COLOR: this.games.get(socket_id).color, STATE: this.games.get(socket_id).specMenuState};
-        let tmp : number = 0;
-        for (let [key, value] of this.games) {
-          if (value.gameState == GameState.MULTI) {
-            if (tmp % 2 == 0) {
-              let matchFound = {[numberOfMatches] : value.playerOneName + " vs " + value.playerTwoName };
-              MatchList = Object.assign(MatchList, matchFound);
-              numberOfMatches++;
-            }
-            tmp++;
-          }
-          if (this.games.get(socket_id).specMenuState == 0 && tmp != 0)
-            this.games.get(socket_id).specMenuState++;
-          MatchList = Object.assign(MatchList, { MATCHNUMBER : numberOfMatches, });
+        for (let i = 0; i < numberOfMatches; i++) {
+          let matchFound = {[i + 1] : currentgames[i].JOUEUR_1_PSEUDO + " vs " + currentgames[i].JOUEUR_2_PSEUDO }
+          MatchList = Object.assign(MatchList, matchFound);
         }
+        MatchList = Object.assign(MatchList, { MATCHNUMBER : numberOfMatches, });
         if (payload[0].ACTION == "UP") {
           if (this.games.get(socket_id).specMenuState != 0 && this.games.get(socket_id).specMenuState != 1) {
             this.games.get(socket_id).specMenuState--;
@@ -175,7 +166,7 @@ export class PongGateway {
           }
         }
         if (payload[0].ACTION == "GO") {
-          tmp = 0;
+          let tmp = 0;
           for (let [key, value] of this.games) {
             tmp++;
             if (this.games.get(socket_id).specMenuState != 0) {
