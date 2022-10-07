@@ -216,7 +216,23 @@ Ca risque d'être un peu compliqué donc on pourra en discuter.
 
 status : À faire*/
 
+async requestUserWins(userID: number) {
+	console.log("Wins requested for user ID" + userID);
 
+	let userName = await this.prisma.user.findFirst({
+		where: {
+			id: userID,
+		}
+	});
+
+	let wins = await this.prisma.gameHistory.findMany({
+		where: {
+			VAINQUEUR: userName[0],
+		}
+	});
+
+	return wins.length;
+}
 
 async updateUser(userInfos: any) {
 	console.log(userInfos);
