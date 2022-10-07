@@ -122,6 +122,20 @@ top : User[] (voir Objectif: 1)
 status : À faire*/
 
 
+async requestTopFiveUsers() {
+	// console.log(userInfos);
+
+	let top5 = this.prisma.user.findMany({
+		take: 5 ,
+		orderBy: {
+			wins: 'desc' ,
+		  },
+    });
+
+	return  top5;
+  }
+  
+  
  
 /* Objectif 9: Update la friendlist de l'user */
 
@@ -201,6 +215,8 @@ Il faut donc trouver le socket de l'user dont l'id est userID.
 Ca risque d'être un peu compliqué donc on pourra en discuter. 
 
 status : À faire*/
+
+
 
 async updateUser(userInfos: any) {
 	console.log(userInfos);

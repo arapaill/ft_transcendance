@@ -54,7 +54,7 @@ services:
       - ./srcs/angular-frontend:/usr/src/app
       - front-package:/usr/src/app/node_modules
     depends_on:
-      - backend
+       - backend
       - postgres
     networks:
       - frontend

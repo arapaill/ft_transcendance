@@ -57,7 +57,7 @@ Ce que je voudrais récupérer :
 
 top : User[] (voir Objectif: 1)
 
-status : À faire
+status : FAIT
 
 ------------------------------
 
@@ -188,7 +188,7 @@ Réponse : socket.on("getLogin");
 Ce que je voudrais récupérer :
 	recevoir une confirmation de login + un objet du User
 
-status : À faire
+status : FAIT
 
 -----------------------------
 
@@ -216,3 +216,18 @@ Ca risque d'être un peu compliqué donc on pourra en discuter.
 status : À faire
 
 ------------------------------
+
+
+
+
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>.
+Saad notes:
+
+1 - il faut changer la emit du Objectif 9 du socket.emit("updateFriendlist", newFriendID) 
+au socket.emit("updateFriendlist" , userName: string , newFriendID) .
+2 - j'ai aucune socket pour changer ou donner ces variables , on doit les faire des sockets :
+"   Wins ,  Loses,  matchHistory,
+	avatar, Description,    2FA,    QrCode, status(online , in game , offline ) "
+
