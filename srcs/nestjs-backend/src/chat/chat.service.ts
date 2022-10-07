@@ -3,7 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class ChatService {
-	/*constructor(private prisma: PrismaService) {}
+	constructor(private prisma: PrismaService) {}
 
 	async createNewChannel(channel: unknown) {
 		console.log("New channel created: " + channel[0].name);
@@ -21,15 +21,15 @@ export class ChatService {
 		return newChannel;
 	}
 
-	async requestChannels(user: unknown) {
-		console.log("User " + user[0].pseudo + " requested all channels.");
+	async requestChannels(userID: Number) {
+		console.log("User ID " + userID[0] + " requested all channels.");
 
 		const channels = await this.prisma.chatChannel.findMany({
 			where: {
 				OR: [
-					{ owner:	user[0].pseudo,			},
-					{ users:	{ has: user[0].pseudo,	}},
-					{ admins:	{ has: user[0].pseudo,	}},
+					{ owner:	userID[0].pseudo,		},
+/* 					{ users:	{ has: user[0].pseudo,	}},
+					{ admins:	{ has: user[0].pseudo,	}}, */
 					{ type:		'Public',				},
 					{ type:		'Protégé',				},
 				]
@@ -93,5 +93,5 @@ export class ChatService {
 				channelName: channelName[0],
 			}
 		});
-	}*/
+	}
 }

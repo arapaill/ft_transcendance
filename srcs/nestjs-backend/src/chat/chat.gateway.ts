@@ -36,7 +36,7 @@ export class ChatGateway {
   constructor(private appService: AppService, private chatService: ChatService) {}
 
   @WebSocketServer() server: Server;
-/*
+
 
   @SubscribeMessage('createNewChannel')
   async handleCreateNewChannel(@MessageBody() data: unknown) {
@@ -44,8 +44,8 @@ export class ChatGateway {
   }
 
   @SubscribeMessage('requestChannels')
-  async handleRequestChannels(@MessageBody() data: unknown) {
-    let channels = await this.chatService.requestChannels(data);
+  async handleRequestChannels(@MessageBody() userID: number) {
+    let channels = await this.chatService.requestChannels(userID);
     this.server.emit('getChannels', channels);
   }
 
@@ -68,7 +68,7 @@ export class ChatGateway {
 
 
 
-*/
+
 
 
 

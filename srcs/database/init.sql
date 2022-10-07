@@ -42,6 +42,7 @@ CREATE TABLE IF NOT EXISTS "ongoingGame"(
    JOUEUR_2_SOCKET text COLLATE pg_catalog."default",
    JOUEUR_2_PSEUDO text COLLATE pg_catalog."default"
 );
+
 CREATE TABLE IF NOT EXISTS "gameHistory"(
    id SERIAL,
    JOUEUR_1 text COLLATE pg_catalog."default",
@@ -49,4 +50,29 @@ CREATE TABLE IF NOT EXISTS "gameHistory"(
    VAINQUEUR text COLLATE pg_catalog."default",
    SCORE text COLLATE pg_catalog."default"
 );
+
+CREATE TABLE IF NOT EXISTS "chatMessage"(
+   id SERIAL,
+   userPseudo text COLLATE pg_catalog."default",
+   userAvatar text COLLATE pg_catalog."default",
+   text text COLLATE pg_catalog."default",
+   Date timestamp without time zone NOT NULL DEFAULT now(),
+   channelName text COLLATE pg_catalog."default",
+   chatChannelId integer,
+);
+
+CREATE TABLE IF NOT EXISTS "chatChannel"{
+   id SERIAL,
+   name text COLLATE pg_catalog."default",
+   owner text COLLATE pg_catalog."default",
+   admins text[] COLLATE pg_catalog."default",
+   users text[] COLLATE pg_catalog."default",
+   type text COLLATE pg_catalog."default",
+   password text COLLATE pg_catalog."default",
+}
+
+INSERT INTO chatChannel(id, name, owner, type)
+VALUES (0, "Général", "ADMIN", "Public"); 
+
 -- GRANT ALL PRIVILEGES ON DATABASE users TO $(POSTGRES_USER);
+

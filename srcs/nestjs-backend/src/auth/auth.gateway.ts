@@ -77,8 +77,8 @@ import {
 	}
 
 	@SubscribeMessage('updateUser')
-	async handleUpdateUser(client, userName: string): Promise<void> {
-		let updateUser = await this.userService.updateUser(userName);
+	async handleUpdateUser(client, user: unknown): Promise<void> {
+		let updateUser = await this.userService.updateUser(user);
 	}
 	
 
