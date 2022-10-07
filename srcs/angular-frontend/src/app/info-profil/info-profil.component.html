@@ -8,5 +8,5 @@
 <div *ngFor="let match of matchs">
 	<p>{{match}}</p>
 </div>
-<button mat-raised-button color="accent" (click)="addToFriends()"> {{ myUser.friends.has(this.Personne.name) ? 'Retirer des amis' : 'Ajouter en amis'     }}</button>
+<button mat-raised-button color="accent" (click)="addToFriends()"> {{ myUser.friends.indexOf(this.Personne.id) ? 'Retirer des amis' : 'Ajouter en amis'     }}</button>
 <button *ngIf="Personne.match" mat-raised-button color="accent">Voir match</button>
