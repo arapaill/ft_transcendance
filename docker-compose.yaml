@@ -21,7 +21,6 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      DATABASE_URL: ${DATABASE_URL}
     ports:
       - '5432:5432'
 
@@ -62,9 +61,6 @@ services:
       - 4200:4200
 
 volumes:
-  pg-admin:
-    driver: local
-
   db-data:
     driver: local
 

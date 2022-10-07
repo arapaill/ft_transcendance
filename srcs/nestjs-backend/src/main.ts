@@ -20,6 +20,6 @@ app.use(
 	app.use(passport.session())
   app.useStaticAssets(join(__dirname, '..', 'static'));
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
-  await app.listen(3333);
+  await app.listen(3000);
 }
 bootstrap();
