@@ -32,7 +32,8 @@ export class PopupPongInvitationComponent implements OnInit {
 
   Accept() {
     this.webSocketService.emit("invitation", {
-        TYPETYPE: "Accepte",
+        TYPE: "Accepte",
+        MYSOCKET: this.webSocketService.socket.id,
         MYUSER: this.userWhoInvite,
         USER: this.myUser.pseudo,
         USERID: this.myUser.id
@@ -42,8 +43,9 @@ export class PopupPongInvitationComponent implements OnInit {
 
   Refuse() {
     this.webSocketService.emit("invitation", {
-      TYPETYPE: "Accepte",
-      MYUSER: this.userWhoInvite,
+      TYPE: "Refuse",
+      MYSOCKET: this.webSocketService.socket.id,
+      MYUSER: this.myUser.pseudo,
       USER: this.myUser.pseudo,
       USERID: this.myUser.id
   })

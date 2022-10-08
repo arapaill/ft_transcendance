@@ -16,7 +16,7 @@ export class Entity {
     }
 }
 
-class Ball extends Entity {
+export class Ball extends Entity {
     
     private speed: number = 5;
     
@@ -83,7 +83,7 @@ class Ball extends Entity {
     }
 }
 
-class PlayerPaddle extends Entity {
+export class PlayerPaddle extends Entity {
     
     private speed:number = 20;
     
@@ -110,7 +110,7 @@ class PlayerPaddle extends Entity {
     }
 }
 
-class ComputerPaddle extends Entity {
+export class ComputerPaddle extends Entity {
     
     private speed:number = 6;
     

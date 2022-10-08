@@ -1,5 +1,4 @@
-sleep 20
+sleep 15
 npx prisma generate
-npx prisma db push --accept-data-loss --skip-generate
-npx prisma migrate dev
+npx prisma db push --accept-data-loss
 npm run start:dev

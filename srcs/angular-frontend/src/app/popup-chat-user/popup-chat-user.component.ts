@@ -85,6 +85,7 @@ export class PopupChatUserComponent implements OnInit {
       });
       this.webSocketService.emit("invitation", {
         TYPE: "Demande",
+        MYSOCKET: this.webSocketService.socket.id,
         MYUSER: this.myUser.pseudo,
         USER: this.Personne.name,
         USERID: this.userID,
