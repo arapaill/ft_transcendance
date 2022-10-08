@@ -115,15 +115,6 @@ export class PongGateway {
         client.emit('update', this.games.get(socket_id).returnData());
       }
       else if (this.games.get(socket_id).gameState == GameState.WAITINGFOR) {
-        if (payload[0].ACTION == "QUIT") {
-          let color = "white";
-          if (this.games.has(socket_id)) {
-            color = this.games.get(socket_id).color;
-            this.games.delete(socket_id);
-          }
-          this.games.set(socket_id, new Game(socket_id, color));
-          this.games.get(socket_id).gameState = GameState.MENU;
-        }
         if (this.games.get(socket_id).playerOne == undefined) {
           this.games.get(socket_id).ball = new Ball(payload[0].WIDTH / 50, payload[0].HEIGHT / 50, payload[0].WIDTH / 2, payload[0].HEIGHT / 2);
           this.games.get(socket_id).addPlayer(payload[0], user_id);
