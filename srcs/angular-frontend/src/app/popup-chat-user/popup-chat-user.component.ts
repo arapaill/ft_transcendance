@@ -16,6 +16,7 @@ export class PopupChatUserComponent implements OnInit {
   userID: number = 0;
   playing: boolean = false;
 
+
   constructor(private webSocketService: WebSocketService, public myUser:myUser,
     public dialogRef: MatDialogRef<PopupChatUserComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
@@ -69,29 +70,28 @@ export class PopupChatUserComponent implements OnInit {
     return false;
   }
 
-  inviteToPlayOrWatch() {
-    if (this.playing) {
-      this.webSocketService.emit("spectate", {
-        MYUSER: this.myUser.pseudo,
-        MYSOCKET: this.webSocketService.socket.id,
-        USER: this.Personne.name,
-        USERID: this.userID,
-      })
-    }
-    else {
-      this.webSocketService.emit("inviteUserToPlay", {
-        userToInvite: this.userID,
-        userWhoInvite: this.myUser.pseudo,
-      });
-      this.webSocketService.emit("invitation", {
-        TYPE: "Demande",
-        MYSOCKET: this.webSocketService.socket.id,
-        MYUSER: this.myUser.pseudo,
-        USER: this.Personne.name,
-        USERID: this.userID,
-      });
-    }
+  inviteToPlay() {
+    this.webSocketService.emit("inviteUserToPlay", {
+      userToInvite: this.userID,
+      userWhoInvite: this.myUser.pseudo,
+    });
+    this.webSocketService.emit("invitation", {
+      TYPE: "Demande",
+      MYSOCKET: this.webSocketService.socket.id,
+      MYUSER: this.myUser.pseudo,
+      USER: this.Personne.name,
+      USERID: this.userID,
+    });
     this.dialogRef.close();
+  }
+
+  inviteToWatch() {
+    this.webSocketService.emit("spectate", {
+      MYUSER: this.myUser.pseudo,
+      MYSOCKET: this.webSocketService.socket.id,
+      USER: this.Personne.name,
+      USERID: this.userID,
+    });
   }
 
   sendPrivateMessage() {

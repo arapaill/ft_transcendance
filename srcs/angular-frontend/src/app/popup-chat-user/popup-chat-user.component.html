@@ -7,7 +7,8 @@
 
 <div *ngIf="Personne.name !== myUser.pseudo">
 	<button mat-raised-button color="accent" (click)="addToFriends()">{{ myUser.friends.indexOf(Personne.id) == -1 ? 'Retirer des amis' : 'Ajouter en amis' }}</button>
-	<button mat-raised-button color="accent" (click)="inviteToPlayOrWatch()">{{ playing ? 'Voir match' : 'Inviter à jouer'}}</button>
+	<button mat-raised-button color="accent" (click)="inviteToPlay()" [disabled]="">Inviter à jouer</button>
+	<button mat-raised-button color="accent" (click)="inviteToWatch()" [disabled]="">Voir match</button>
 	<button mat-raised-button color="accent" (click)="sendPrivateMessage()">Message privé</button>
 	<!-- <button mat-raised-button color="warn" (click)="blockUser()">{{ myUser.blacklist.indexOf(Personne.id) ? 'Bloquer' : 'Débloquer'}}</button> -->
 </div>
