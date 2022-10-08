@@ -8,6 +8,7 @@ import { User } from '@prisma/client'
 import { PrismaService } from '../prisma/prisma.service';
 import { userInfo } from 'os';
 import { UserModule } from './user.module';
+import { generateSecret, verify } from '2fa-util';
 
 @Injectable()
 export class UserService {
@@ -317,6 +318,110 @@ async updateUser(userInfos: any) {
 		  otpauthUrl
 		}
 	}
+	
+		// added new by saad night ---------------------------------------
+		
+		
+		private secrets: Map<number, string> = new Map();
+		async generateQR(username: string , userId: number){
+	   
+		   
+		   const output = await generateSecret(username, 'PingPong');
+		   this.secrets.set(userId, output.secret);
+		   console.log("->userId:" , userId ,"*-*output.secret: ", output.secret , "<-");
+		   // return output.qrcode;
+		   let secret = output.secret ;
+		   let qrcode = output.qrcode ;
+		   return {
+			   secret,
+			   qrcode 
+			 }
+		 }
+		 
+		 async verifyCode(
+		   userId: number,
+		   code: string,
+		   secret?: string,
+		 ) {
+	   
+	   
+		   const check = await verify(code, secret);
+		   if (!check) {return 0};
+		   return 1;
+	   
+		 }
+	   
+		 async request2FA( idd: number) {
+			   let id_num = idd;
+			   var y: number = +id_num;
+			   let id = y ;
+			   let u =  await this.prisma.user.findFirst({
+				   where: {
+					   id: id,
+					   // secret: null,
+				   },
+			   });
+			   const p = this.generateQR(u.name , (await this.findid(u.name)));
+			   // this.pipeQrCodeStream((await p).qrcode.toString(), "sejjed")
+			   // const f = '<img src="' + (await p).qrcode.toFileStream.url() +'" /> ';
+			   let codeQr = (await p).qrcode.toString();
+			   let secretQr = (await p).secret;
+			   const gf = await this.prisma.user.update({
+				   where: {
+					   name: u.name,
+				   },
+				   data: {
+					   qrCode: codeQr,
+					   secret: secretQr,
+					   two_factor: true ,
+				   }	
+				   });
+		   // return (await p).qrcode.toString();
+		 }
+		 
+		 
+		 async requestUN2FA( idd: number) {
+		   let id_num = idd;
+		   var y: number = +id_num;
+		   let id = y ;
+		   let u =  await this.prisma.user.findFirst({
+			   where: {
+				   id: id,
+			   },
+		   });
+		   const gf = await this.prisma.user.update({
+			   where: {
+				   name: u.name,
+			   },
+			   data: {
+				   qrCode: null,
+				   secret: null,
+				   two_factor: false ,
+			   }	
+			   });
+		   }
+		   
+		   async requestChangeStatus( idd: number, statu: string) {
+			   let id_num = idd;
+			   var y: number = +id_num;
+			   let id = y ;
+			   let u =  await this.prisma.user.findFirst({
+				   where: {
+					   id: id,
+				   },
+			   });
+			   const gf = await this.prisma.user.update({
+				   where: {
+					   name: u.name,
+				   },
+				   data: {
+					   line_status: statu,
+				   }	
+				   });
+			   }		
+		
+
+	//-------------------------------------------------------------
   public async pipeQrCodeStream(stream: Response, otpauthUrl: string) {
     return toFileStream(stream, otpauthUrl);
   }

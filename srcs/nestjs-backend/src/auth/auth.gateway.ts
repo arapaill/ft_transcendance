@@ -97,6 +97,28 @@ import {
 		this.server.to(client.id).emit('getIsUserPlaying', match);
 	}
 	
+	// added new by saad night ---------------------------------------
+	
+	@SubscribeMessage('request2FA')
+	async handlerequest2FA(client, userIDD: number): Promise<void> {
+		let user = await this.userService.request2FA(userIDD);
+		// this.server.emit("getUserInfos", user);
+	}
+	
+	@SubscribeMessage('requestUN2FA')
+	async handlerequestUN2FA(client, userIDD: number): Promise<void> {
+		let user = await this.userService.requestUN2FA(userIDD);
+		// this.server.emit("getUserInfos", user);
+	}
+	
+	@SubscribeMessage('requestChangeStatus')
+	async handlerequestChangeStatus(client, userIDD: number, newStatus: string): Promise<void> {
+		let user = await this.userService.requestChangeStatus(userIDD, newStatus);
+		// this.server.emit("getUserInfos", user);
+	}
+	
+	//-------------------------------------------------------------
+	
 
 	
 	handleConnection(client: Socket, ...args: any[]) {
