@@ -33,6 +33,7 @@ import { PopupDisplayFriendsComponent } from './popup-display-friends/popup-disp
 import { LoginComponent } from './login/login.component';
 import { PopupPongInvitationComponent } from './popup-pong-invitation/popup-pong-invitation.component';
 import { myUser } from './models/user.model';
+import { PopupChatJoinComponent } from './popup-chat-join/popup-chat-join.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { myUser } from './models/user.model';
     PopupDisplayFriendsComponent,
     LoginComponent,
     PopupPongInvitationComponent,
+    PopupChatJoinComponent,
   ],
   imports: [
     BrowserModule,

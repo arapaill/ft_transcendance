@@ -70,4 +70,10 @@ CREATE TABLE IF NOT EXISTS "chatChannel"(
    password text COLLATE pg_catalog."default"
 );
 
-INSERT INTO "chatChannel" (id, name, owner, type) VALUES (0, 'Général', 'ADMIN', 'Public');
+CREATE TABLE IF NOT EXISTS "userChannels"(
+   id SERIAL,
+   userID integer[],
+   channelID integer[]
+);
+
+INSERT INTO "chatChannel" (id, name, owner, type) VALUES (1, 'Général', 'ADMIN', 'Public');

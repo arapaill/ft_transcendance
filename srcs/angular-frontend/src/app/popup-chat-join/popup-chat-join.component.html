@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>Join a channel</h2>
+<mat-dialog-content>
+	<form #settingsForm="ngForm">
+		<mat-select ngModel name="channel">
+			<mat-option *ngFor="let channel of channels;" value="{{ channel.name }}">{{ channel.name }}</mat-option>
+		</mat-select>
+	</form>
+</mat-dialog-content>
+<mat-dialog-actions>
+	<br>
+	<button mat-raised-button color='accent' (click)="join(settingsForm.value)">Join</button>
+	<button mat-button color='accent' (click)="closeDialog()">Cancel</button>
+</mat-dialog-actions>

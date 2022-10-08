@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE "users" ALTER COLUMN "friends" SET DATA TYPE TEXT[],
-ALTER COLUMN "demFriends" SET DATA TYPE TEXT[];

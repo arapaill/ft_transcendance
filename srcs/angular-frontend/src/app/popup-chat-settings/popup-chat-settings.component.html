@@ -40,4 +40,5 @@
 	<button mat-raised-button color="accent" (click)="submitValues(settingsForm.value)" [disabled]="disableSelect">Save</button>
 	<button mat-button color="accent" (click)="closeDialog()">Cancel</button>
 	<button mat-button color="warn" (click)="deleteChannel()" [disabled]="disableSelect">Delete</button>
+	<button mat-button color="warn" (click)="leaveChannel()" [disabled]="currentSettings.owner == myUser.pseudo">Leave</button>
 </mat-dialog-actions>

@@ -7,6 +7,7 @@ export class ChatMessage {
 }
 
 export class ChatChannel {
+	id!: number;
 	name!: string;
 	owner!: string;
 	admins!: string[];

@@ -14,6 +14,7 @@ import { WebSocketService } from '../web-socket.service';
 export class PopupChatSettingsComponent implements OnInit {
   isPasswordChecked: boolean = false;
   currentSettings: ChatChannel = {
+    id: 0,
     name: "",
     owner: "",
     admins: [],
@@ -77,11 +78,24 @@ export class PopupChatSettingsComponent implements OnInit {
   }
 
   submitValues(values: any) {
-    this.dialogRef.close(values);
+    this.dialogRef.close({
+      action: 'Submit',
+      values: values
+    });
   }
 
   deleteChannel() {
-    this.dialogRef.close("Delete");
+    this.dialogRef.close({
+      action: 'Delete',
+      values: undefined
+    });
+  }
+
+  leaveChannel() {
+    this.dialogRef.close({
+      action: 'Leave',
+      values: this.myUser.pseudo
+    });
   }
 
 }

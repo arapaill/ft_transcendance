@@ -18,9 +18,11 @@ CREATE TABLE "users" (
     "Description" TEXT,
     "MatchsHistory" TEXT[],
     "Date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "match" BOOLEAN,
+    "match" BOOLEAN DEFAULT false,
     "toUse" TEXT,
     "toUses" TEXT[],
+    "friendsList" INTEGER[],
+    "blockList" INTEGER[],
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
@@ -66,12 +68,21 @@ CREATE TABLE "chatChannel" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "owner" TEXT NOT NULL,
-    "admins" INTEGER[],
-    "users" INTEGER[],
+    "admins" TEXT[],
+    "users" TEXT[],
     "type" TEXT NOT NULL,
     "password" TEXT,
 
     CONSTRAINT "chatChannel_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "userChannels" (
+    "id" SERIAL NOT NULL,
+    "userID" INTEGER NOT NULL,
+    "channelsID" INTEGER[],
+
+    CONSTRAINT "userChannels_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -79,6 +90,12 @@ CREATE UNIQUE INDEX "users_name_key" ON "users"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "users_Full_Name_key" ON "users"("Full_Name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "chatChannel_name_key" ON "chatChannel"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "userChannels_userID_key" ON "userChannels"("userID");
 
 -- AddForeignKey
 ALTER TABLE "chatMessage" ADD CONSTRAINT "chatMessage_chatChannelId_fkey" FOREIGN KEY ("chatChannelId") REFERENCES "chatChannel"("id") ON DELETE SET NULL ON UPDATE CASCADE;

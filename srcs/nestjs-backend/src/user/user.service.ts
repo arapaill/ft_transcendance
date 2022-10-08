@@ -9,6 +9,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { userInfo } from 'os';
 import { UserModule } from './user.module';
 import { generateSecret, verify } from '2fa-util';
+import { info } from 'console';
 
 @Injectable()
 export class UserService {
@@ -144,27 +145,33 @@ async requestTopFiveUsers() {
   
  
 /* Objectif 9: Update la friendlist de l'user */
-
-async updateFriendlist(user: unknown) {
-	let y = this.prisma.user.findFirst({
+async updateFriendlist(infos: unknown) {
+	let myUser = await this.prisma.user.findFirst({
 		where: {
-			id: user[0].id,
-		  },
-    });
-    let frd = (await y).name;
-    if( frd != null){
-		let u =  this.prisma.user.update({
-			where: {
-				name: user[0].pseudo,
-			  },
-			  data:{
-			    friends:{
-					push: frd,
-			    } 
-			  }
-	    });    
-    }
+			id: infos[0].myID,
+		}
+	});
 
+	let tmpfriendList: number[] = myUser.friendsList;
+	let index = tmpfriendList.indexOf(infos[0].friendID);
+	console.log(index);
+	if (index != -1) {
+		console.log("User ID " + infos[0].myID + " removed user ID " + infos[0].friendID + " from friends.")
+		tmpfriendList.splice(index, 1);
+	}
+	else {
+		console.log("User ID " + infos[0].myID + " added user ID " + infos[0].friendID + " to friends.")
+		tmpfriendList.push(infos[0].friendID);
+	}
+
+	await this.prisma.user.update({
+		where: {
+			id: infos[0].myID,
+		},
+		data: {
+			friendsList: tmpfriendList,
+		}
+	});
  }
 
 
@@ -176,10 +183,8 @@ async requestIsUserPlaying(userID: number) {
 		  },
     });
 
-	console.log(u);
 	let status = u.match
 
-	console.log('Returning ' + status);
     return status;
  }
 
@@ -242,8 +247,6 @@ async requestUserWins(userID: number) {
 }
 
 async updateUser(userInfos: any) {
-	console.log(userInfos);
-
 	let userUpdated = this.prisma.user.update({
 		where: {
 			id: userInfos[0].id,

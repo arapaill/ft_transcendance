@@ -45,9 +45,31 @@ export class ChatGateway {
   }
 
   @SubscribeMessage('requestChannels')
-  async handleRequestChannels(client, userID: number) {
-    let channels = await this.chatService.requestChannels(userID);
+  async handleRequestChannels(client, user: unknown) {
+    let channels = await this.chatService.requestChannels(user);
     this.server.to(client.id).emit('getChannels', channels);
+  }
+
+  @SubscribeMessage('requestMyChannels')
+  async handleRequestMyChannels(client, userID: number) {
+    let channels = await this.chatService.requestMyChannels(userID);
+    this.server.to(client.id).emit('getMyChannels', channels);
+  }
+
+  @SubscribeMessage('joinChannel')
+  async handleJoinChannel(client, infos: unknown) {
+    await this.chatService.joinChannel(infos);
+  }
+
+  @SubscribeMessage('leaveChannel')
+  async handleLeaveChannel(client, infos: unknown) {
+    await this.chatService.leaveChannel(infos);
+  }
+
+  @SubscribeMessage('updateChannel')
+  async handleUpdateChannel(client, channel: unknown) {
+    console.log(channel[0]);
+    this.chatService.updateChannel(channel);
   }
 
   @SubscribeMessage('requestChannelMessages')

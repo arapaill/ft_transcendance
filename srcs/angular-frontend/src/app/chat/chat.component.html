@@ -8,6 +8,7 @@
 	<div class="chatButtons">
 		<mat-icon (click)="openSettingsDialog()">settings</mat-icon>
 		<mat-icon (click)="openAddDialog()">add_circle</mat-icon>
+		<mat-icon (click)="openJoinLeaveDialog()">menu_open</mat-icon>
 	</div>
 </mat-toolbar>
 
@@ -16,7 +17,7 @@
 		<div [ngClass]="isOdd ? 'container darker' : 'container'">
 			<img [src]="message.userAvatar" alt="Avatar" (click)="openUserProfileDialog(message)"/>
 			<p><span class="userPseudo">{{ message.userPseudo }}</span><span class="time">{{ message.date.getHours() }}:{{ message.date.getMinutes() }}</span></p>
-			<p class="text" ><!--{{ !myUser.blacklist.has(message.userPseudo) ? -->{{message.text}}<!-- : 'Cet utilisateur est bloqué.' }}--></p>
+			<p class="text" ><!-- {{!myUser.blacklist.indexOf(message.userPseudo) ? -->{{message.text}}<!-- : 'Cet utilisateur est bloqué.'}}--></p>
 		</div>
 	</div>
 </div>

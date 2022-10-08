@@ -6,8 +6,8 @@ export class Pong {
 
 	constructor(canvas: ElementRef) {
 	  this.canvas = canvas;
-	  console.log(canvas);
+	  //console.log(canvas);
 	  this.ctx = this.canvas.nativeElement.getContext('2d');
-	  console.log(this.ctx);
+	  //console.log(this.ctx);
 	}
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConsoleLogger, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
@@ -21,15 +21,29 @@ export class ChatService {
 		return newChannel;
 	}
 
-	async requestChannels(userID: Number) {
-		console.log("User ID " + userID[0] + " requested all channels.");
+	async updateChannel(channel: any) {
+		console.log("Updating channel " + channel[0].name);
+
+		await this.prisma.chatChannel.update({
+			where: {
+				name: channel[0].name,
+			},
+			data: {
+				users: channel[0].users,
+				admins: channel[0].admins
+			}
+		});
+	}
+
+	async requestChannels(user: unknown) {
+		console.log("User " + user[0].pseudo + " requested all channels.");
 
 		const channels = await this.prisma.chatChannel.findMany({
 			where: {
 				OR: [
-					{ owner:	userID[0].pseudo,		},
-/* 					{ users:	{ has: user[0].pseudo,	}},
-					{ admins:	{ has: user[0].pseudo,	}}, */
+					{ owner:	user[0].pseudo,			},
+					{ users:	{ has: user[0].pseudo,	}},
+					{ admins:	{ has: user[0].pseudo,	}},
 					{ type:		'Public',				},
 					{ type:		'Protégé',				},
 				]
@@ -39,7 +53,90 @@ export class ChatService {
 		return channels;
 	}
 
+	async leaveChannel(infos: unknown) {
+		console.log("User ID " + infos[0].userID + " leaved channel ID " + infos[0].channelID);
+
+		const user = await this.prisma.userChannels.findFirst({
+			where: {
+				userID: infos[0].userID,
+			}
+		});
+
+		let channelArray: number[] = user.channelsID;
+		let index = channelArray.indexOf(infos[0].channelID);
+		channelArray.splice(index, 1);
+
+		await this.prisma.userChannels.update({
+			where: {
+				userID: infos[0].userID,
+			},
+			data: {
+				channelsID: channelArray,
+			}
+		});
+	}
+
+	async joinChannel(infos: unknown) {
+		console.log("User ID " + infos[0].userID + " joined channel ID " + infos[0].channelID);
+
+		const user = await this.prisma.userChannels.findFirst({
+			where: {
+				userID: infos[0].userID,
+			}
+		});
+
+		let channelArray: number[] = [];
+		if (user) {
+			channelArray = user.channelsID;
+			if (channelArray.indexOf(infos[0].channelID) == -1)
+				channelArray.push(infos[0].channelID);
+		}
+		else {
+			channelArray.push(infos[0].channelID);
+		}
+
+		const channels = await this.prisma.userChannels.upsert({
+			where: {
+				userID: infos[0].userID,
+			},
+			update: {
+				channelsID: channelArray,
+			},
+			create: {
+				userID: infos[0].userID,
+				channelsID: channelArray
+			}
+		});
+		
+		console.log(channels);
+
+		return channels;
+	}
+
+	async requestMyChannels(userID: number) {
+		console.log("User ID" + userID[0] + " requested all his channels.");
+
+		const userChannelInfos = await this.prisma.userChannels.findMany({
+			where: {
+				userID: userID[0],
+			}
+		});
+		
+		console.log(userChannelInfos);
+
+		let channelsToFind: number[] = userChannelInfos[0].channelsID;
+
+		const channels = await this.prisma.chatChannel.findMany({
+			where: {
+				id: {in: channelsToFind},
+			}
+		})
+
+		return channels;
+	}
+
 	async requestChannelMessages(channel: string) {
+		//console.log("User requested messages from channel " + channel);
 		const messages = await this.prisma.chatMessage.findMany({
 			where: {
 				channelName: channel[0],
@@ -53,11 +150,15 @@ export class ChatService {
 		console.log("User " + message[0].userPseudo + " send a new message:");
 		console.log(message[0]);
 
+		console.log(await this.prisma.chatChannel.findMany({}));
+
 		let channelID = await this.prisma.chatChannel.findFirst({
 			where: {
 				name: message[0].channelName
 			}
 		});
+
+		console.log("ChannelID: ", channelID);
 
 		const newMessage = await this.prisma.chatMessage.create({
 			data: {        
