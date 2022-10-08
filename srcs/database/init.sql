@@ -23,8 +23,8 @@ CREATE TABLE IF NOT EXISTS "users"(
    
    PRIMARY KEY (id)
 );
-CREATE TABLE IF NOT EXISTS "chat"
-(
+
+CREATE TABLE IF NOT EXISTS "chat"(
     "createdAt" timestamp without time zone NOT NULL DEFAULT now(),
     "user" character varying COLLATE pg_catalog."default",
 	id SERIAL,
@@ -33,7 +33,6 @@ CREATE TABLE IF NOT EXISTS "chat"
     text text COLLATE pg_catalog."default",
     roomsb text COLLATE pg_catalog."default"
 );
-
 
 CREATE TABLE IF NOT EXISTS "ongoingGame"(
 	id SERIAL,
@@ -58,7 +57,7 @@ CREATE TABLE IF NOT EXISTS "chatMessage"(
    text text COLLATE pg_catalog."default",
    Date timestamp without time zone NOT NULL DEFAULT now(),
    channelName text COLLATE pg_catalog."default",
-   chatChannelId integer,
+   chatChannelId integer
 );
 
 CREATE TABLE IF NOT EXISTS "chatChannel"(
@@ -68,11 +67,8 @@ CREATE TABLE IF NOT EXISTS "chatChannel"(
    admins text[] COLLATE pg_catalog."default",
    users text[] COLLATE pg_catalog."default",
    type text COLLATE pg_catalog."default",
-   password text COLLATE pg_catalog."default",
+   password text COLLATE pg_catalog."default"
 );
 
-INSERT INTO chatChannel(id, name, owner, type)
-VALUES (0, "Général", "ADMIN", "Public"); 
-
--- GRANT ALL PRIVILEGES ON DATABASE users TO $(POSTGRES_USER);
-
+INSERT INTO "chatChannel" (id, name, owner, type)
+VALUES (0, "Général", "ADMIN", "Public");

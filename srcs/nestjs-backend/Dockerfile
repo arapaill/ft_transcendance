@@ -15,7 +15,7 @@ RUN npm ci
 # Ensuite le reste de l'application
 COPY --chown=node:node . .
 USER node
-RUN npm run prisma:generate
+ENTRYPOINT [ "sh", "init.sh" ]
 # Ca construit le projet, et crée un dossier dist avec l'application finale
 #User pour la sécurité, et apparement des librairies optimise le bail quand NODE_ENV est init a production
 
