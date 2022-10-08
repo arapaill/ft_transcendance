@@ -13,8 +13,6 @@ import { myUser } from '../models/user.model';
 })
 export class PopupChatUserComponent implements OnInit {
   @Input() Personne!: ProfileModel;
-  tmpUserName: string = '';
-  tmpUserAvatar: string = '';
   userID: number = 0;
   playing: boolean = false;
 
@@ -22,44 +20,47 @@ export class PopupChatUserComponent implements OnInit {
     public dialogRef: MatDialogRef<PopupChatUserComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
       //this.blockedUsers = data.blockedUsers,
-      this.tmpUserName = data.userName,
-      this.tmpUserAvatar = data.userAvatar
+      this.Personne = {
+        avatar: data.userAvatar,
+        name: data.userName,
+        description: "User not found",
+        date: new Date(),
+        victoires: 0,
+        id: 0,
+        match: []
+      }
   }
 
   ngOnInit(): void {
     this.webSocketService.emit("requestUserInfosID", Number(localStorage.getItem('id')));
+    this.webSocketService.emit("requestUserInfos", this.Personne.name);
+
     this.webSocketService.listen("getUserInfosID").subscribe((data: any) => {
       this.myUser.avatar = data.avatar;
       this.myUser.pseudo = data.name;
       this.myUser.description = data.Description;
-      this.myUser.blacklist = data.blacklist;
-      this.myUser.friends = data.friends;
+      if (data.friendlist)
+        this.myUser.friends = data.friendlist;
+      console.log(data.friendsList);
+      console.log(data.blackList);
       this.myUser.id = data.id;
     });
-    this.Personne = {
-      avatar: this.tmpUserAvatar,
-      name: this.tmpUserName,
-      description: "User not found",
-      date: new Date(),
-      victoires: 0,
-      id: this.userID,
-      match: []
-    }
-    this.webSocketService.emit("requestUserInfos", this.Personne.name);
+
     this.webSocketService.listen("getUserInfos").subscribe((data: any) => {
       if (data !== undefined) {
-        console.log(data.id);
         this.Personne.name = data.name;
-        this.userID = data.id;
+        this.Personne.description = data.Description,
         this.Personne.victoires = data.victoires;
         this.Personne.id = data.id;
         this.playing = this.isUserPlaying();
       }
     });
+
+    console.log("userID: " + this.userID);
+    console.log("PersonneID: " + this.Personne.id);
   }
 
   isUserPlaying(): boolean {
-    console.log(this.Personne.id);
     this.webSocketService.emit("requestIsUserPlaying", this.Personne.id);
     this.webSocketService.listen("getIsUserPlaying").subscribe((data: any) => {
       if (data != undefined)
@@ -112,15 +113,11 @@ export class PopupChatUserComponent implements OnInit {
   }
 
   addToFriends() {
-    if (this.myUser.friends.indexOf(this.Personne.id) == -1) {
-      console.log('ADDED TO FRIENDS');
-      this.myUser.friends.push(this.Personne.id);
-    }
-    else {
-      let index = this.myUser.friends.indexOf(this.Personne.id);
-      this.myUser.friends.splice(index, 1);
-    }
-    this.webSocketService.emit("updateUser", this.myUser);
+    this.webSocketService.emit("updateFriendlist", {
+      myID: Number(localStorage.getItem('id')),
+      friendID: this.Personne.id
+    });
+    this.webSocketService.emit("requestUserInfosID", Number(localStorage.getItem('id')));
     this.dialogRef.close();
   }
 }
