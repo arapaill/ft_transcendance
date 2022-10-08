@@ -53,45 +53,56 @@ export class PopupChatUserComponent implements OnInit {
         this.Personne.description = data.Description,
         this.Personne.victoires = data.victoires;
         this.Personne.id = data.id;
-        this.playing = this.isUserPlaying();
+        this.playing = data.match;
       }
+    });
+
+    this.webSocketService.listen("getIsUserPlaying").subscribe((data: any) => {
+      if (data !== undefined)
+        this.playing = data;
+      else
+        this.playing = false;
     });
 
     console.log("userID: " + this.userID);
     console.log("PersonneID: " + this.Personne.id);
   }
 
-  isUserPlaying(): boolean {
+  isUserPlaying() {
     this.webSocketService.emit("requestIsUserPlaying", this.Personne.id);
-    this.webSocketService.listen("getIsUserPlaying").subscribe((data: any) => {
-      if (data != undefined)
-        return (data);
-    });
-    return false;
   }
 
   inviteToPlay() {
-    this.webSocketService.emit("inviteUserToPlay", {
-      userToInvite: this.userID,
-      userWhoInvite: this.myUser.pseudo,
-    });
-    this.webSocketService.emit("invitation", {
-      TYPE: "Demande",
-      MYSOCKET: this.webSocketService.socket.id,
-      MYUSER: this.myUser.pseudo,
-      USER: this.Personne.name,
-      USERID: this.userID,
-    });
-    this.dialogRef.close();
+    this.isUserPlaying();
+
+    if (this.playing == false) {
+      this.webSocketService.emit("inviteUserToPlay", {
+        userToInvite: this.userID,
+        userWhoInvite: this.myUser.pseudo,
+      });
+      this.webSocketService.emit("invitation", {
+        TYPE: "Demande",
+        MYSOCKET: this.webSocketService.socket.id,
+        MYUSER: this.myUser.pseudo,
+        USER: this.Personne.name,
+        USERID: this.userID,
+      });
+      this.dialogRef.close();
+    }
   }
 
   inviteToWatch() {
-    this.webSocketService.emit("spectate", {
-      MYUSER: this.myUser.pseudo,
-      MYSOCKET: this.webSocketService.socket.id,
-      USER: this.Personne.name,
-      USERID: this.userID,
-    });
+    this.isUserPlaying();
+
+    if (this.playing == true) {
+      this.webSocketService.emit("spectate", {
+        MYUSER: this.myUser.pseudo,
+        MYSOCKET: this.webSocketService.socket.id,
+        USER: this.Personne.name,
+        USERID: this.userID,
+      });
+      this.dialogRef.close();
+    }
   }
 
   sendPrivateMessage() {
