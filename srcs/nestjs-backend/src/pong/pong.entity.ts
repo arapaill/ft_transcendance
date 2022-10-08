@@ -217,9 +217,11 @@ export class Game {
     equilibrium: number;
     specMenuState: number;
     waitedPseudo: string;
+    ispec: number;
 
     constructor(data : any, color : string) {
         this.data_multi = data;
+        this.ispec = 0;
         this.specMenuState = 0;
         this.color = color;
         this.equilibrium = 0;
@@ -426,6 +428,7 @@ export class Game {
                 BALLX: this.ball.x,
                 BALLY: this.ball.y,
                 COLOR: this.color,
+                SPEC: this.ispec,
             }
         }
         else if (this.gameState == GameState.SOLO) {
@@ -456,6 +459,7 @@ export class Game {
                 GAMESTATE: this.gameState,
                 OPTIONSTATE: this.optionState,
                 COLOR: this.color,
+                SPEC: this.ispec,
             }
         }
         else if (this.gameState == GameState.WAITINGFOR) {
@@ -469,6 +473,7 @@ export class Game {
             return {
                 GAMESTATE: this.gameState,
                 COLOR: this.color,
+                SPEC: this.ispec,
             }
         }
     }

@@ -295,7 +295,6 @@ export class PongComponent implements OnInit, AfterViewInit {
     this.webSocketService.listen('update').subscribe((val : any) => {
       this.response = val;
     });
-    console.log(this.response);
     if (this.response != undefined) {
       if (this.response.GAMESTATE == 0)
         this.drawMenu();

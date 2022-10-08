@@ -20,8 +20,6 @@ export class PongGateway {
 
   @SubscribeMessage('invitation')
   async handleInvitation(client: any, payload: any) {
-    console.log("VALUE OF PAYLOAD : _____________________________________________");
-    console.log(payload[0]);
     let socket_id = payload[0].MYSOCKET;
     let user = payload[0].MYUSER;
     let user_iv = payload[0].USER;
@@ -50,9 +48,6 @@ export class PongGateway {
 
   @SubscribeMessage('spectate')
   async handleSpec(client: any, payload: any) {
-    console.log("____________________________________________________");
-    console.log("SPECTATE");
-    console.log("____________________________________________________");
     let verif = await this.prisma.ongoingGame.findFirst({
       where: {
         OR: [
@@ -61,22 +56,15 @@ export class PongGateway {
         ]
       }
     });
-    if (Object.keys(verif).length == 0) {
-      client.emit('spectate', {
-        ISGAME: false,
-      });
-    }
-    else {
-      client.emit('spectate', {
-        ISGAME: true,
-      });
-      let tmp = 0;
-      let socket_id = payload[0].SOCKET;
-      for (let [key, value] of this.games) {
-        if (value.playerOneName == payload[0].USER || value.playerTwoName == payload[0].USER) {
-          this.games.set(socket_id, value);
-          break ;
-        }
+    let socket_id = payload[0].MYSOCKET;
+    let playerOne = verif.JOUEUR_2_PSEUDO;
+    let playerTwo = verif.JOUEUR_2_PSEUDO;
+    for (let [key, value] of this.games) {
+      if (value.playerOneName == playerOne || value.playerTwoName == playerTwo) {
+        this.games.set(socket_id, this.games.get(verif.JOUEUR_1_SOCKET));
+        this.games.get(socket_id).gameState = GameState.MULTI;
+        client.emit('update', value.returnData());
+        break ;
       }
     }
   }
@@ -88,15 +76,9 @@ export class PongGateway {
     let user_id = payload[0].NAME;
     if (this.games.has(socket_id)) {
       if (this.games.get(socket_id).gameState == GameState.MENU) {
-          let tmp = await this.prisma.ongoingGame.findMany({});
-          for (let i = 0; i < tmp.length; i++){
-            if (socket_id == tmp[0].JOUEUR_1_SOCKET)
-              this.games.set(socket_id, this.games.get(tmp[this.games.get(socket_id).specMenuState - 1].JOUEUR_1_SOCKET));
-            else if (socket_id == tmp[0].JOUEUR_2_SOCKET)
-              this.games.get(tmp[this.games.get(socket_id).specMenuState - 1].JOUEUR_2_SOCKET);
-          }
         this.games.get(socket_id).changeStateMenu(payload[0]);
-        client.emit('update', this.games.get(socket_id).returnGameState());
+        if (this.games.get(socket_id).gameState == GameState.MENU)
+          client.emit('update', this.games.get(socket_id).returnGameState());
       }
       else if (this.games.get(socket_id).gameState == GameState.OPTION) {
         this.games.get(socket_id).changeOptionMenu(payload[0]);
@@ -124,8 +106,6 @@ export class PongGateway {
       else if (this.games.get(socket_id).gameState == GameState.SEARCHINGFOR) {
         let tmp = 0;
         for (let [key, value] of this.games) {
-          console.log("waited : ", value.waitedPseudo);
-          console.log("actual user : ", user_id);
           if (this.games.get(key).gameState == GameState.WAITINGFOR && value.waitedPseudo == user_id) {
             this.games.get(key).addPlayer(payload[0], value.waitedPseudo);
             this.games.delete(socket_id);
@@ -286,6 +266,7 @@ export class PongGateway {
             JOUEUR_2_SOCKET: socket_id,
           }
         });
+        await this.prisma.ongoingGame.deleteMany({});
         await this.prisma.user.update({
           where: {
               name : this.games.get(socket_id).playerOneName,
@@ -325,8 +306,7 @@ export class PongGateway {
         client.emit('update', this.games.get(socket_id).returnData());
       }
     }
-    else {
-      this.games.set(socket_id, new Game(socket_id, "white"));
-    }
+    else 
+        this.games.set(socket_id, new Game(socket_id, "white"));
   }
 }
