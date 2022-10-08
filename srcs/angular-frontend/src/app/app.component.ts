@@ -28,7 +28,6 @@ export class AppComponent implements OnInit {
   
       this.webSocketService.emit("requestUserInfosID", this.userID);
       this.webSocketService.listen("getUserInfosID").subscribe((data: any) => {
-
         this.myUser.avatar = data.avatar;
         this.myUser.blacklist = data.blacklist;
         this.myUser.description = data.Description;
@@ -37,10 +36,11 @@ export class AppComponent implements OnInit {
         this.myUser.pseudo = data.name;
     });
    }
-   console.log(this.userID);
-
+    this.myUser.id = Number(localStorage.getItem('id'));
     this.webSocketService.listen("getInviteToPlay").subscribe((data: any) => {
-      if (data.userToInvite == this.myUser.pseudo) {
+      console.log("Received invitation to play from " + data[0].userWhoInvite);
+      console.log("MyID: " + this.myUser.id + " " + " InvitedID: " + data[0].userToInvite)
+      if (data[0].userToInvite == this.myUser.id) {
       this.dialogRef.open(PopupPongInvitationComponent, {
         data: {
           user: data,

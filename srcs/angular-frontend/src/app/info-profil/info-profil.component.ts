@@ -22,7 +22,7 @@ export class InfoProfilComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("TEST");
+    this.myUser.id = Number(localStorage.getItem('id'));
     
     this.webSocketService.emit("requestUserInfos", this.nameProfil);
     this.webSocketService.listen("getUserInfos").subscribe((data: any) => {

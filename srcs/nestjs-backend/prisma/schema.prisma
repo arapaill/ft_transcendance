@@ -31,7 +31,7 @@ model User {
   Description   String?
   MatchsHistory String[]
   Date          DateTime @default(now())
-  match         Boolean?
+  match         Boolean? @default(false)
   toUse         String?
   toUses        String[]
 

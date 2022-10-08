@@ -69,7 +69,7 @@ export class PopupChatUserComponent implements OnInit {
   }
 
   inviteToPlayOrWatch() {
-    if (this.isUserPlaying()) {
+    if (this.playing) {
       this.webSocketService.emit("spectate", {
         MYUSER: this.myUser.pseudo,
         MYSOCKET: this.webSocketService.socket.id,

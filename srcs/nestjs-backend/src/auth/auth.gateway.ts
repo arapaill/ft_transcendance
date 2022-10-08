@@ -61,6 +61,7 @@ import {
 
 	@SubscribeMessage('inviteUserToPlay')
 	async handleInviteUserToPlay(client, data: any ): Promise<void> {
+		console.log("Sent invite to play to" + data.userToInvite);
 		this.server.emit("getInviteToPlay", data);
 	}
 
@@ -72,11 +73,11 @@ import {
 	}
 	
 	
-/* 	@SubscribeMessage('requestIsUserPlaying')
-	async handlerequestIsUserPlaying(client, userName: string): Promise<void> {
-		let playing =  await this.userService.requestIsUserPlaying( userName) ;
+	@SubscribeMessage('requestIsUserPlaying')
+	async handlerequestIsUserPlaying(client, userID: number): Promise<void> {
+		let playing =  await this.userService.requestIsUserPlaying(userID) ;
 		this.server.emit("getIsUserPlaying", playing);
-	} */
+	}
 	
 	@SubscribeMessage('requestCheckUserName')
 	async handlerequestCheckUserName(client, userName: string): Promise<void> {
