@@ -168,8 +168,9 @@ export class ChatComponent implements OnInit {
   }
 
   createNewChannel(settings: any) {
-    let adminsArray = settings.admins ? settings.admins : [];
-    let usersArray = settings.users ? settings.users : [];
+
+    let adminsArray = settings.newAdmins ? settings.newAdmins : [];
+    let usersArray = settings.newUsers ? settings.newUsers : [];
     
     adminsArray.push(this.myUser.pseudo);
     usersArray.push(this.myUser.pseudo);
@@ -187,6 +188,7 @@ export class ChatComponent implements OnInit {
       usersKicked: [],
       usersMuted: []
     }
+    console.log(newChannel);
     this.webSocketService.emit('createNewChannel', newChannel);
   }
 
@@ -288,6 +290,7 @@ export class ChatComponent implements OnInit {
     });
 
     profileDialog.afterClosed().subscribe(result => {
+      console.log('CurrentChannelID: ', this.currentChannel.id);
       if (result === undefined)
         return;
       else if (result.action == 'PM')

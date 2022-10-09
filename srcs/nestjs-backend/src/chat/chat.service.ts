@@ -7,7 +7,7 @@ export class ChatService {
 
 	async createNewChannel(channel: object) {
 		console.log("New channel created: " + channel[0].name);
-
+		console.log(channel[0]);
 		const newChannel = await (this.prisma.chatChannel.create({
 			data: {
 				name: channel[0].name,
@@ -21,6 +21,75 @@ export class ChatService {
 				usersMuted: [],
 			}
 		}))
+
+		if (channel[0].admins) {
+			for (let admins of channel[0].admins) {
+				let user = await this.prisma.user.findFirst({
+					where: {
+						name: admins,
+					}
+				});
+
+				let userInfo = await this.prisma.userChannels.findFirst({
+					where: {
+						userID: user.id,
+					}
+				})
+
+				console.log("USER: ", userInfo)
+
+				let channelArray = userInfo.channelsID ? userInfo.channelsID : [];
+				let channelID = await this.prisma.chatChannel.findFirst({
+					where: {
+						name: channel[0].name,
+					}
+				})
+				channelArray.push(channelID.id);
+
+				await this.prisma.userChannels.update({
+					where: {
+						userID: user.id,
+					},
+					data: {
+						channelsID: channelArray,
+					}
+				})
+			}
+		}
+
+		if (channel[0].users) {
+			for (let users of channel[0].users) {
+				let user = await this.prisma.user.findFirst({
+					where: {
+						name: users,
+					}
+				});
+
+				let userInfo = await this.prisma.userChannels.findFirst({
+					where: {
+						userID: user.id,
+					}
+				})
+
+				let channelArray = userInfo.channelsID ? userInfo.channelsID : [];
+				let channelID = await this.prisma.chatChannel.findFirst({
+					where: {
+						name: channel[0].name,
+					}
+				})
+				channelArray.push(channelID.id);
+
+				await this.prisma.userChannels.update({
+					where: {
+						userID: user.id,
+					},
+					data: {
+						channelsID: channelArray,
+					}
+				})
+			}
+		}
+		
 
 		return newChannel;
 	}
@@ -427,33 +496,8 @@ export class ChatService {
 	}
 
 	async kickUser(infos: object) {
-	/* 	let channel = await this.prisma.chatChannel.findFirst({
-			where: {
-				id: infos[0].channelID,
-			}
-		})
 
-		let usersArray: number[] = channel ? channel.usersMuted : [];
-		let index = usersArray.indexOf(infos[0].userID)
-		if (index == -1) {
-			console.log("User ID " + infos[0].userID + " was kicked from channel ID " + infos[0].channelID);
-			usersArray.push(infos[0].userID);
-		}
-		else {
-			console.log("User ID " + infos[0].userID + " was kicked from channel ID " + infos[0].channelID);
-			usersArray.splice(index, 1);
-		};
-
-		this.prisma.chatChannel.update({
-			where: {
-				id: infos[0].channelID,
-			},
-			data: {
-				usersKicked: usersArray,
-			}
-		});
-	} */
-
+	console.log("ChannelID: ", infos[0].channelID)
 	
 	const user = await this.prisma.userChannels.findFirst({
 		where: {
@@ -466,6 +510,8 @@ export class ChatService {
 			id: infos[0].channelID,
 		}
 	});
+
+	console.log(channel);
 
 	let channelArray: number[] = user.channelsID;
 	let index = channelArray.indexOf(infos[0].channelID);
@@ -481,11 +527,11 @@ export class ChatService {
 	});
 
 	index = usersArray.indexOf(userInfos.name);
-	if (index == -1)
+	if (index != -1)
 		usersArray.splice(index, 1);
 
 	index = adminsArray.indexOf(userInfos.name);
-	if (index == -1)
+	if (index != -1)
 		adminsArray.splice(index, 1);
 
 	await this.prisma.userChannels.update({
