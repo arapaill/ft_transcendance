@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, OnInit, Inject } from '@angular/core';
+import { MatDialog, MAT_DIALOG_DATA } from  '@angular/material/dialog';
 import { InfoProfilComponent } from '../info-profil/info-profil.component';
+import { ProfileModel } from '../models/profile-model.model';
 import { myUser, User } from '../models/user.model';
 import { WebSocketService } from '../web-socket.service';
 
@@ -12,29 +13,28 @@ import { WebSocketService } from '../web-socket.service';
 })
 export class PopupDisplayFriendsComponent implements OnInit {
   friends : number[] = [];
-  constructor(private  dialogRef : MatDialog, public myUser : myUser, private webSocketService: WebSocketService) { }
+  friendslist : string[] = [];
+  Personne !: ProfileModel;
+  constructor(public myUser : myUser, private webSocketService: WebSocketService, private  dialogRef : MatDialog, @Inject(MAT_DIALOG_DATA) public data : any) {
+    this.friends = data.friends;
+   }
  
   ngOnInit(): void {
-    this.webSocketService.emit("requestUserInfosID", Number(localStorage.getItem('id')));
-    this.webSocketService.listen("getUserInfosID").subscribe((data: any) => {
-      this.myUser.avatar = data.avatar;
-      this.myUser.pseudo = data.name;
-      this.myUser.description = data.Description;
-      this.myUser.blacklist = data.blacklist;
-      this.myUser.id = data.id;
-      data.friends.forEach((key : number, value : any) : any =>{
-        this.friends.push(key);
-      });
-      console.log(data.friends);
+    console.log(this.friends);
+    for (const num of this.friends) {
+      this.webSocketService.emit("requestUserInfosID", num);
+      this.webSocketService.listen("getUserInfosID").subscribe((data: any) => {
+        this.friendslist.push(data.name);
     });
-    
-  }
-  openDialog(num : number){
-    this.dialogRef.open(InfoProfilComponent,{
-      data : {
-        num : num,
-      }
-    });
+    }
   }
 
+  openDialog(num : string){
+      this.dialogRef.open(InfoProfilComponent,{
+        data : {
+          name : num,
+        }
+      });
+      
+  }
 }
