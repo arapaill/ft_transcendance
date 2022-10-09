@@ -86,17 +86,43 @@ export class PongGateway {
         });
         if (test != null) {
           this.games.delete(socket_id);
+          await this.prisma.ongoingGame.deleteMany({
+            where: {
+              OR:[
+                {JOUEUR_1_PSEUDO : user_id},
+                {JOUEUR_2_PSEUDO : user_id},
+                {JOUEUR_1_SOCKET : socket_id},
+                {JOUEUR_2_SOCKET : socket_id}, 
+              ]
+            }
+          });
           if (test.JOUEUR_1_PSEUDO == user_id) {
             this.games.get(test.JOUEUR_2_SOCKET).playerOne.socket_id = socket_id;
             this.games.set(socket_id, this.games.get(test.JOUEUR_2_SOCKET));
             this.games.get(socket_id).gameState = GameState.MULTI;
             this.games.get(socket_id).playerOne.socket = socket_id;
+            await this.prisma.ongoingGame.create({
+              data: {
+                JOUEUR_1_SOCKET : socket_id,
+                JOUEUR_1_PSEUDO : user_id,
+                JOUEUR_2_SOCKET : test.JOUEUR_2_SOCKET,
+                JOUEUR_2_PSEUDO : test.JOUEUR_2_PSEUDO,
+              }
+            });
           }
           if (test.JOUEUR_2_PSEUDO == user_id) {
             this.games.get(test.JOUEUR_1_SOCKET).playerTwo.socket_id = socket_id;
             this.games.set(socket_id, this.games.get(test.JOUEUR_1_SOCKET));
             this.games.get(socket_id).gameState = GameState.MULTI;
             this.games.get(socket_id).playerTwo.socket = socket_id;
+            await this.prisma.ongoingGame.create({
+              data: {
+                JOUEUR_1_SOCKET : test.JOUEUR_1_SOCKET,
+                JOUEUR_1_PSEUDO : test.JOUEUR_1_PSEUDO,
+                JOUEUR_2_SOCKET : socket_id,
+                JOUEUR_2_PSEUDO : user_id,
+              }
+            });
           }
           this.games.get(socket_id).update(payload[0]);
           client.emit('update', this.games.get(socket_id).returnData());
