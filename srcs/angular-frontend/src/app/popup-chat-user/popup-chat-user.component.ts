@@ -78,10 +78,10 @@ export class PopupChatUserComponent implements OnInit {
 
   inviteToPlay() {
     this.isUserPlaying();
-
+    console.log('Inviting ', this.userID)
     if (this.playing == false) {
       this.webSocketService.emit("inviteUserToPlay", {
-        userToInvite: this.userID,
+        userToInvite: this.Personne.id,
         userWhoInvite: this.myUser.pseudo,
       });
       this.webSocketService.emit("invitation", {
@@ -89,7 +89,7 @@ export class PopupChatUserComponent implements OnInit {
         MYSOCKET: this.webSocketService.socket.id,
         MYUSER: this.myUser.pseudo,
         USER: this.Personne.name,
-        USERID: this.userID,
+        USERID: this.Personne.id,
       });
       this.dialogRef.close();
     }
@@ -103,7 +103,7 @@ export class PopupChatUserComponent implements OnInit {
         MYUSER: this.myUser.pseudo,
         MYSOCKET: this.webSocketService.socket.id,
         USER: this.Personne.name,
-        USERID: this.userID,
+        USERID: this.Personne.id,
       });
       this.dialogRef.close();
     }

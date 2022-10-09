@@ -73,7 +73,9 @@ export class PopupChatSettingsComponent implements OnInit {
       }
     });
 
-    if (this.currentSettings.owner === this.myUser.pseudo)
+    console.log(this.currentSettings.owner, this.myUser.pseudo);
+
+    if (this.currentSettings.owner == this.myUser.pseudo)
       this.disableSelect = false;
     else
       this.disableSelect = true;

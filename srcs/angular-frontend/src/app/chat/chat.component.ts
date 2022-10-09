@@ -73,8 +73,8 @@ export class ChatComponent implements OnInit {
       }
       this.currentChannel = this.channels[0];
       this.selectedChannel = this.currentChannel.name;
-      this.getChannelMessages();
     })
+    this.getChannelMessages();
 
     this.webSocketService.listen('getChannelMessages').subscribe((data: any) => {
       if (data.length == this.currentChannel.messages.length || data == undefined) {
@@ -175,6 +175,10 @@ export class ChatComponent implements OnInit {
     adminsArray.push(this.myUser.pseudo);
     usersArray.push(this.myUser.pseudo);
 
+/*     let passwordHashed;
+    if (settings.password)
+      passwordHashed = await bcrypt.hash(settings.password, 10) */
+
     let newChannel: ChatChannel = {
       id: 0,
       name: settings.name,
@@ -194,6 +198,10 @@ export class ChatComponent implements OnInit {
 
   changeCurrentChannel(newSettings: any) {
     if (newSettings.action == "Delete") {
+      this.webSocketService.emit('leaveChannel', {
+        userID: this.myUser.id,
+        channelID: this.currentChannel.id
+      });
       this.webSocketService.emit("deleteChannel", this.currentChannel.name);
       let index = this.channels.indexOf(this.currentChannel);
       this.channels.splice(index, 1);
