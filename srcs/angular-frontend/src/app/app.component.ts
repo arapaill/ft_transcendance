@@ -20,7 +20,6 @@ export class AppComponent implements OnInit {
   userID : number = Number( localStorage.getItem('id'));
 
   ngOnInit(): void {
-    console.log("TEST");
     this.loc = this.Location.path();
     if((this.loc.split("id="))[1] && !this.userID)
     {
@@ -41,8 +40,8 @@ export class AppComponent implements OnInit {
    }
     this.myUser.id = Number(localStorage.getItem('id'));
     this.webSocketService.listen("getInviteToPlay").subscribe((data: any) => {
-      console.log("Received invitation to play from " + data[0].userWhoInvite);
-      console.log("MyID: " + this.myUser.id + " " + " InvitedID: " + data[0].userToInvite)
+/*       console.log("Received invitation to play from " + data[0].userWhoInvite);
+      console.log("MyID: " + this.myUser.id + " " + " InvitedID: " + data[0].userToInvite) */
       if (data[0].userToInvite == this.myUser.id) {
       this.dialogRef.open(PopupPongInvitationComponent, {
         data: {

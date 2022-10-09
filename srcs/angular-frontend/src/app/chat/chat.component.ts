@@ -42,15 +42,11 @@ export class ChatComponent implements OnInit {
       this.myUser.avatar = data.avatar;
       this.myUser.pseudo = data.name;
       this.myUser.qr = data.qrCode;
-      console.log('Blocklist ', data.blockList);
       this.myUser.blacklist = data.blockList === undefined ? [] : data.blockList;
       this.myUser.friends = data.friendList === undefined ? [] : data.friendList;
       this.blockList = data.blockList === undefined ? [] : data.blockList;
       this.checkMessages();
     });
-    console.log("myUser.blacklist: ", this.myUser.blacklist);
-    console.log("myUser.friends: ", this.myUser.friends);
-    // console.log(bcrypt("test", 10));
    }
 
   ngOnInit(): void {
@@ -136,11 +132,8 @@ export class ChatComponent implements OnInit {
   }
 
   checkMessages() {
-    console.log('Checking...');
     for (const message of this.currentChannel.messages) {
-      console.log('BEFORE:', message.text);
       message.text = this.displayMessage(message);
-      console.log('AFTER:', message.text);
     }
   }
 
@@ -194,12 +187,10 @@ export class ChatComponent implements OnInit {
       if (tmpChannel.type == "Protégé") {
         let settingsDialog = this.dialogRef.open(PopupChatPasswordComponent);
         settingsDialog.afterClosed().subscribe(async (password: any)  => {
-          console.log(tmpChannel);
           if (tmpChannel != undefined && tmpChannel?.password != undefined) {
             let ret = await bcrypt.compare(password, tmpChannel?.password);
             if (tmpChannel?.password != undefined && ret) {
               this.currentChannel = tmpChannel;
-              console.log('ACCEPTED');
             }
           }
         });
@@ -232,7 +223,6 @@ export class ChatComponent implements OnInit {
       usersKicked: [],
       usersMuted: []
     }
-    console.log(newChannel);
     this.webSocketService.emit('createNewChannel', newChannel);
   }
 
@@ -341,7 +331,6 @@ export class ChatComponent implements OnInit {
     });
 
     profileDialog.afterClosed().subscribe(result => {
-      console.log('CurrentChannelID: ', this.currentChannel.id);
       if (result === undefined)
         return;
       else if (result.action == 'PM')
@@ -365,7 +354,6 @@ export class ChatComponent implements OnInit {
   }
 
   openJoinLeaveDialog() {
-    console.log(this.myUser.pseudo);
     let joinLeaveDialog = this.dialogRef.open(PopupChatJoinComponent, {
       data: {
         pseudo: this.myUser.pseudo,

@@ -59,7 +59,6 @@ export class AuthService {
 	
 		const output = await generateSecret(username, 'PingPong');
 		this.secrets.set(userId, output.secret);
-		console.log("->userId:" , userId ,"*-*output.secret: ", output.secret , "<-");
 		// return output.qrcode;
 		let secret = output.secret ;
 		let qrcode = output.qrcode ;
@@ -110,7 +109,6 @@ export class AuthService {
 			  name: 'test1',
 			},
 		}))
-		console.log(user);
 		return user;
 	}
 }
