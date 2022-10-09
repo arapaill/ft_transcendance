@@ -293,7 +293,6 @@ export class PongGateway {
             JOUEUR_2_SOCKET: socket_id,
           }
         });
-        await this.prisma.ongoingGame.deleteMany({});
         await this.prisma.user.update({
           where: {
               name : this.games.get(socket_id).playerOneName,
