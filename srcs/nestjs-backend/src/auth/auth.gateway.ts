@@ -111,7 +111,7 @@ import {
 	
 	@SubscribeMessage('request2FA')
 	async handlerequest2FA(client, userIDD: number): Promise<void> {
-		console.log("2FA 2FA 2FA :  Id :" , userIDD);
+		// console.log("2FA 2FA 2FA :  Id :" , userIDD);
 		let user = await this.userService.request2FA(userIDD[0]);
 		// this.server.emit("getUserInfos", user);
 	}
@@ -124,7 +124,7 @@ import {
 	
 	@SubscribeMessage('requestChangeStatus')
 	async handlerequestChangeStatus(client, userIDD: number, newStatus: string): Promise<void> {
-		let user = await this.userService.requestChangeStatus(userIDD, newStatus);
+		let user = await this.userService.requestChangeStatus(userIDD[0], userIDD[1]);
 		// this.server.emit("getUserInfos", user);
 	}
 	@SubscribeMessage('requestQR')

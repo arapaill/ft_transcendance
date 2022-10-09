@@ -242,6 +242,7 @@ export class AuthController {
 			
 				let linki = "http://localhost:4200/accueil?id="  + id ;
 				response.redirect(linki,302);
+				
 				await this.prismaService.user.create({
 				    data : { id, name,
 					    Full_Name, two_factor, avatar, line_status,
@@ -264,6 +265,7 @@ export class AuthController {
 				var y: number = +id_num;
 				id = y ;
 				name = req.user.username ;
+				await this.UserService.requestChangeStatus(req.user.id,"online");
 				let link = "http://localhost:4200/accueil?id="  + id_num ;
 				response.redirect(link,302);
 				}
@@ -406,6 +408,7 @@ export class AuthController {
 				if(req.url.split("verify?text=")[1]){
 					let f = (await this.authService.verifyCode(id,req.url.split("verify?text=")[1],secret));
 					if ((await f) == 1){
+						await this.UserService.requestChangeStatus(req.user.id,"online");
 						let link = "http://localhost:4200/accueil?id=" + req.user.id;
 						response.redirect( link ,302);
 					}
