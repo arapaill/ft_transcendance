@@ -22,6 +22,8 @@ export class ChatService {
 			}
 		}))
 
+		let alreadyAdded: boolean = false;
+
 		if (channel[0].admins) {
 			for (let admins of channel[0].admins) {
 				let user = await this.prisma.user.findFirst({
@@ -54,6 +56,7 @@ export class ChatService {
 						channelsID: channelArray,
 					}
 				})
+				alreadyAdded = true;
 			}
 		}
 
@@ -79,14 +82,16 @@ export class ChatService {
 				})
 				channelArray.push(channelID.id);
 
-				await this.prisma.userChannels.update({
-					where: {
-						userID: user.id,
-					},
-					data: {
-						channelsID: channelArray,
-					}
-				})
+				if (alreadyAdded == false) {
+					await this.prisma.userChannels.update({
+						where: {
+							userID: user.id,
+						},
+						data: {
+							channelsID: channelArray,
+						}
+					})
+				}
 			}
 		}
 		
@@ -151,6 +156,8 @@ export class ChatService {
 	}
 
 	async leaveChannel(infos: unknown) {
+		if (infos[0].channelID == 0)
+			return ;
 		console.log("User ID " + infos[0].userID + " leaved channel ID " + infos[0].channelID);
 
 		const user = await this.prisma.userChannels.findFirst({
@@ -274,6 +281,7 @@ export class ChatService {
 
 		console.log(userChannelInfos);
 		if (!userChannelInfos[0]) {
+			console.log('Hey');
 			await this.prisma.userChannels.create({
 				data: {
 					userID: userID[0],
@@ -299,8 +307,6 @@ export class ChatService {
 		});
 
 		userPseudo = user.name;
-
-		
 
 		const channels = await this.prisma.chatChannel.findMany({
 			where: {
@@ -373,6 +379,36 @@ export class ChatService {
 				name: channelName[0],
 			}
 		});
+
+		for (let user in channel.users) {
+			let userInfos = await this.prisma.user.findFirst({
+				where: {
+					name: user,
+				}
+			});
+			
+			if (userInfos) {
+				await this.leaveChannel({
+					userID: userInfos.id,
+					channelID: channel.id
+				});
+			}
+		}
+
+		for (let admin in channel.admins) {
+			let userInfos = await this.prisma.user.findFirst({
+				where: {
+					name: admin,
+				}
+			});
+
+			if (userInfos) {
+				await this.leaveChannel({
+					userID: userInfos.id,
+					channelID: channel.id
+				});
+			}
+		}
 		
 		await this.prisma.chatChannel.delete({
 			where: {
@@ -432,6 +468,8 @@ export class ChatService {
 			console.log("User ID " + infos[0].userID + " was unbanned from channel ID " + infos[0].channelID);
 			usersArray.splice(index, 1);
 		};
+
+		console.log(usersArray);
 
 		this.prisma.chatChannel.update({
 			where: {
