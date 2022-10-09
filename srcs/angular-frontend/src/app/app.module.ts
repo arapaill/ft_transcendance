@@ -34,6 +34,7 @@ import { LoginComponent } from './login/login.component';
 import { PopupPongInvitationComponent } from './popup-pong-invitation/popup-pong-invitation.component';
 import { myUser } from './models/user.model';
 import { PopupChatJoinComponent } from './popup-chat-join/popup-chat-join.component';
+import { PopupQrcodeComponent } from './popup-qrcode/popup-qrcode.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { PopupChatJoinComponent } from './popup-chat-join/popup-chat-join.compon
     LoginComponent,
     PopupPongInvitationComponent,
     PopupChatJoinComponent,
+    PopupQrcodeComponent,
   ],
   imports: [
     BrowserModule,
