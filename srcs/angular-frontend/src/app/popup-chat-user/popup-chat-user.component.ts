@@ -24,7 +24,7 @@ export class PopupChatUserComponent implements OnInit {
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
       this.amIOwner = data.AmIOwner;
       this.amIAdmin = data.AmIAdmin;
-      this.channelOwner = data.owner;
+      this.channelOwner = data.channelOwner;
       this.Personne = {
         avatar: data.userAvatar,
         name: data.userName,
@@ -37,13 +37,7 @@ export class PopupChatUserComponent implements OnInit {
       }
       this.myUser = data.myUser;
       this.myUser.blacklist = data.blockList;
-      console.log(data.myUser);
-      console.log(data.myUser.blacklist);
-
-      console.log('Friends:');
-      console.log((this.myUser.friends != undefined), this.myUser.friends.length, this.myUser.friends.indexOf(this.Personne.id) == -1)
-      console.log('Blacklist:');
-      console.log((this.myUser.blacklist != undefined), this.myUser.blacklist.length, this.myUser.blacklist.indexOf(this.Personne.id) == -1)
+      console.log(this.amIOwner, this.amIAdmin, this.Personne.name, this.channelOwner);
   }
 
   ngOnInit(): void {

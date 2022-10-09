@@ -213,7 +213,7 @@ export class ChatComponent implements OnInit {
 
   async createNewChannel(settings: any) {
 
-    let adminsArray = settings.newAdmins ? settings.newAdmins : [];
+    let adminsArray = settings.newAdmin ? settings.newAdmin : [];
     let usersArray = settings.newUsers ? settings.newUsers : [];
     
     adminsArray.push(this.myUser.pseudo);
@@ -328,6 +328,7 @@ export class ChatComponent implements OnInit {
   }
 
   openUserProfileDialog(user: ChatMessage) {
+    console.log(this.currentChannel);
     let profileDialog = this.dialogRef.open(PopupChatUserComponent, {
       data: {
         userName: user.userPseudo,
