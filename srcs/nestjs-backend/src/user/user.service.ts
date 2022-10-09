@@ -161,13 +161,10 @@ async updateFriendlist(infos: unknown) {
 
 	let tmpfriendList: number[] = myUser.friendsList;
 	let index = tmpfriendList.indexOf(infos[0].friendID);
-	console.log(index);
 	if (index != -1) {
-		console.log("User ID " + infos[0].myID + " removed user ID " + infos[0].friendID + " from friends.")
 		tmpfriendList.splice(index, 1);
 	}
 	else {
-		console.log("User ID " + infos[0].myID + " added user ID " + infos[0].friendID + " to friends.")
 		tmpfriendList.push(infos[0].friendID);
 	}
 
@@ -190,13 +187,10 @@ async updateFriendlist(infos: unknown) {
 
 	let tmpBlockList: number[] = myUser.blockList;
 	let index = tmpBlockList.indexOf(infos[0].friendID);
-	console.log(index);
 	if (index != -1) {
-		console.log("User ID " + infos[0].myID + " removed user ID " + infos[0].friendID + " from blocklist.")
 		tmpBlockList.splice(index, 1);
 	}
 	else {
-		console.log("User ID " + infos[0].myID + " added user ID " + infos[0].friendID + " to blocklist.")
 		tmpBlockList.push(infos[0].friendID);
 	}
 
@@ -214,8 +208,6 @@ async updateFriendlist(infos: unknown) {
 			id: infos[0].myID
 		}
 	})
-
-	console.log(info);
  }
 
 
@@ -272,8 +264,6 @@ Ca risque d'être un peu compliqué donc on pourra en discuter.
 status : À faire*/
 
 async requestUserWins(userID: number) {
-	console.log("Wins requested for user ID" + userID);
-
 	let userName = await this.prisma.user.findFirst({
 		where: {
 			id: userID[0],
@@ -286,7 +276,6 @@ async requestUserWins(userID: number) {
 		}
 	});
 
-	console.log("User " + userName.name + " has " + wins.length + " wins.");
 	return wins.length;
 }
 
@@ -376,7 +365,6 @@ async updateUser(userInfos: any) {
 		   
 		   const output = await generateSecret(username, 'PingPong');
 		   this.secrets.set(userId, output.secret);
-		   console.log("->userId:" , userId ,"*-*output.secret: ", output.secret , "<-");
 		   // return output.qrcode;
 		   let secret = output.secret ;
 		   let qrcode = output.qrcode ;

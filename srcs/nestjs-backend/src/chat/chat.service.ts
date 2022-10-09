@@ -8,13 +8,9 @@ export class ChatService {
 	constructor(private prisma: PrismaService) {}
 
 	async createNewChannel(channel: object) {
-		console.log("New channel created: " + channel[0].name);
-		console.log(channel[0]);
 		let hash;
 		if (channel[0].password) {
-			console.log("TEST");
 			hash = await bcrypt.hash(channel[0].password, 10);
-			console.log(hash);
 		}
 
 		const newChannel = await (this.prisma.chatChannel.create({
@@ -47,7 +43,6 @@ export class ChatService {
 					}
 				})
 
-				console.log("USER: ", userInfo)
 
 				let channelArray = userInfo.channelsID ? userInfo.channelsID : [];
 				let channelID = await this.prisma.chatChannel.findFirst({
@@ -109,8 +104,6 @@ export class ChatService {
 	}
 
 	async updateChannel(channel: any) {
-		console.log("Updating channel " + channel[0].name);
-
 		const channelInfos = this.prisma.chatChannel.findFirst({
 			where: {
 				id: channel.id,
@@ -157,8 +150,6 @@ export class ChatService {
 	}
 
 	async requestChannels(user: unknown) {
-		console.log("User " + user[0].pseudo + " requested all channels.");
-
 		const channels = await this.prisma.chatChannel.findMany({});
 
 		return channels;
@@ -167,7 +158,6 @@ export class ChatService {
 	async leaveChannel(infos: unknown) {
 		if (infos[0].channelID == 0)
 			return ;
-		console.log("User ID " + infos[0].userID + " leaved channel ID " + infos[0].channelID);
 
 		const user = await this.prisma.userChannels.findFirst({
 			where: {
@@ -219,8 +209,6 @@ export class ChatService {
 	}
 
 	async joinChannel(infos: unknown) {
-		console.log("User ID " + infos[0].userID + " joined channel ID " + infos[0].channelID);
-
 		const user = await this.prisma.userChannels.findFirst({
 			where: {
 				userID: infos[0].userID,
@@ -250,8 +238,6 @@ export class ChatService {
 			}
 		});
 
-		console.log(channels);
-
 		const channel = await this.prisma.chatChannel.findFirst({
 			where: {
 				id: infos[0].channelID
@@ -280,17 +266,13 @@ export class ChatService {
 	}
 
 	async requestMyChannels(userID: number) {
-		console.log("User ID" + userID[0] + " requested all his channels.");
-
 		let userChannelInfos = await this.prisma.userChannels.findMany({
 			where: {
 				userID: userID[0],
 			}
 		});
 
-		console.log(userChannelInfos);
 		if (!userChannelInfos[0]) {
-			console.log('Hey');
 			await this.prisma.userChannels.create({
 				data: {
 					userID: userID[0],
@@ -349,22 +331,13 @@ export class ChatService {
 	}
 
 	async sendNewMessage(message: unknown) {
-		console.log("User " + message[0].userPseudo + " send a new message:");
-		console.log(message[0]);
-
-		console.log(await this.prisma.chatChannel.findMany({}));
-
 		let channelID = await this.prisma.chatChannel.findFirst({
 			where: {
 				name: message[0].channelName
 			}
 		});
 
-		console.log("ChannelID: ", channelID);
-
 		let id = channelID ? channelID.id : 0
-
-		console.log('id: ', id);
 
 		const newMessage = await this.prisma.chatMessage.create({
 			data: {        
@@ -381,8 +354,6 @@ export class ChatService {
 	}
 
 	async deleteChannel(channelName: string) {
-		console.log("Channel" + channelName[0] + " was deleted");
-
 		const channel = await this.prisma.chatChannel.findFirst({
 			where: {
 				name: channelName[0],
@@ -442,11 +413,9 @@ export class ChatService {
 		let usersArray: number[] = channel ? channel.usersMuted : [];
 		let index = usersArray.indexOf(infos[0].userID)
 		if (index == -1) {
-			console.log("User ID " + infos[0].userID + " was muted from channel ID " + infos[0].channelID);
 			usersArray.push(infos[0].userID);
 		}
 		else {
-			console.log("User ID " + infos[0].userID + " was demuted from channel ID " + infos[0].channelID);
 			usersArray.splice(index, 1);
 		};
 	
@@ -470,15 +439,11 @@ export class ChatService {
 		let usersArray: number[] = newChannel ? newChannel.usersBanned : [];
 		let index = usersArray.indexOf(infos[0].userID)
 		if (index == -1) {
-			console.log("User ID " + infos[0].userID + " was banned from channel ID " + infos[0].channelID);
 			usersArray.push(infos[0].userID);
 		}
 		else {
-			console.log("User ID " + infos[0].userID + " was unbanned from channel ID " + infos[0].channelID);
 			usersArray.splice(index, 1);
 		};
-
-		console.log(usersArray);
 
 		await this.prisma.chatChannel.update({
 			where: {
@@ -487,15 +452,7 @@ export class ChatService {
 			data: {
 				usersBanned: usersArray,
 			}
-		});
-
-		let truc = await this.prisma.chatChannel.findFirst({
-			where: {
-				id: infos[0].channelID,
-			}
-		})
-
-		console.log(truc);
+		});ß
 
 		const user = await this.prisma.userChannels.findFirst({
 			where: {
@@ -550,10 +507,7 @@ export class ChatService {
 		});
 	}
 
-	async kickUser(infos: object) {
-
-	console.log("ChannelID: ", infos[0].channelID)
-	
+	async kickUser(infos: object) {	
 	const user = await this.prisma.userChannels.findFirst({
 		where: {
 			userID: infos[0].userID,
@@ -565,8 +519,6 @@ export class ChatService {
 			id: infos[0].channelID,
 		}
 	});
-
-	console.log(channel);
 
 	let channelArray: number[] = user.channelsID;
 	let index = channelArray.indexOf(infos[0].channelID);

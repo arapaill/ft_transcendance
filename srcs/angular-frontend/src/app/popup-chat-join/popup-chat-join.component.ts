@@ -26,7 +26,6 @@ export class PopupChatJoinComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.myUser);
     this.webSocketService.emit("requestChannels", this.myUser);
     this.webSocketService.listen("getChannels").subscribe((data: any) => {
       if (data.length == 0)
@@ -47,10 +46,6 @@ export class PopupChatJoinComponent implements OnInit {
           messages: []
         }
 
-        console.log("Evaluating ", newChannel);
-        console.log(newChannel.users, newChannel.admins);
-        console.log(newChannel.users.indexOf(this.myUser.pseudo));
-        console.log(newChannel.admins.indexOf(this.myUser.pseudo));
         if (newChannel.type != 'Privé' && newChannel.users.indexOf(this.myUser.pseudo) == -1 && newChannel.admins.indexOf(this.myUser.pseudo) == -1)
           this.channelsToDisplay.push(newChannel);
       }
@@ -61,9 +56,6 @@ export class PopupChatJoinComponent implements OnInit {
 
   join(values: any) {
     let tmpChannel = this.channelsToDisplay.find(x => x.name === values.channel);
-    console.log(tmpChannel);
-    console.log('BAN: ', tmpChannel?.usersBanned);
-    console.log('BAN: ', tmpChannel?.usersBanned.indexOf(this.myUser.id));
     if (tmpChannel?.usersBanned.indexOf(this.myUser.id) != -1) {
       alert("Vous êtes banni de ce channel.");
       this.dialogRef.close();

@@ -48,7 +48,6 @@ function getPrivateMessages() {
 
   // let filtered_arr = data.filter((obj)=> obj.roomsb === activeroom);
   // let fewd = data.filter((obj)=> obj.email === activeroom);
-  console.log(data);
   // alert("**********************");
   // alert(JSON.stringify(data, null, 4));
   loadDate(data); 

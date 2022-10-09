@@ -47,7 +47,6 @@ export class AuthController {
 
 	@Get('recupFakeUser')
 	controllerRecupFakeUsef() {
-		console.log("recupFakeUsers called !");
 		this.authService.recupFakeUsers();
 	}
 
@@ -469,12 +468,10 @@ export class AuthController {
     
 	@Get('123')
 	findAll(): any {
-	  console.log(this.prismaService.user.findFirst());
 	}
 
 	@Get('999')
 	finvvAll(@Req() req): any {
-	  console.log(req.socket._sockname);
 	}
 
 	@Get('login')

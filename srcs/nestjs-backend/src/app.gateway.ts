@@ -16,7 +16,6 @@ export class AppGateway {
 
   @SubscribeMessage('message')
   handleMessage(client: Socket, data: any): string {
-    console.log("DODODODO");
     return 'Hello worldqsqsqsss!';
   }
 }

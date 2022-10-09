@@ -47,9 +47,7 @@ import {
 
 	@SubscribeMessage('requestUserMatchsHistory')
 	async handlerequestUserMatchsHistory(client, userName: string): Promise<void> {
-		console.log("Requested match history");
 		let matchs = await this.userService.requestUserMatchsHistory(userName)
-		console.log(matchs);
 		this.server.to(client.id).emit("getUserMatchsHistory", matchs);
 	}	
 
@@ -71,7 +69,6 @@ import {
 
 	@SubscribeMessage('inviteUserToPlay')
 	async handleInviteUserToPlay(client, data: any ): Promise<void> {
-		console.log("Sent invite to play to" + data.userToInvite);
 		this.server.emit("getInviteToPlay", data);
 	}
 
@@ -102,7 +99,6 @@ import {
 
 	@SubscribeMessage('requestIsUserPlaying')
 	async handleRequestIsUserPlaying(client, userID: number): Promise<void> {
-		console.log("isInMatch requested");
 		let match = await this.userService.requestIsUserPlaying(userID);
 		this.server.to(client.id).emit('getIsUserPlaying', match);
 	}

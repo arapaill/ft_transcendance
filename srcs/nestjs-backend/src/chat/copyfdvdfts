@@ -37,7 +37,6 @@ export class AppGateway
   }
 
   handleDisconnect(client: Socket) {
-    console.log(`Disconnected: ${client.id}`);
     //Do stuffs
   }
   
@@ -62,12 +61,10 @@ export class AppGateway
 
   @SubscribeMessage('createUser')
   handlecreateUser(client,message: { sender: string, room: string, message: string , rooms: any}) {
-    console.log("dekhlt le user");
     client.username = message.sender;
     usernames[message.sender] = message.sender;
     client.currentRoom = "global";
     client.join("global");
-    console.log(`User ${message.sender} created on server successfully.`);
     client.emit("updateChat", "INFO", "You have joined global room", client.currentRoom,message);
     client.broadcast.to("global").emit("updateChat", "INFO", message.sender + " has joined global room","global", message);
     this.server.emit("updateUsers", usernames);
@@ -75,7 +72,6 @@ export class AppGateway
   }
 
   handleConnection(client: Socket, ...args: any[]) {
-    console.log(`Connected ${client.id}`);
     //Do stuffs
   }
 }

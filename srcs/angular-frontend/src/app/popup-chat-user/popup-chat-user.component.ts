@@ -37,7 +37,6 @@ export class PopupChatUserComponent implements OnInit {
       }
       this.myUser = data.myUser;
       this.myUser.blacklist = data.blockList;
-      console.log(this.amIOwner, this.amIAdmin, this.Personne.name, this.channelOwner);
   }
 
   ngOnInit(): void {
@@ -77,7 +76,6 @@ export class PopupChatUserComponent implements OnInit {
 
   inviteToPlay() {
     this.isUserPlaying();
-    console.log('Inviting ', this.userID)
     if (this.playing == false) {
       this.webSocketService.emit("inviteUserToPlay", {
         userToInvite: this.Personne.id,

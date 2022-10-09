@@ -69,15 +69,12 @@ export class ChatGateway {
 
   @SubscribeMessage('updateChannel')
   async handleUpdateChannel(client, channel: unknown) {
-    console.log(channel[0]);
     this.chatService.updateChannel(channel);
   }
 
   @SubscribeMessage('requestChannelMessages')
   async handleRequestChannelMessages(client, data: string) {
     let messages = await this.chatService.requestChannelMessages(data);
-    console.log("********");
-    console.log(data);
     this.server.to(client.id).emit('getChannelMessages', messages);
   }
 
