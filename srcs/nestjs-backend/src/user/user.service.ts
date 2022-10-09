@@ -460,7 +460,18 @@ async updateUser(userInfos: any) {
 				   });
 			   }		
 		
+			   async requestQR( idd: number) {
 
+				let id_num = idd;
+				var y: number = +id_num;
+				let id = y ;
+				let u =  await this.prisma.user.findFirst({
+					where: {
+						id: id,
+					},
+				});
+				return (await u).qrCode;
+			  }
 	//-------------------------------------------------------------
   public async pipeQrCodeStream(stream: Response, otpauthUrl: string) {
     return toFileStream(stream, otpauthUrl);
