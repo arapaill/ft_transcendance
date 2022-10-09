@@ -74,8 +74,35 @@ export class PongGateway {
   async handleAction(client: any, payload: any) {
     let socket_id = payload[0].SOCKET;
     let user_id = payload[0].NAME;
+    let test = await this.prisma.ongoingGame.findFirst({
+      where: {
+        OR:[
+          {JOUEUR_1_PSEUDO : user_id},
+          {JOUEUR_2_PSEUDO : user_id},
+        ]
+      }
+    });
     if (this.games.has(socket_id)) {
       if (this.games.get(socket_id).gameState == GameState.MENU) {
+        if (test != null) {
+          this.games.delete(socket_id);
+          if (test.JOUEUR_1_PSEUDO == user_id) {
+            this.games.get(test.JOUEUR_2_SOCKET).playerOne.socket_id = socket_id;
+            this.games.set(socket_id, this.games.get(test.JOUEUR_2_SOCKET));
+            this.games.get(socket_id).gameState = GameState.MULTI;
+            this.games.get(socket_id).playerOne.socket = socket_id;
+          }
+          if (test.JOUEUR_2_PSEUDO == user_id) {
+            this.games.get(test.JOUEUR_1_SOCKET).playerOne.socket_id = socket_id;
+            this.games.set(socket_id, this.games.get(test.JOUEUR_1_SOCKET));
+            this.games.get(socket_id).gameState = GameState.MULTI;
+            this.games.get(socket_id).playerOne.socket = socket_id;
+          }
+          console.log(this.games.get(socket_id));
+          this.games.get(socket_id).update(payload[0]);
+          client.emit('update', this.games.get(socket_id).returnData());
+          return ;
+        }
         this.games.get(socket_id).changeStateMenu(payload[0]);
         if (this.games.get(socket_id).gameState == GameState.MENU)
           client.emit('update', this.games.get(socket_id).returnGameState());
