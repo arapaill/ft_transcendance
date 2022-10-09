@@ -20,7 +20,6 @@ export class PopupDisplayFriendsComponent implements OnInit {
    }
  
   ngOnInit(): void {
-    console.log(this.friends);
     for (const num of this.friends) {
       this.webSocketService.emit("requestUserInfosID", num);
       this.webSocketService.listen("getUserInfosID").subscribe((data: any) => {
