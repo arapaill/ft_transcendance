@@ -1,9 +1,8 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from  '@angular/material/dialog';
-import { PopupAddFriendComponent } from "../popup-add-friend/popup-add-friend.component";
 import { WebSocketService } from '../web-socket.service'
 import { ProfileModel} from "../models/profile-model.model";
-import { myUser, User} from '../models/user.model';
+import { myUser} from '../models/user.model';
 
 @Component({
   selector: 'app-info-profil',
@@ -13,7 +12,17 @@ import { myUser, User} from '../models/user.model';
   
 })
 export class InfoProfilComponent implements OnInit {
-  Personne!: ProfileModel;
+  Personne: ProfileModel = {
+    avatar: "",
+    name: "",
+    description: "",
+    date: new Date(),
+    victoires: 0,
+    match: false,
+    id : 0,
+    status: "",
+    
+  };
   matchs : string[] = [];
   nameProfil !: string;
   constructor(private webSocketService: WebSocketService, private  dialogRef : MatDialog, @Inject(MAT_DIALOG_DATA) public data : any, public myUser : myUser) {
