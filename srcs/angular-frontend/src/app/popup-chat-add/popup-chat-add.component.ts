@@ -57,7 +57,6 @@ export class PopupChatAddComponent implements OnInit {
   }
 
   submitValues(values: any) {
-    console.log(values);
     this.dialogRef.close(values);
   }
 

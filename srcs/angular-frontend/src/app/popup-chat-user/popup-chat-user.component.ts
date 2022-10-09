@@ -37,13 +37,6 @@ export class PopupChatUserComponent implements OnInit {
       }
       this.myUser = data.myUser;
       this.myUser.blacklist = data.blockList;
-      console.log(data.myUser);
-      console.log(data.myUser.blacklist);
-
-      console.log('Friends:');
-      console.log((this.myUser.friends != undefined), this.myUser.friends.length, this.myUser.friends.indexOf(this.Personne.id) == -1)
-      console.log('Blacklist:');
-      console.log((this.myUser.blacklist != undefined), this.myUser.blacklist.length, this.myUser.blacklist.indexOf(this.Personne.id) == -1)
   }
 
   ngOnInit(): void {
@@ -83,7 +76,6 @@ export class PopupChatUserComponent implements OnInit {
 
   inviteToPlay() {
     this.isUserPlaying();
-    console.log('Inviting ', this.userID)
     if (this.playing == false) {
       this.webSocketService.emit("inviteUserToPlay", {
         userToInvite: this.Personne.id,
