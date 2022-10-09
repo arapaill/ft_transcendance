@@ -4,6 +4,8 @@ import { MatDialog } from  '@angular/material/dialog';
 import { PopupModifierProfilComponent } from '../popup-modifier-profil/popup-modifier-profil.component';
 import { PopupDisplayFriendsComponent } from '../popup-display-friends/popup-display-friends.component';
 import { WebSocketService } from '../web-socket.service';
+import { PopupQrcodeComponent } from '../popup-qrcode/popup-qrcode.component';
+import { LoginComponent } from '../login/login.component';
 
 @Component({
   selector: 'app-profile',
@@ -21,6 +23,7 @@ export class ProfileComponent implements OnInit {
       this.myUser.description = data.Description;
       this.myUser.qr = data.qrCode;
       this.two_factor = data.two_factor;
+      console.log(this.two_factor);
     });
 
   }
@@ -50,9 +53,20 @@ export class ProfileComponent implements OnInit {
   }
 
   openLogout(){
-    this.webSocketService.emit("requestLogout", Number(localStorage.getItem('id')));
+    this.webSocketService.emit("requestChangeStatus", Number(localStorage.getItem('id')), "Offline");
     localStorage.removeItem('id')
-    console.log(this.two_factor);
-    console.log("logout");
+    this.dialogRef.open(LoginComponent);
+  }
+
+  showQR(){
+    console.log("click show qr");
+    this.webSocketService.emit("requestQR", Number(localStorage.getItem('id')));
+    this.webSocketService.listen("getQR").subscribe((data: any) => {
+      console.log("in getQR");
+      this.dialogRef.open(PopupQrcodeComponent,{
+        data : data,
+      });
+    });
+    
   }
 }

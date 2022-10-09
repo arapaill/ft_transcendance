@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
+import { MatDialog, MAT_DIALOG_DATA } from  '@angular/material/dialog';
+import { WebSocketService } from '../web-socket.service'
+
+
 
 @Component({
   selector: 'app-popup-qrcode',
@@ -7,9 +11,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PopupQrcodeComponent implements OnInit {
 
-  constructor() { }
+  QR !: any;
+  constructor(private webSocketService: WebSocketService, private  dialogRef : MatDialog, @Inject(MAT_DIALOG_DATA) public data : any) {
+      this.QR = data;
+   }
 
   ngOnInit(): void {
+    
   }
 
 }
