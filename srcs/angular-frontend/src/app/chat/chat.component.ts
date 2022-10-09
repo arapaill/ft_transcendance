@@ -34,19 +34,22 @@ export class ChatComponent implements OnInit {
   selectedChannel: string = this.currentChannel.name;
   blockList: number[] = [];
 
-  constructor(private webSocketService: WebSocketService, private dialogRef: MatDialog, public myUser: myUser ) {
+  constructor(private webSocketService: WebSocketService, private dialogRef: MatDialog, public myUser: myUser) {
     this.myUser.id = Number(localStorage.getItem('id'));
     this.webSocketService.emit("requestUserInfosID", Number(localStorage.getItem('id')));
     this.webSocketService.listen("getUserInfosID").subscribe((data: any) => {
       this.myUser.avatar = data.avatar;
       this.myUser.pseudo = data.name;
       this.myUser.qr = data.qrCode;
+      console.log('Blocklist ', data.blockList);
       this.myUser.blacklist = data.blockList === undefined ? [] : data.blockList;
       this.myUser.friends = data.friendList === undefined ? [] : data.friendList;
       this.blockList = data.blockList === undefined ? [] : data.blockList;
+      this.checkMessages();
     });
     console.log("myUser.blacklist: ", this.myUser.blacklist);
     console.log("myUser.friends: ", this.myUser.friends);
+    // console.log(bcrypt("test", 10));
    }
 
   ngOnInit(): void {
@@ -130,6 +133,15 @@ export class ChatComponent implements OnInit {
     });
   }
 
+  checkMessages() {
+    console.log('Checking...');
+    for (const message of this.currentChannel.messages) {
+      console.log('BEFORE:', message.text);
+      message.text = this.displayMessage(message);
+      console.log('AFTER:', message.text);
+    }
+  }
+
   sendNewMessage(msg: any): void {
     if (msg.value == "")
     return ;
@@ -146,6 +158,30 @@ export class ChatComponent implements OnInit {
     this.webSocketService.emit("requestChannelMessages", this.currentChannel.name);
   }
 
+  // async sendNewMessage(msg: any) {
+  //   if (msg.value == "")
+  //   return ;
+  //   let newMessage: ChatMessage = {
+  //     userPseudo: this.myUser.pseudo,
+  //     userID: this.myUser.id,
+  //     userAvatar: this.myUser.avatar,
+  //     text: msg.value,
+  //     date: new Date(),
+  //     channelName: this.currentChannel.name
+  //   }
+  //   msg.value = "";
+  //   var hash =  await bcrypt.hash("test", 10);
+  //   console.log("the hash is: ", hash, "**");
+  //   // console.log();
+  //   const isPasswordMatching = await bcrypt.compare("tesgtrtrtt", hash);    
+  //   console.log(isPasswordMatching)
+  //   const works = await bcrypt.compare("test", hash);    
+  //   console.log(works)
+  //   // console.log(hash);
+  //   this.webSocketService.emit("sendNewMessage", newMessage);
+  //   this.webSocketService.emit("requestChannelMessages", this.currentChannel.name);
+  // }
+
   getChannelMessages() {
     this.webSocketService.emit('requestChannelMessages', this.currentChannel.name);
   }
@@ -156,7 +192,7 @@ export class ChatComponent implements OnInit {
       if (tmpChannel.type == "Protégé") {
         let settingsDialog = this.dialogRef.open(PopupChatPasswordComponent);
         settingsDialog.afterClosed().subscribe(password => {
-          if (tmpChannel?.password !== undefined && password == tmpChannel?.password) { // Encrypt mdp
+          if (tmpChannel?.password !== undefined && password == tmpChannel?.password) {
             this.currentChannel = tmpChannel;
           }
         });
@@ -165,19 +201,16 @@ export class ChatComponent implements OnInit {
         this.currentChannel = tmpChannel;
     }
     this.getChannelMessages();
+    this.checkMessages();
   }
 
-  createNewChannel(settings: any) {
+  async createNewChannel(settings: any) {
 
     let adminsArray = settings.newAdmins ? settings.newAdmins : [];
     let usersArray = settings.newUsers ? settings.newUsers : [];
     
     adminsArray.push(this.myUser.pseudo);
     usersArray.push(this.myUser.pseudo);
-
-/*     let passwordHashed;
-    if (settings.password)
-      passwordHashed = await bcrypt.hash(settings.password, 10) */
 
     let newChannel: ChatChannel = {
       id: 0,
@@ -237,10 +270,13 @@ export class ChatComponent implements OnInit {
   displayMessage(message: ChatMessage): string {
     let text: string = message.text
   
+    
     if (this.currentChannel.usersBanned.indexOf(message.userID) != -1)
-      text = 'This user is banned.'
+      text = 'This user is banned.';
     else if (this.currentChannel.usersMuted.indexOf(message.userID) != -1)
-      text = 'This user is muted.'
+      text = 'This user is muted.';
+    else if (this.myUser.blacklist != undefined && this.myUser.blacklist.indexOf(message.userID) != -1)
+      text = 'This user is blocked.';
 
     return text;
   }
