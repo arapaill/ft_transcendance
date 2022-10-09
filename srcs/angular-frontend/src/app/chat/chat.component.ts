@@ -204,7 +204,7 @@ export class ChatComponent implements OnInit {
 
   async createNewChannel(settings: any) {
 
-    let adminsArray = settings.newAdmins ? settings.newAdmins : [];
+    let adminsArray = settings.newAdmin ? settings.newAdmin : [];
     let usersArray = settings.newUsers ? settings.newUsers : [];
     
     adminsArray.push(this.myUser.pseudo);
@@ -260,7 +260,7 @@ export class ChatComponent implements OnInit {
       usersKicked: [],
       usersMuted: []
     }
-    this.channels.push(newChannel);
+    //this.channels.push(newChannel);
     this.webSocketService.emit('createNewChannel', newChannel);
   }
 
