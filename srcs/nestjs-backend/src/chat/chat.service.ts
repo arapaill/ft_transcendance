@@ -452,7 +452,7 @@ export class ChatService {
 			data: {
 				usersBanned: usersArray,
 			}
-		});ß
+		});
 
 		const user = await this.prisma.userChannels.findFirst({
 			where: {

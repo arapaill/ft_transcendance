@@ -68,6 +68,7 @@ export class ProfileComponent implements OnInit {
   showQR(){
     this.webSocketService.emit("requestQR", Number(localStorage.getItem('id')));
     this.webSocketService.listen("getQR").subscribe((data: any) => {
+      console.log("in emit");
       this.dialogRef.open(PopupQrcodeComponent,{
         data : data,
       });
