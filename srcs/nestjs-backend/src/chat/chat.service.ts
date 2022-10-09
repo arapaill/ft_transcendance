@@ -34,11 +34,11 @@ export class ChatService {
 			}
 		});
 
-		let usersArray = channelInfos.users;
-		let adminsArray = channelInfos.admins;
+		let usersArray = channelInfos[0].users;
+		let adminsArray = channelInfos[0].admins;
 
 		for (const user of channel[0].users) {
-			if (channelInfos.users.indexOf(user) == -1) {
+			if (channelInfos[0].users.indexOf(user) == -1) {
 				let cUser = await this.prisma.user.findFirst({
 					where: {
 						name: user,
@@ -49,7 +49,7 @@ export class ChatService {
 		}
 
 		for (const admin of channel[0].admins) {
-			if (channelInfos.admins.indexOf(admin) == -1) {
+			if (channelInfos[0].admins.indexOf(admin) == -1) {
 				let cAdmin = await this.prisma.user.findFirst({
 					where: {
 						name: admin,
@@ -127,8 +127,8 @@ export class ChatService {
 				id: infos[0].channelID,
 			},
 			data: {
-				users = usersArray,
-				admins = adminsArray
+				users: usersArray,
+				admins: adminsArray
 			}
 		})
 	}
@@ -347,13 +347,13 @@ export class ChatService {
 	}
 
 	async banUser(infos: object) {
-		let channel = await this.prisma.chatChannel.findFirst({
+		let newChannel = await this.prisma.chatChannel.findFirst({
 			where: {
 				id: infos[0].channelID,
 			}
 		})
 
-		let usersArray: number[] = channel ? channel.usersMuted : [];
+		let usersArray: number[] = newChannel ? newChannel.usersMuted : [];
 		let index = usersArray.indexOf(infos[0].userID)
 		if (index == -1) {
 			console.log("User ID " + infos[0].userID + " was banned from channel ID " + infos[0].channelID);
@@ -384,6 +384,12 @@ export class ChatService {
 				id: infos[0].channelID,
 			}
 		});
+
+		const userInfos = await this.prisma.user.findFirst({
+			where: {
+				id: infos[0].userID,
+			}
+		})
 	
 		let channelArray: number[] = user.channelsID;
 		index = channelArray.indexOf(infos[0].channelID);
@@ -392,11 +398,11 @@ export class ChatService {
 		let usersArrayString: string[] = channel.users;
 		let adminsArray: string[] = channel.admins;
 	
-		index = usersArrayString.indexOf(user.name);
+		index = usersArrayString.indexOf(userInfos.name);
 		if (index == -1)
 			usersArrayString.splice(index, 1);
 	
-		index = adminsArray.indexOf(user.name);
+		index = adminsArray.indexOf(userInfos.name);
 		if (index == -1)
 			adminsArray.splice(index, 1);
 	
@@ -414,7 +420,7 @@ export class ChatService {
 				id: infos[0].channelID,
 			},
 			data: {
-				users: usersArray,
+				users: usersArrayString,
 				admins: adminsArray,
 			}
 		});
@@ -468,11 +474,17 @@ export class ChatService {
 	let usersArray: string[] = channel.users;
 	let adminsArray: string[] = channel.admins;
 
-	index = usersArray.indexOf(user.name);
+	let userInfos = await this.prisma.user.findFirst({
+		where: {
+			id: infos[0].userID,
+		}
+	});
+
+	index = usersArray.indexOf(userInfos.name);
 	if (index == -1)
 		usersArray.splice(index, 1);
 
-	index = adminsArray.indexOf(user.name);
+	index = adminsArray.indexOf(userInfos.name);
 	if (index == -1)
 		adminsArray.splice(index, 1);
 
@@ -494,4 +506,5 @@ export class ChatService {
 			admins: adminsArray,
 		}
 	});
+	}
 }
