@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MatDialog } from  '@angular/material/dialog';
-import { bcrypt } from 'bcryptjs'
+var bcrypt = require('bcryptjs');
 
 import { WebSocketService } from '../web-socket.service'
 import { PopupChatAddComponent } from '../popup-chat-add/popup-chat-add.component';
@@ -68,6 +68,7 @@ export class ChatComponent implements OnInit {
           admins: channel.admins,
           users: channel.users,
           type: channel.type,
+          password: channel.password,
           messages: [],
           usersBanned: channel.usersBanned,
           usersKicked: channel.usersKicked,
@@ -187,14 +188,19 @@ export class ChatComponent implements OnInit {
     this.webSocketService.emit('requestChannelMessages', this.currentChannel.name);
   }
 
-  selectChannel(fchannel: string) {
+  async selectChannel(fchannel: string) {
     let tmpChannel = this.channels.find(x => x.name === fchannel);
     if (tmpChannel) {
       if (tmpChannel.type == "Protégé") {
         let settingsDialog = this.dialogRef.open(PopupChatPasswordComponent);
-        settingsDialog.afterClosed().subscribe(password => {
-          if (tmpChannel?.password != undefined && await bcrypt.compare(password, tmpChannel?.password)) {
-            this.currentChannel = tmpChannel;
+        settingsDialog.afterClosed().subscribe(async (password: any)  => {
+          console.log(tmpChannel);
+          if (tmpChannel != undefined && tmpChannel?.password != undefined) {
+            let ret = await bcrypt.compare(password, tmpChannel?.password);
+            if (tmpChannel?.password != undefined && ret) {
+              this.currentChannel = tmpChannel;
+              console.log('ACCEPTED');
+            }
           }
         });
       }

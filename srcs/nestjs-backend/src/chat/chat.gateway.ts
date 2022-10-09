@@ -12,6 +12,7 @@ import { Socket, Server } from 'socket.io';
 import { AppService } from '../app.service';
 import { Chat } from './chat.entity';
 import { ChatService } from './chat.service';
+var bcrypt = require('bcryptjs');
 
 
 /* var usernames = {};

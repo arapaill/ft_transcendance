@@ -1,5 +1,7 @@
 import { ConsoleLogger, Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+var bcrypt = require('bcryptjs');
+
 
 @Injectable()
 export class ChatService {
@@ -8,6 +10,13 @@ export class ChatService {
 	async createNewChannel(channel: object) {
 		console.log("New channel created: " + channel[0].name);
 		console.log(channel[0]);
+		let hash;
+		if (channel[0].password) {
+			console.log("TEST");
+			hash = await bcrypt.hash(channel[0].password, 10);
+			console.log(hash);
+		}
+
 		const newChannel = await (this.prisma.chatChannel.create({
 			data: {
 				name: channel[0].name,
@@ -15,7 +24,7 @@ export class ChatService {
 				type: channel[0].type,
 				users: channel[0].users,
 				admins: channel[0].admins,
-				password: channel[0].password,
+				password: hash ? hash : "",
 				usersBanned: [],
 				usersKicked: [],
 				usersMuted: [],
