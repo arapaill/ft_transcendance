@@ -1,9 +1,8 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from  '@angular/material/dialog';
-import { PopupAddFriendComponent } from "../popup-add-friend/popup-add-friend.component";
 import { WebSocketService } from '../web-socket.service'
 import { ProfileModel} from "../models/profile-model.model";
-import { myUser, User} from '../models/user.model';
+import { myUser} from '../models/user.model';
 
 @Component({
   selector: 'app-info-profil',
@@ -13,10 +12,20 @@ import { myUser, User} from '../models/user.model';
   
 })
 export class InfoProfilComponent implements OnInit {
-  Personne!: ProfileModel;
+  Personne: ProfileModel = {
+    avatar: "",
+    name: "",
+    description: "",
+    date: new Date(),
+    victoires: 0,
+    match: false,
+    id : 0,
+    status: "",
+    
+  };
   matchs : string[] = [];
   nameProfil !: string;
-  constructor(private webSocketService: WebSocketService, private  dialogRef : MatDialog, @Inject(MAT_DIALOG_DATA) public data : any, public myUser : myUser, public dude : myUser) {
+  constructor(private webSocketService: WebSocketService, private  dialogRef : MatDialog, @Inject(MAT_DIALOG_DATA) public data : any, public myUser : myUser) {
     this.nameProfil = data.name;
 
   }
@@ -26,11 +35,6 @@ export class InfoProfilComponent implements OnInit {
     
     this.webSocketService.emit("requestUserInfos", this.nameProfil);
     this.webSocketService.listen("getUserInfos").subscribe((data: any) => {
-      this.dude.avatar = data.avatar;
-      this.dude.pseudo = data.name;
-      this.dude.description = data.Description;
-      this.dude.id = data.id;
-      console.log(data);
       this.Personne = 
       {
         avatar: data.avatar,
@@ -61,10 +65,7 @@ export class InfoProfilComponent implements OnInit {
       this.myUser.description = data.Description;
       this.myUser.blacklist = data.blacklist;
       this.myUser.id = data.id;
-      data.friends.forEach((key : any, value : any) : any =>{
-        this.myUser.friends.push(value, key);
-      });
-      this.myUser.friends.push(this.Personne.id);
+      this.myUser.friends = data.friendsList;
     this.webSocketService.emit("updateFriendlist", {
       myID : Number(localStorage.getItem('id')),
       friendID : this.Personne.id,

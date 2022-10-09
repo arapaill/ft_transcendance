@@ -18,11 +18,15 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     this.webSocketService.emit("requestUserInfosID", Number(localStorage.getItem('id')));
     this.webSocketService.listen("getUserInfosID").subscribe((data: any) => {
-      this.myUser.avatar = data.avatar;
-      this.myUser.pseudo = data.name;
-      this.myUser.description = data.Description;
-      this.myUser.qr = data.qrCode;
-      this.two_factor = data.two_factor;
+      if(data.id == Number(localStorage.getItem('id')))
+      {
+        this.myUser.avatar = data.avatar;
+        this.myUser.pseudo = data.name;
+        this.myUser.description = data.Description;
+        this.myUser.qr = data.qrCode;
+        this.myUser.friends = data.friendsList;
+        this.two_factor = data.two_factor;
+      }
       console.log(this.two_factor);
     });
 
@@ -35,7 +39,11 @@ export class ProfileComponent implements OnInit {
     })
   }
     displayFriends(){
-      this.dialogRef.open(PopupDisplayFriendsComponent);
+      this.dialogRef.open(PopupDisplayFriendsComponent,{
+        data : {
+          friends : this.myUser.friends,
+        }
+      });
     }
     
   secureConect(){

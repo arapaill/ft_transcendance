@@ -1,7 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MatDialog } from  '@angular/material/dialog';
-import { Router } from '@angular/router';
-//import { bcrypt } from 'bcryptjs';
 
 import { WebSocketService } from '../web-socket.service'
 import { PopupChatAddComponent } from '../popup-chat-add/popup-chat-add.component';
@@ -36,7 +34,7 @@ export class ChatComponent implements OnInit {
   selectedChannel: string = this.currentChannel.name;
   blockList: number[] = [];
 
-  constructor(private webSocketService: WebSocketService, private dialogRef: MatDialog, public myUser: myUser, public router: Router) {
+  constructor(private webSocketService: WebSocketService, private dialogRef: MatDialog, public myUser: myUser) {
     this.myUser.id = Number(localStorage.getItem('id'));
     this.webSocketService.emit("requestUserInfosID", Number(localStorage.getItem('id')));
     this.webSocketService.listen("getUserInfosID").subscribe((data: any) => {
@@ -51,6 +49,7 @@ export class ChatComponent implements OnInit {
     });
     console.log("myUser.blacklist: ", this.myUser.blacklist);
     console.log("myUser.friends: ", this.myUser.friends);
+    // console.log(bcrypt("test", 10));
    }
 
   ngOnInit(): void {
@@ -158,6 +157,30 @@ export class ChatComponent implements OnInit {
     this.webSocketService.emit("sendNewMessage", newMessage);
     this.webSocketService.emit("requestChannelMessages", this.currentChannel.name);
   }
+
+  // async sendNewMessage(msg: any) {
+  //   if (msg.value == "")
+  //   return ;
+  //   let newMessage: ChatMessage = {
+  //     userPseudo: this.myUser.pseudo,
+  //     userID: this.myUser.id,
+  //     userAvatar: this.myUser.avatar,
+  //     text: msg.value,
+  //     date: new Date(),
+  //     channelName: this.currentChannel.name
+  //   }
+  //   msg.value = "";
+  //   var hash =  await bcrypt.hash("test", 10);
+  //   console.log("the hash is: ", hash, "**");
+  //   // console.log();
+  //   const isPasswordMatching = await bcrypt.compare("tesgtrtrtt", hash);    
+  //   console.log(isPasswordMatching)
+  //   const works = await bcrypt.compare("test", hash);    
+  //   console.log(works)
+  //   // console.log(hash);
+  //   this.webSocketService.emit("sendNewMessage", newMessage);
+  //   this.webSocketService.emit("requestChannelMessages", this.currentChannel.name);
+  // }
 
   getChannelMessages() {
     this.webSocketService.emit('requestChannelMessages', this.currentChannel.name);
