@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { HostListener , Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { myUser} from './models/user.model';
 import { WebSocketService } from './web-socket.service';
@@ -15,9 +15,12 @@ export class AppComponent implements OnInit {
   title = 'THE AMAZING PONG';
   loc !: string;
   
+
   constructor(private webSocketService: WebSocketService, private Location:Location, private myUser: myUser, private dialogRef: MatDialog) {}
   userID : number = Number( localStorage.getItem('id'));
+
   ngOnInit(): void {
+    console.log("TEST");
     this.loc = this.Location.path();
     if((this.loc.split("id="))[1] && !this.userID)
     {

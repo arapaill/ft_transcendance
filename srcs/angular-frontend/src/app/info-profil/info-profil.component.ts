@@ -65,7 +65,10 @@ export class InfoProfilComponent implements OnInit {
         this.myUser.friends.push(value, key);
       });
       this.myUser.friends.push(this.Personne.id);
-    this.webSocketService.emit("updateUser", this.myUser);
+    this.webSocketService.emit("updateFriendlist", {
+      myID : Number(localStorage.getItem('id')),
+      friendID : this.Personne.id,
+    });
     console.log(this.myUser);
   });
   }
