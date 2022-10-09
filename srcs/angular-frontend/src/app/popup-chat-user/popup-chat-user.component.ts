@@ -16,11 +16,15 @@ export class PopupChatUserComponent implements OnInit {
   userID: number = 0;
   playing: boolean = false;
   amIOwner: boolean = false;
+  amIAdmin: boolean = false;
+  channelOwner: string = '';
 
   constructor(private webSocketService: WebSocketService, public myUser:myUser,
     public dialogRef: MatDialogRef<PopupChatUserComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
       this.amIOwner = data.AmIOwner;
+      this.amIAdmin = data.AmIAdmin;
+      this.channelOwner = data.owner;
       this.Personne = {
         avatar: data.userAvatar,
         name: data.userName,

@@ -156,7 +156,7 @@ export class ChatComponent implements OnInit {
       if (tmpChannel.type == "Protégé") {
         let settingsDialog = this.dialogRef.open(PopupChatPasswordComponent);
         settingsDialog.afterClosed().subscribe(password => {
-          if (tmpChannel?.password !== undefined && password == tmpChannel?.password) {
+          if (tmpChannel?.password !== undefined && password == tmpChannel?.password) { // Encrypt mdp
             this.currentChannel = tmpChannel;
           }
         });
@@ -280,6 +280,8 @@ export class ChatComponent implements OnInit {
         userName: user.userPseudo,
         userAvatar: user.userAvatar,
         AmIOwner: this.currentChannel.owner === this.myUser.pseudo ? true : false,
+        AmIAdmin: this.currentChannel.admins.indexOf(this.myUser.pseudo) != -1 ? true : false,
+        channelOwner: this.currentChannel.owner,
         myUser: this.myUser,
         blockList: this.blockList
       }

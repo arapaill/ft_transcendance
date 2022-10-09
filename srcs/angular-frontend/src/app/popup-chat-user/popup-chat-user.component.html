@@ -12,7 +12,7 @@
 	<button mat-raised-button color="accent" (click)="sendPrivateMessage()">Message privé</button>
 	<button mat-raised-button color="warn" 	 (click)="blockUser()">{{ myUser.blacklist.indexOf(Personne.id) == -1 ? 'Bloquer' : 'Débloquer'}}</button>
 
-	<div *ngIf="amIOwner == true">
+	<div *ngIf="amIOwner == true || (amIAdmin == true && Personne.name != channelOwner">
 		<br>
 		<button mat-raised-button color="accent" (click)="kickUser()">Kick</button>
 		<button mat-raised-button color="accent" (click)="muteUser()">Mute</button>
