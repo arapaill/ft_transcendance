@@ -60,8 +60,8 @@ export class PopupChatJoinComponent implements OnInit {
 
 
   join(values: any) {
-    let tmpChannel = this.channels.find(x => x.name === values.channel);
-    if (tmpChannel?.usersBanned.indexOf(this.myUser.id) == -1) {
+    let tmpChannel = this.channelsToDisplay.find(x => x.name === values.channel);
+    if (tmpChannel?.usersBanned.indexOf(this.myUser.id) != -1) {
       alert("Vous êtes banni de ce channel.");
       this.dialogRef.close();
     }
