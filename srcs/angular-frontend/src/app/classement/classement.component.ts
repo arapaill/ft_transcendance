@@ -33,6 +33,7 @@ export class ClassementComponent implements OnInit {
             victoires : i.wins,
             match : i.match,
             id: i.id,
+            status: i.line_status,
           }
           this.profils.push(profil);
       

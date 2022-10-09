@@ -64,6 +64,7 @@ export class PopupChatSettingsComponent implements OnInit {
           date: user.Date,
           victoires: user.wins,
           match: user.match,
+          status : user.line_status,
         }
         if (user.name != this.myUser.pseudo && this.currentSettings.users.indexOf(user.name) == -1)
           this.users.push(newUser);

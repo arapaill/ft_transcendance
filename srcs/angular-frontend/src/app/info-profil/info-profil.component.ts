@@ -30,7 +30,7 @@ export class InfoProfilComponent implements OnInit {
       this.dude.pseudo = data.name;
       this.dude.description = data.Description;
       this.dude.id = data.id;
-
+      console.log(data);
       this.Personne = 
       {
         avatar: data.avatar,
@@ -38,14 +38,15 @@ export class InfoProfilComponent implements OnInit {
         description: data.Description,
         date: new Date(),
         victoires: data.wins,
-        match: [],
-        id :data.id
+        match: data.match,
+        id :data.id,
+        status: data.line_status,
       }
     this.webSocketService.emit("requestUserMatchsHistory", this.Personne.name);
     this.webSocketService.listen("getUserMatchsHistory").subscribe((userMatchs : any) => {
       this.matchs = [];
       for (const iterator of userMatchs) {
-        let match : string = iterator.JOUEUR_1 + " vs " + iterator.JOUEUR_2 + " score: " + iterator.SCORE_JOUEUR_1 + " : "+ iterator.SCORE_JOUEUR_2;
+        let match : string = iterator.JOUEUR_1 + " vs " + iterator.JOUEUR_2;
         this.matchs.push(match);
       }
     });
@@ -63,15 +64,7 @@ export class InfoProfilComponent implements OnInit {
       data.friends.forEach((key : any, value : any) : any =>{
         this.myUser.friends.push(value, key);
       });
-    
-    if (!this.myUser.friends.indexOf(this.Personne.id)) {
       this.myUser.friends.push(this.Personne.id);
-    }
-    else
-      {
-        let ret = this.myUser.friends.indexOf(this.Personne.id)
-        this.myUser.friends.splice(ret, 1);
-      }
     this.webSocketService.emit("updateUser", this.myUser);
     console.log(this.myUser);
   });

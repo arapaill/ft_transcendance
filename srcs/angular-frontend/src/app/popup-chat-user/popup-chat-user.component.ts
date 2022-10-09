@@ -28,7 +28,8 @@ export class PopupChatUserComponent implements OnInit {
         date: new Date(),
         victoires: 0,
         id: 0,
-        match: []
+        match: false,
+        status: "online",
       }
       this.myUser = data.myUser;
       this.myUser.blacklist = data.blockList;

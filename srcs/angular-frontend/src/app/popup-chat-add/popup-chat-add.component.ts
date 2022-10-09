@@ -37,6 +37,7 @@ export class PopupChatAddComponent implements OnInit {
           date: user.Date,
           victoires: user.wins,
           match: user.match,
+          status : user.line_status,
         }
         if (user.name != this.myUser.pseudo)
           this.users.push(newUser);

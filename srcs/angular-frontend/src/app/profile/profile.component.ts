@@ -20,7 +20,7 @@ export class ProfileComponent implements OnInit {
       this.myUser.pseudo = data.name;
       this.myUser.description = data.Description;
       this.myUser.qr = data.qrCode;
-      console.log(this.myUser);
+      console.log(data);
     });
 
   }

@@ -4,6 +4,7 @@ export class ProfileModel {
 	description!: string;
  	date!: Date;
   	victoires!: number;
-	match!: string[];
+	match!: boolean;
 	id !: number;
+	status !: string;
 }
