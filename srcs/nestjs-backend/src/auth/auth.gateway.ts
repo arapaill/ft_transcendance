@@ -33,6 +33,12 @@ import {
 		this.server.to(client.id).emit("getUserInfos", user);
 	}
 
+	@SubscribeMessage('requestAllUsers')
+	async handleRequestAllUsers(client, undefined): Promise<void> {
+		let users = await this.userService.requestAllUsers();
+		this.server.to(client.id).emit("getAllUsers", users);
+	}
+
 	@SubscribeMessage('requestUserInfosID')
 	async handlerequestUserInfosID(client, id: number): Promise<void> {
 		let user = await this.userService.requestUserInfosID(id);
@@ -55,8 +61,12 @@ import {
 
 	@SubscribeMessage('updateFriendlist')
 	async handleupdateFriendlist(client, user: unknown ): Promise<void> {
-		let update = await this.userService.updateFriendlist(user);
-		// this.server.emit("getUserInfos", matchs );
+		await this.userService.updateFriendlist(user);
+	}
+
+	@SubscribeMessage('updateBlocklist')
+	async handleUpdateBlocklist(client, user: unknown ): Promise<void> {
+		await this.userService.updateBlocklist(user);
 	}
 
 	@SubscribeMessage('inviteUserToPlay')
@@ -64,7 +74,6 @@ import {
 		console.log("Sent invite to play to" + data.userToInvite);
 		this.server.emit("getInviteToPlay", data);
 	}
-
 
 	@SubscribeMessage('requestUserWins')
 	async handleRequestUserWins(client, userID: number ): Promise<void> {

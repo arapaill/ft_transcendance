@@ -5,6 +5,7 @@ import { FormControl } from '@angular/forms';
 import { ChatChannel } from '../models/chat.model';
 import { myUser, User } from '../models/user.model';
 import { WebSocketService } from '../web-socket.service';
+import { ProfileModel } from '../models/profile-model.model';
 
 @Component({
   selector: 'app-popup-chat-settings',
@@ -21,9 +22,14 @@ export class PopupChatSettingsComponent implements OnInit {
     users: [],
     type: "",
     password: "",
+    usersBanned: [],
+    usersKicked: [],
+    usersMuted: [],
     messages: []
   };
   disableSelect: boolean = true;
+  users: ProfileModel[] = [];
+  admins: ProfileModel[] = [];
 
   constructor(
     private webSocketService: WebSocketService,
@@ -38,6 +44,7 @@ export class PopupChatSettingsComponent implements OnInit {
 
   ngOnInit(): void {
     this.webSocketService.emit("requestUserInfosID", Number(localStorage.getItem('id')));
+    this.webSocketService.emit("requestAllUsers", undefined);
     this.webSocketService.listen("getUserInfosID").subscribe((data: any) => {
       this.myUser.avatar = data.avatar;
       this.myUser.pseudo = data.name;
@@ -46,11 +53,32 @@ export class PopupChatSettingsComponent implements OnInit {
       this.myUser.friends = data.friends;
       this.myUser.id = data.id;
     });
+
+    this.webSocketService.listen("getAllUsers").subscribe((data: any) => {
+      for (const user of data) {
+        let newUser: ProfileModel = {
+          id: user.id,
+          avatar: user.avatar,
+          name: user.name,
+          description: user.Description,
+          date: user.Date,
+          victoires: user.wins,
+          match: user.match,
+        }
+        if (user.name != this.myUser.pseudo && this.currentSettings.users.indexOf(user.name) == -1)
+          this.users.push(newUser);
+        if (user.name != this.myUser.pseudo && this.currentSettings.admins.indexOf(user.name))
+          this.admins.push(newUser);
+      }
+    });
+
     if (this.currentSettings.owner === this.myUser.pseudo)
       this.disableSelect = false;
     else
       this.disableSelect = true;
   }
+
+
 
   onToggle(event: any) {
     if (event.value === "Protégé")

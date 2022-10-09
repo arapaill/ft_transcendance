@@ -11,6 +11,7 @@ import { myUser } from '../models/user.model';
 })
 export class PopupChatJoinComponent implements OnInit {
   channels: ChatChannel[] = []
+  channelsToDisplay: ChatChannel[] = []
 
   constructor(
     public webSocketService: WebSocketService,
@@ -40,12 +41,23 @@ export class PopupChatJoinComponent implements OnInit {
           admins: channel.admins,
           users: channel.users,
           type: channel.type,
+          usersBanned: channel.usersBanned,
+          usersKicked: channel.usersKicked,
+          usersMuted: channel.usersMuted,
           messages: []
         }
-        this.channels.push(newChannel);
+
+        console.log("Evaluating ", newChannel);
+        console.log(newChannel.users, newChannel.admins);
+        console.log(newChannel.users.indexOf(this.myUser.pseudo));
+        console.log(newChannel.admins.indexOf(this.myUser.pseudo));
+        if (newChannel.type != 'Privé' && newChannel.users.indexOf(this.myUser.pseudo) == -1 && newChannel.admins.indexOf(this.myUser.pseudo) == -1)
+          this.channelsToDisplay.push(newChannel);
       }
     })
+
   }
+
 
   join(values: any) {
     let tmpChannel = this.channels.find(x => x.name === values.channel);

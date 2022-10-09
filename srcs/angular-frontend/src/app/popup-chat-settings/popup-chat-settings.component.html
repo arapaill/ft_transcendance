@@ -23,14 +23,14 @@
 		<mat-form-field color="accent">
 			<mat-label>Ajouter des utilisateurs</mat-label>
 			<mat-select [(ngModel)]="currentSettings.users" name="newUsers" multiple [disabled]="shouldBlock()">
-				<mat-option *ngFor="let friend of myUser.friends" [value]="friend">{{friend}}</mat-option>
+				<mat-option *ngFor="let user of users" [value]="user.name">{{user.name}}</mat-option>
 			</mat-select>
 		</mat-form-field>
 
 		<mat-form-field color="accent">
 			<mat-label>Ajouter des administrateurs</mat-label>
 			<mat-select [(ngModel)]="currentSettings.admins" name="newAdmins" multiple [disabled]="shouldBlock()">
-				<mat-option *ngFor="let friend of myUser.friends" [value]="friend">{{friend}}</mat-option>
+				<mat-option *ngFor="let admin of admins" [value]="admin.name">{{admin.name}}</mat-option>
 			</mat-select>
 		</mat-form-field>
 	</form>

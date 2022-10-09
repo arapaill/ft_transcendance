@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import { ProfileModel } from '../models/profile-model.model';
 import { myUser, User } from '../models/user.model';
 import { WebSocketService } from '../web-socket.service';
 
@@ -10,11 +11,13 @@ import { WebSocketService } from '../web-socket.service';
 })
 export class PopupChatAddComponent implements OnInit {
   isPasswordChecked = false;
+  users: ProfileModel[] = [];
 
   constructor(private webSocketService: WebSocketService, public dialogRef: MatDialogRef<PopupChatAddComponent>, public myUser : myUser) { }
 
   ngOnInit(): void {
     this.webSocketService.emit("requestUserInfosID", Number(localStorage.getItem('id')));
+    this.webSocketService.emit("requestAllUsers", undefined);
     this.webSocketService.listen("getUserInfosID").subscribe((data: any) => {
       this.myUser.avatar = data.avatar;
       this.myUser.pseudo = data.name;
@@ -22,6 +25,22 @@ export class PopupChatAddComponent implements OnInit {
       this.myUser.blacklist = data.blacklist;
       this.myUser.friends = data.friends;
       this.myUser.id = data.id;
+    });
+
+    this.webSocketService.listen("getAllUsers").subscribe((data: any) => {
+      for (const user of data) {
+        let newUser: ProfileModel = {
+          id: user.id,
+          avatar: user.avatar,
+          name: user.name,
+          description: user.Description,
+          date: user.Date,
+          victoires: user.wins,
+          match: user.match,
+        }
+        if (user.name != this.myUser.pseudo)
+          this.users.push(newUser);
+      }
     });
   }
 

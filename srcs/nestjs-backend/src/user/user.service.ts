@@ -93,6 +93,13 @@ async requestUserMatchsHistory(userName: string) {
     return  matchsHistory;
  }
 
+async requestAllUsers() {
+	let users = await this.prisma.user.findMany();
+
+	return users;
+}
+
+
 /*
  async requestUpdateFriendList(userID: number) {
     let ret = await this.prisma.user.findFirst({
@@ -170,6 +177,35 @@ async updateFriendlist(infos: unknown) {
 		},
 		data: {
 			friendsList: tmpfriendList,
+		}
+	});
+ }
+
+ async updateBlocklist(infos: unknown) {
+	let myUser = await this.prisma.user.findFirst({
+		where: {
+			id: infos[0].myID,
+		}
+	});
+
+	let tmpBlockList: number[] = myUser.blockList;
+	let index = tmpBlockList.indexOf(infos[0].friendID);
+	console.log(index);
+	if (index != -1) {
+		console.log("User ID " + infos[0].myID + " removed user ID " + infos[0].friendID + " from blocklist.")
+		tmpBlockList.splice(index, 1);
+	}
+	else {
+		console.log("User ID " + infos[0].myID + " added user ID " + infos[0].friendID + " to blocklist.")
+		tmpBlockList.push(infos[0].friendID);
+	}
+
+	await this.prisma.user.update({
+		where: {
+			id: infos[0].myID,
+		},
+		data: {
+			blockList: tmpBlockList,
 		}
 	});
  }

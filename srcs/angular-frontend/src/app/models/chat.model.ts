@@ -1,5 +1,6 @@
 export class ChatMessage {
 	userPseudo!: string;
+	userID!: number;
 	userAvatar!: string;
 	text!: string;
 	date!: Date;
@@ -15,4 +16,8 @@ export class ChatChannel {
 	type!: string;
 	password?: string = "";
 	messages!: ChatMessage[];
+
+	usersBanned: number[] = [];
+	usersKicked: number[] = [];
+	usersMuted: number[] = [];
 }

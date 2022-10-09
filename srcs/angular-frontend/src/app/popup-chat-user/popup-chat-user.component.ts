@@ -15,12 +15,12 @@ export class PopupChatUserComponent implements OnInit {
   @Input() Personne!: ProfileModel;
   userID: number = 0;
   playing: boolean = false;
-
+  amIOwner: boolean = false;
 
   constructor(private webSocketService: WebSocketService, public myUser:myUser,
     public dialogRef: MatDialogRef<PopupChatUserComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any) {
-      //this.blockedUsers = data.blockedUsers,
+      this.amIOwner = data.AmIOwner;
       this.Personne = {
         avatar: data.userAvatar,
         name: data.userName,
@@ -30,6 +30,10 @@ export class PopupChatUserComponent implements OnInit {
         id: 0,
         match: []
       }
+      this.myUser = data.myUser;
+      this.myUser.blacklist = data.blockList;
+      console.log(data.myUser);
+      console.log(data.myUser.blacklist);
   }
 
   ngOnInit(): void {
@@ -42,8 +46,6 @@ export class PopupChatUserComponent implements OnInit {
       this.myUser.description = data.Description;
       if (data.friendlist)
         this.myUser.friends = data.friendlist;
-      console.log(data.friendsList);
-      console.log(data.blackList);
       this.myUser.id = data.id;
     });
 
@@ -63,9 +65,6 @@ export class PopupChatUserComponent implements OnInit {
       else
         this.playing = false;
     });
-
-    console.log("userID: " + this.userID);
-    console.log("PersonneID: " + this.Personne.id);
   }
 
   isUserPlaying() {
@@ -131,5 +130,29 @@ export class PopupChatUserComponent implements OnInit {
     });
     this.webSocketService.emit("requestUserInfosID", Number(localStorage.getItem('id')));
     this.dialogRef.close();
+  }
+
+  muteUser() {
+    this.dialogRef.close({
+      user: this.Personne.name,
+      userID: this.Personne.id,
+      action: 'Mute'
+    });
+  }
+
+  kickUser() {
+    this.dialogRef.close({
+      user: this.Personne.name,
+      userID: this.Personne.id,
+      action: 'Kick',
+    });
+  }
+
+  banUser() {
+    this.dialogRef.close({
+      user: this.Personne.name,
+      userID: this.Personne.id,
+      action: 'Ban',
+    });
   }
 }

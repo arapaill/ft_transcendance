@@ -5,8 +5,9 @@ import { PrismaService } from '../prisma/prisma.service';
 export class ChatService {
 	constructor(private prisma: PrismaService) {}
 
-	async createNewChannel(channel: unknown) {
+	async createNewChannel(channel: object) {
 		console.log("New channel created: " + channel[0].name);
+
 		const newChannel = await (this.prisma.chatChannel.create({
 			data: {
 				name: channel[0].name,
@@ -14,7 +15,10 @@ export class ChatService {
 				type: channel[0].type,
 				users: channel[0].users,
 				admins: channel[0].admins,
-				password: channel[0].password
+				password: channel[0].password,
+				usersBanned: [],
+				usersKicked: [],
+				usersMuted: [],
 			}
 		}))
 
@@ -30,7 +34,10 @@ export class ChatService {
 			},
 			data: {
 				users: channel[0].users,
-				admins: channel[0].admins
+				admins: channel[0].admins,
+				usersBanned: channel[0].usersBanned,
+				usersKicked: channel[0].usersKicked,
+				usersMuted: channel[0].usersMuted,
 			}
 		});
 	}
@@ -38,18 +45,8 @@ export class ChatService {
 	async requestChannels(user: unknown) {
 		console.log("User " + user[0].pseudo + " requested all channels.");
 
-		const channels = await this.prisma.chatChannel.findMany({
-			where: {
-				OR: [
-					{ owner:	user[0].pseudo,			},
-					{ users:	{ has: user[0].pseudo,	}},
-					{ admins:	{ has: user[0].pseudo,	}},
-					{ type:		'Public',				},
-					{ type:		'Protégé',				},
-				]
-			}
-		});
-		
+		const channels = await this.prisma.chatChannel.findMany({});
+
 		return channels;
 	}
 
@@ -107,30 +104,91 @@ export class ChatService {
 				channelsID: channelArray
 			}
 		});
-		
+
 		console.log(channels);
 
-		return channels;
+		const channel = await this.prisma.chatChannel.findFirst({
+			where: {
+				id: infos[0].channelID
+			}
+		})
+
+		let myUser = await this.prisma.user.findFirst({
+			where: {
+				id: infos[0].id,
+			}
+		})
+
+		let userArray: string[] = channel.users
+
+		if (userArray.indexOf(myUser.name) == -1)
+			userArray.push(myUser.name);
+		
+		await this.prisma.chatChannel.update({
+			where: {
+				id: infos[0].channelID
+			},
+			data: {
+				users: userArray,
+			}
+		})
 	}
 
 	async requestMyChannels(userID: number) {
 		console.log("User ID" + userID[0] + " requested all his channels.");
 
-		const userChannelInfos = await this.prisma.userChannels.findMany({
+		let userChannelInfos = await this.prisma.userChannels.findMany({
 			where: {
 				userID: userID[0],
 			}
 		});
-		
+
 		console.log(userChannelInfos);
+		if (!userChannelInfos[0]) {
+			await this.prisma.userChannels.create({
+				data: {
+					userID: userID[0],
+					channelsID: [0],
+				}
+			});
+
+			userChannelInfos = await this.prisma.userChannels.findMany({
+				where: {
+					userID: userID[0],
+				}
+			});
+		}
 
 		let channelsToFind: number[] = userChannelInfos[0].channelsID;
 
+		let userPseudo: string;
+
+		let user = await this.prisma.user.findFirst({
+			where: {
+				id: userID[0],
+			},
+		});
+
+		userPseudo = user.name;
+
+		
+
 		const channels = await this.prisma.chatChannel.findMany({
 			where: {
-				id: {in: channelsToFind},
-			}
-		})
+				OR: [
+				{
+					id: {in: channelsToFind},
+				},
+				{
+					type: 'Privé',
+					users: {has: userPseudo},
+				},
+				{
+					type: 'Privé',
+					admins: {has: userPseudo}
+				},
+			]}
+		});
 
 		return channels;
 	}
@@ -160,14 +218,18 @@ export class ChatService {
 
 		console.log("ChannelID: ", channelID);
 
+		let id = channelID ? channelID.id : 0
+
+		console.log('id: ', id);
+
 		const newMessage = await this.prisma.chatMessage.create({
 			data: {        
 				userPseudo: message[0].userPseudo,
 				userAvatar: message[0].userAvatar,
+				userID: message[0].userID,
 				text: message[0].text,
 				date: message[0].date,
 				channelName: message[0].channelName,
-				chatChannelId: channelID.id
 			}
 		})
 
@@ -192,6 +254,90 @@ export class ChatService {
 		await this.prisma.chatMessage.deleteMany({
 			where: {
 				channelName: channelName[0],
+			}
+		});
+	}
+
+	async muteUser(infos: object) {
+		let channel = await this.prisma.chatChannel.findFirst({
+			where: {
+				id: infos[0].channelID,
+			}
+		})
+
+		let usersArray: number[] = channel ? channel.usersMuted : [];
+		let index = usersArray.indexOf(infos[0].userID)
+		if (index == -1) {
+			console.log("User ID " + infos[0].userID + " was muted from channel ID " + infos[0].channelID);
+			usersArray.push(infos[0].userID);
+		}
+		else {
+			console.log("User ID " + infos[0].userID + " was demuted from channel ID " + infos[0].channelID);
+			usersArray.splice(index, 1);
+		};
+	
+		await this.prisma.chatChannel.update({
+			where: {
+				id: infos[0].channelID,
+			},
+			data: {
+				usersMuted: usersArray,
+			}
+		});
+	}
+
+	async banUser(infos: object) {
+		let channel = await this.prisma.chatChannel.findFirst({
+			where: {
+				id: infos[0].channelID,
+			}
+		})
+
+		let usersArray: number[] = channel ? channel.usersMuted : [];
+		let index = usersArray.indexOf(infos[0].userID)
+		if (index == -1) {
+			console.log("User ID " + infos[0].userID + " was banned from channel ID " + infos[0].channelID);
+			usersArray.push(infos[0].userID);
+		}
+		else {
+			console.log("User ID " + infos[0].userID + " was unbanned from channel ID " + infos[0].channelID);
+			usersArray.splice(index, 1);
+		};
+
+		this.prisma.chatChannel.update({
+			where: {
+				id: infos[0].channelID,
+			},
+			data: {
+				usersBanned: usersArray,
+			}
+		});
+	}
+
+	async kickUser(infos: object) {
+		let channel = await this.prisma.chatChannel.findFirst({
+			where: {
+				id: infos[0].channelID,
+			}
+		})
+
+		let usersArray: number[] = channel ? channel.usersMuted : [];
+		let index = usersArray.indexOf(infos[0].userID)
+		if (index == -1) {
+			console.log("User ID " + infos[0].userID + " was kicked from channel ID " + infos[0].channelID);
+			usersArray.push(infos[0].userID);
+		}
+		else {
+			console.log("User ID " + infos[0].userID + " was kicked from channel ID " + infos[0].channelID);
+			usersArray.splice(index, 1);
+		};
+
+		this.prisma.chatChannel.update({
+			where: {
+				id: infos[0].channelID,
+			},
+			data: {
+				usersKicked: usersArray,
 			}
 		});
 	}

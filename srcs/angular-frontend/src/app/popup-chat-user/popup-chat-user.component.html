@@ -10,5 +10,12 @@
 	<button mat-raised-button color="accent" (click)="inviteToPlay()">Inviter à jouer</button>
 	<button mat-raised-button color="accent" (click)="inviteToWatch()">Voir match</button>
 	<button mat-raised-button color="accent" (click)="sendPrivateMessage()">Message privé</button>
-	<!-- <button mat-raised-button color="warn" (click)="blockUser()">{{ myUser.blacklist.indexOf(Personne.id) ? 'Bloquer' : 'Débloquer'}}</button> -->
+	<button mat-raised-button color="warn" 	 (click)="blockUser()">{{ myUser.blacklist.indexOf(Personne.id) == -1 ? 'Bloquer' : 'Débloquer'}}</button>
+
+	<div *ngIf="amIOwner == true">
+		<br>
+		<button mat-raised-button color="accent" (click)="kickUser()">Kick</button>
+		<button mat-raised-button color="accent" (click)="muteUser()">Mute</button>
+		<button mat-raised-button color="accent" (click)="banUser()">Ban</button>
+	</div>
 </div>

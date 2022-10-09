@@ -39,7 +39,7 @@ export class ChatGateway {
 
 
   @SubscribeMessage('createNewChannel')
-  async handleCreateNewChannel(@MessageBody() data: unknown) {
+  async handleCreateNewChannel(@MessageBody() data: object) {
     await this.chatService.createNewChannel(data);
     this.server.emit('getNewChannel', data);
   }
@@ -91,6 +91,22 @@ export class ChatGateway {
     let channels = await this.chatService.sendNewMessage(data);
     this.server.emit('getNewMessage', data);
   }
+
+  @SubscribeMessage('kickUser')
+  async handleKickUser(@MessageBody() data: object) {
+    await this.chatService.kickUser(data);
+  }
+
+  @SubscribeMessage('banUser')
+  async handleBanUser(@MessageBody() data: object) {
+    await this.chatService.banUser(data);
+  }
+
+  @SubscribeMessage('muteUser')
+  async handleMuteUser(@MessageBody() data: object) {
+    await this.chatService.muteUser(data);
+  }
+
 
 
 

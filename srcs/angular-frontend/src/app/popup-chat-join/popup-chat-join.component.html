@@ -2,7 +2,7 @@
 <mat-dialog-content>
 	<form #settingsForm="ngForm">
 		<mat-select ngModel name="channel">
-			<mat-option *ngFor="let channel of channels;" value="{{ channel.name }}">{{ channel.name }}</mat-option>
+			<mat-option *ngFor="let channel of channelsToDisplay;" value="{{ channel.name }}">{{ channel.name }}</mat-option>
 		</mat-select>
 	</form>
 </mat-dialog-content>

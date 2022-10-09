@@ -60,6 +60,7 @@ model gameHistory {
 
 model chatMessage {
   id            Int          @id @default(autoincrement())
+  userID        Int
   userPseudo    String
   userAvatar    String
   text          String
@@ -70,14 +71,17 @@ model chatMessage {
 }
 
 model chatChannel {
-  id       Int           @id @default(autoincrement())
-  name     String        @unique
-  owner    String
-  admins   String[]
-  users    String[]
-  type     String
-  password String?
-  messages chatMessage[]
+  id            Int           @id @default(autoincrement())
+  name          String        @unique
+  owner         String
+  admins        String[]
+  users         String[]
+  type          String
+  password      String?
+  messages      chatMessage[]
+  usersBanned   Int[]
+  usersKicked   Int[]
+  usersMuted    Int[]
 }
 
 model userChannels {
