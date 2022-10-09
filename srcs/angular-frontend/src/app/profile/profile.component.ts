@@ -49,7 +49,10 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  showQR(){
-    this.webSocketService.emit("requestQR", Number(localStorage.getItem('id')));
+  openLogout(){
+    this.webSocketService.emit("requestLogout", Number(localStorage.getItem('id')));
+    localStorage.removeItem('id')
+    console.log(this.two_factor);
+    console.log("logout");
   }
 }
