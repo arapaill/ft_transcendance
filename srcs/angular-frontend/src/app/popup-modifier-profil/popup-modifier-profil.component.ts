@@ -20,13 +20,11 @@ export class PopupModifierProfilComponent implements OnInit {
   msg = "";
 
   ngOnInit(): void {
-    console.log(Number(localStorage.getItem('id')));
     this.webSocketService.emit("requestUserInfosID", Number(localStorage.getItem('id')));
     this.webSocketService.listen("getUserInfosID").subscribe((data: any) => {
       this.myUser.avatar = data.avatar;
       this.myUser.pseudo = data.name;
       this.myUser.description = data.Description;
-      this.myUser.blacklist = data.blacklist;
       this.myUser.id = data.id;
     });
   }
@@ -62,7 +60,6 @@ export class PopupModifierProfilComponent implements OnInit {
         this.myUser.description = value.Description;
       if(this.url)
         this.myUser.avatar = this.url;
-    console.log("PSEUDO: ", this.myUser.pseudo);
     this.webSocketService.emit("updateUser", this.myUser);
     this.dialogRef.close(this.myUser);
     });

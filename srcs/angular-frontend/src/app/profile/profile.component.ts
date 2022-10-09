@@ -21,7 +21,6 @@ export class ProfileComponent implements OnInit {
       this.myUser.description = data.Description;
       this.myUser.qr = data.qrCode;
       this.two_factor = data.two_factor;
-      console.log(data);
     });
 
   }
