@@ -25,8 +25,7 @@ import { AuthGateway } from './auth.gateway';
 @Module({
 	imports: [
 		JwtModule.register({
-		  secret: '2adb6038a9d246fd31bedf11ca301e8864d8fc23809ac3fd7a0dbd114644f57f',
-		//   signOptions: { expiresIn: '7d' },
+
 		}),
 		PassportModule,
 		PrismaModule,
