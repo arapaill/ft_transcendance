@@ -56,7 +56,7 @@ export class PopupModifierProfilComponent implements OnInit {
     
     this.webSocketService.emit("requestCheckUserName", value.Nom);
     this.webSocketService.listen("getCheckUserName").subscribe((check : any) => {
-      if(check)
+      if(!check)
         this.myUser.pseudo = value.Nom;
         if(value.Description)
         this.myUser.description = value.Description;

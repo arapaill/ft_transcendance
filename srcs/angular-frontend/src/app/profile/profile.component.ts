@@ -12,7 +12,7 @@ import { WebSocketService } from '../web-socket.service';
 })
 export class ProfileComponent implements OnInit {
   constructor(private  dialogRef : MatDialog, private webSocketService: WebSocketService, public myUser : myUser){}
-
+  two_factor : boolean = false;
   ngOnInit(): void {
     this.webSocketService.emit("requestUserInfosID", Number(localStorage.getItem('id')));
     this.webSocketService.listen("getUserInfosID").subscribe((data: any) => {
@@ -20,6 +20,7 @@ export class ProfileComponent implements OnInit {
       this.myUser.pseudo = data.name;
       this.myUser.description = data.Description;
       this.myUser.qr = data.qrCode;
+      this.two_factor = data.two_factor;
       console.log(data);
     });
 
@@ -36,7 +37,17 @@ export class ProfileComponent implements OnInit {
     }
     
   secureConect(){
-    this.webSocketService.emit("request2FA", Number(localStorage.getItem('id')));
+    
+    if(this.two_factor == false)
+    {
+      this.webSocketService.emit("request2FA", Number(localStorage.getItem('id')));
+      this.two_factor = true;
+    }
+    else if (this.two_factor == true)
+    {
+      this.webSocketService.emit("requestUN2FA", Number(localStorage.getItem('id')));
+      this.two_factor = false;
+    }
   }
 
   showQR(){
