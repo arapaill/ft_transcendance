@@ -21,7 +21,6 @@ export class ClassementComponent implements OnInit {
     this.profils = [];
     this.webSocketService.emit("requestTopFiveUsers", undefined);
      this.webSocketService.listen("getTopFive").subscribe((top : any) => {
-      console.log(top);
       for (const i of top) {
        
           let profil : ProfileModel = 
