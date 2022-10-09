@@ -61,6 +61,9 @@ export class PopupChatJoinComponent implements OnInit {
 
   join(values: any) {
     let tmpChannel = this.channelsToDisplay.find(x => x.name === values.channel);
+    console.log(tmpChannel);
+    console.log('BAN: ', tmpChannel?.usersBanned);
+    console.log('BAN: ', tmpChannel?.usersBanned.indexOf(this.myUser.id));
     if (tmpChannel?.usersBanned.indexOf(this.myUser.id) != -1) {
       alert("Vous êtes banni de ce channel.");
       this.dialogRef.close();

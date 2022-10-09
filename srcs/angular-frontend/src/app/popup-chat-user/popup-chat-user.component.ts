@@ -39,6 +39,11 @@ export class PopupChatUserComponent implements OnInit {
       this.myUser.blacklist = data.blockList;
       console.log(data.myUser);
       console.log(data.myUser.blacklist);
+
+      console.log('Friends:');
+      console.log((this.myUser.friends != undefined), this.myUser.friends.length, this.myUser.friends.indexOf(this.Personne.id) == -1)
+      console.log('Blacklist:');
+      console.log((this.myUser.blacklist != undefined), this.myUser.blacklist.length, this.myUser.blacklist.indexOf(this.Personne.id) == -1)
   }
 
   ngOnInit(): void {
@@ -117,14 +122,28 @@ export class PopupChatUserComponent implements OnInit {
   }
 
   blockUser() {
-    if (this.myUser.blacklist.indexOf(this.Personne.id) == -1) {
-      this.myUser.blacklist.push(this.Personne.id);
+    if (this.myUser.blacklist) {
+      if (this.myUser.blacklist.indexOf(this.Personne.id) == -1) {
+        this.myUser.blacklist.push(this.Personne.id);
+      }
+      else {
+        let index = this.myUser.blacklist.indexOf(this.Personne.id);
+        this.myUser.blacklist.splice(index, 1);
+      }
+      this.webSocketService.emit("updateBlocklist", {
+        myID: this.myUser.id,
+        friendID: this.Personne.id
+      });
     }
     else {
-      let index = this.myUser.blacklist.indexOf(this.Personne.id);
-      this.myUser.blacklist.splice(index, 1);
+      this.myUser.blacklist = [];
+      this.myUser.blacklist.push(this.Personne.id);
+      this.webSocketService.emit("updateBlocklist", {
+        myID: this.myUser.id,
+        friendID: this.Personne.id
+      });
     }
-    this.webSocketService.emit("updateUser", this.myUser);
+    this.webSocketService.emit("requestUserInfosID", Number(localStorage.getItem('id')));
     this.dialogRef.close();
   }
 

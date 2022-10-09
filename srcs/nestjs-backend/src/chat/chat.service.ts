@@ -458,7 +458,7 @@ export class ChatService {
 			}
 		})
 
-		let usersArray: number[] = newChannel ? newChannel.usersMuted : [];
+		let usersArray: number[] = newChannel ? newChannel.usersBanned : [];
 		let index = usersArray.indexOf(infos[0].userID)
 		if (index == -1) {
 			console.log("User ID " + infos[0].userID + " was banned from channel ID " + infos[0].channelID);
@@ -471,7 +471,7 @@ export class ChatService {
 
 		console.log(usersArray);
 
-		this.prisma.chatChannel.update({
+		await this.prisma.chatChannel.update({
 			where: {
 				id: infos[0].channelID,
 			},
@@ -479,6 +479,14 @@ export class ChatService {
 				usersBanned: usersArray,
 			}
 		});
+
+		let truc = await this.prisma.chatChannel.findFirst({
+			where: {
+				id: infos[0].channelID,
+			}
+		})
+
+		console.log(truc);
 
 		const user = await this.prisma.userChannels.findFirst({
 			where: {

@@ -6,11 +6,11 @@
 <p class="victoires">Victoires : {{ Personne.victoires }}</p>
 
 <div *ngIf="Personne.name !== myUser.pseudo">
-	<button mat-raised-button color="accent" (click)="addToFriends()">{{ myUser.friends.indexOf(Personne.id) == -1 ? 'Retirer des amis' : 'Ajouter en amis' }}</button>
+	<button mat-raised-button color="accent" (click)="addToFriends()">{{ myUser.friends != undefined && myUser.friends.indexOf(Personne.id) == -1 ? 'Ajouter en amis' : 'Retirer des amis' }}</button>
 	<button mat-raised-button color="accent" (click)="inviteToPlay()">Inviter à jouer</button>
 	<button mat-raised-button color="accent" (click)="inviteToWatch()">Voir match</button>
 	<button mat-raised-button color="accent" (click)="sendPrivateMessage()">Message privé</button>
-	<button mat-raised-button color="warn" 	 (click)="blockUser()">{{ myUser.blacklist.indexOf(Personne.id) == -1 ? 'Bloquer' : 'Débloquer'}}</button>
+	<button mat-raised-button color="warn" 	 (click)="blockUser()">{{ (myUser.blacklist != undefined && myUser.blacklist.indexOf(Personne.id)) || myUser.blacklist == undefined ? 'Bloquer' : 'Débloquer'}}</button>
 
 	<div *ngIf="amIOwner == true || (amIAdmin == true && Personne.name != channelOwner)">
 		<br>

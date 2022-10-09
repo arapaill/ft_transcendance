@@ -208,6 +208,14 @@ async updateFriendlist(infos: unknown) {
 			blockList: tmpBlockList,
 		}
 	});
+
+	let info = await this.prisma.user.findFirst({
+		where: {
+			id: infos[0].myID
+		}
+	})
+
+	console.log(info);
  }
 
 

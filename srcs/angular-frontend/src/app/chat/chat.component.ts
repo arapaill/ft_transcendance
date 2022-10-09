@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MatDialog } from  '@angular/material/dialog';
+import { bcrypt } from 'bcryptjs'
 
 import { WebSocketService } from '../web-socket.service'
 import { PopupChatAddComponent } from '../popup-chat-add/popup-chat-add.component';
@@ -192,7 +193,7 @@ export class ChatComponent implements OnInit {
       if (tmpChannel.type == "Protégé") {
         let settingsDialog = this.dialogRef.open(PopupChatPasswordComponent);
         settingsDialog.afterClosed().subscribe(password => {
-          if (tmpChannel?.password !== undefined && password == tmpChannel?.password) {
+          if (tmpChannel?.password != undefined && await bcrypt.compare(password, tmpChannel?.password)) {
             this.currentChannel = tmpChannel;
           }
         });
