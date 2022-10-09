@@ -27,7 +27,6 @@ export class ProfileComponent implements OnInit {
         this.myUser.friends = data.friendsList;
         this.two_factor = data.two_factor;
       }
-      console.log(this.two_factor);
     });
 
   }
@@ -67,10 +66,8 @@ export class ProfileComponent implements OnInit {
   }
 
   showQR(){
-    console.log("click show qr");
     this.webSocketService.emit("requestQR", Number(localStorage.getItem('id')));
     this.webSocketService.listen("getQR").subscribe((data: any) => {
-      console.log("in getQR");
       this.dialogRef.open(PopupQrcodeComponent,{
         data : data,
       });

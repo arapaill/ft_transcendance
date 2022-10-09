@@ -70,7 +70,6 @@ export class InfoProfilComponent implements OnInit {
       myID : Number(localStorage.getItem('id')),
       friendID : this.Personne.id,
     });
-    console.log(this.myUser);
   });
   }
 
