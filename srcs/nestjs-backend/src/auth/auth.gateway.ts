@@ -127,7 +127,11 @@ import {
 		let user = await this.userService.requestChangeStatus(userIDD, newStatus);
 		// this.server.emit("getUserInfos", user);
 	}
-	
+	@SubscribeMessage('requestQR')
+	async handlerequestQR(client, userIDD: number): Promise<void> {
+		let userqr = await this.userService.requestQR(userIDD);
+		this.server.emit("getQR", userqr);
+	}
 	//-------------------------------------------------------------
 	
 
