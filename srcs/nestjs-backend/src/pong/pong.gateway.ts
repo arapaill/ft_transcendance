@@ -74,18 +74,17 @@ export class PongGateway {
   async handleAction(client: any, payload: any) {
     let socket_id = payload[0].SOCKET;
     let user_id = payload[0].NAME;
-    let test = await this.prisma.ongoingGame.findFirst({
-      where: {
-        OR:[
-          {JOUEUR_1_PSEUDO : user_id},
-          {JOUEUR_2_PSEUDO : user_id},
-        ]
-      }
-    });
     if (this.games.has(socket_id)) {
       if (this.games.get(socket_id).gameState == GameState.MENU) {
+        let test = await this.prisma.ongoingGame.findFirst({
+          where: {
+            OR:[
+              {JOUEUR_1_PSEUDO : user_id},
+              {JOUEUR_2_PSEUDO : user_id},
+            ]
+          }
+        });
         if (test != null) {
-          
           this.games.delete(socket_id);
           if (test.JOUEUR_1_PSEUDO == user_id) {
             this.games.get(test.JOUEUR_2_SOCKET).playerOne.socket_id = socket_id;
@@ -285,12 +284,12 @@ export class PongGateway {
         this.games.get(socket_id).gameState = GameState.OVER;
         await this.prisma.ongoingGame.deleteMany({
           where: {
-            JOUEUR_1_PSEUDO: user_id,
-          }
-        });
-        await this.prisma.ongoingGame.deleteMany({
-          where: {
-            JOUEUR_2_PSEUDO: user_id,
+            OR:[
+              {JOUEUR_1_PSEUDO : user_id},
+              {JOUEUR_2_PSEUDO : user_id},
+              {JOUEUR_1_SOCKET : socket_id},
+              {JOUEUR_2_SOCKET : socket_id}, 
+            ]
           }
         });
         await this.prisma.user.update({
